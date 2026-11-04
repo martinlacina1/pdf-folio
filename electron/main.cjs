@@ -213,7 +213,8 @@ function setupAutoUpdate() {
     updateStatus = { state: "unsupported", message: "system" };
     return;
   }
-  if ((kind === "development" && !process.env.FOLIO_UPDATE_TEST) || kind === "portable") {
+  // Locally customized builds set folioDisableUpdates so an official release never replaces them.
+  if ((kind === "development" && !process.env.FOLIO_UPDATE_TEST) || kind === "portable" || require("../package.json").folioDisableUpdates) {
     updateStatus = { state: "unsupported" };
     return;
   }

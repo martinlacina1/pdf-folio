@@ -55,6 +55,7 @@
     "url": "https://github.com/Forward-Future/folio/issues"
   },
   "main": "electron/main.cjs",
+  "folioDisableUpdates": true,
   "build": {
     "appId": "app.folio.reader",
     "productName": "Folio",
@@ -76,7 +77,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "build/icon.png"
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -93,10 +94,10 @@
     "fileAssociations": [
       {
         "ext": "pdf",
-        "name": "PDF Document",
+        "name": "Folio.PDF",
         "description": "PDF Document",
         "role": "Viewer",
-        "icon": "build/icon.png"
+        "icon": "icon.ico"
       }
     ],
     "publish": [
@@ -108,6 +109,10 @@
       }
     ],
     "extraResources": [
+      {
+        "from": "build/icon.ico",
+        "to": "icon.ico"
+      },
       {
         "from": "LICENSE",
         "to": "LICENSE.txt"

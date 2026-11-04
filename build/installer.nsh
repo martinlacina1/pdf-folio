@@ -40,6 +40,23 @@
   WriteRegStr SHELL_CONTEXT "Software\Classes\Folio.WordDocument\shell\open\command" "" '"$INSTDIR\${APP_EXECUTABLE_FILENAME}" "%1"'
   WriteRegNone SHELL_CONTEXT "Software\Classes\.docx\OpenWithProgids" "Folio.WordDocument"
   WriteRegNone SHELL_CONTEXT "Software\Classes\.doc\OpenWithProgids" "Folio.WordDocument"
+
+  ; PDF: list Folio under "Open with" / recommended apps and in Settings > Default apps, with the PDF icon.
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Folio.PDF" "" "PDF Document"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Folio.PDF" "FriendlyTypeName" "PDF Document"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Folio.PDF\DefaultIcon" "" "$INSTDIR\resources\icon.ico,0"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Folio.PDF\shell\open\command" "" '"$INSTDIR\${APP_EXECUTABLE_FILENAME}" "%1"'
+  WriteRegNone SHELL_CONTEXT "Software\Classes\.pdf\OpenWithProgids" "Folio.PDF"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Applications\${APP_EXECUTABLE_FILENAME}" "FriendlyAppName" "Folio"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Applications\${APP_EXECUTABLE_FILENAME}\DefaultIcon" "" "$INSTDIR\${APP_EXECUTABLE_FILENAME},0"
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Applications\${APP_EXECUTABLE_FILENAME}\shell\open\command" "" '"$INSTDIR\${APP_EXECUTABLE_FILENAME}" "%1"'
+  WriteRegStr SHELL_CONTEXT "Software\Classes\Applications\${APP_EXECUTABLE_FILENAME}\SupportedTypes" ".pdf" ""
+  WriteRegStr SHELL_CONTEXT "Software\Folio\Capabilities" "ApplicationName" "Folio"
+  WriteRegStr SHELL_CONTEXT "Software\Folio\Capabilities" "ApplicationDescription" "PDF reader"
+  WriteRegStr SHELL_CONTEXT "Software\Folio\Capabilities" "ApplicationIcon" "$INSTDIR\${APP_EXECUTABLE_FILENAME},0"
+  WriteRegStr SHELL_CONTEXT "Software\Folio\Capabilities\FileAssociations" ".pdf" "Folio.PDF"
+  WriteRegStr SHELL_CONTEXT "Software\RegisteredApplications" "Folio" "Software\Folio\Capabilities"
+
   System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
   ${If} ${Silent}
   ${AndIf} ${isUpdated}
@@ -59,5 +76,10 @@
   DeleteRegValue SHELL_CONTEXT "Software\Classes\.docx\OpenWithProgids" "Folio.WordDocument"
   DeleteRegValue SHELL_CONTEXT "Software\Classes\.doc\OpenWithProgids" "Folio.WordDocument"
   DeleteRegKey SHELL_CONTEXT "Software\Classes\Folio.WordDocument"
+  DeleteRegValue SHELL_CONTEXT "Software\Classes\.pdf\OpenWithProgids" "Folio.PDF"
+  DeleteRegKey SHELL_CONTEXT "Software\Classes\Folio.PDF"
+  DeleteRegKey SHELL_CONTEXT "Software\Classes\Applications\${APP_EXECUTABLE_FILENAME}"
+  DeleteRegValue SHELL_CONTEXT "Software\RegisteredApplications" "Folio"
+  DeleteRegKey SHELL_CONTEXT "Software\Folio"
   System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 !macroend
