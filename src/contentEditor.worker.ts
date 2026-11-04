@@ -26,6 +26,21 @@ const ready = (async () => {
 })();
 let source: Uint8Array;
 
+// Fallback for subset fonts that lack the typed characters: Liberation Sans (bundled with pdf.js) covers Latin
+// Extended, so accented text can still be written. Indexed by bold * 2 + italic.
+const FALLBACK_FONTS = ["Regular", "Italic", "Bold", "BoldItalic"];
+let fallbackFonts: Promise<Uint8Array[]> | undefined;
+function loadFallbackFonts() {
+  fallbackFonts ??= Promise.all(FALLBACK_FONTS.map(async style => {
+    const url = new URL(`${import.meta.env.BASE_URL}pdfjs/standard_fonts/LiberationSans-${style}.ttf`, self.location.href);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Couldn't load a replacement font.");
+    return new Uint8Array(await response.arrayBuffer());
+  }));
+  fallbackFonts.catch(() => { fallbackFonts = undefined; });
+  return fallbackFonts;
+}
+
 function buffer<T>(m: WrappedPdfiumModule, size: number, use: (ptr: number) => T): T {
   const ptr = m.pdfium.wasmExports.malloc(size);
   if (!ptr) throw new Error("There isn't enough memory to edit this PDF.");
@@ -137,7 +152,65 @@ function save(m: WrappedPdfiumModule, doc: number) {
   } finally { m.PDFiumExt_CloseFileWriter(writer); }
 }
 
-function replaceText(m: WrappedPdfiumModule, page: number, target: EditTarget, text: string) {
+/** Replaces `obj` with a new text object in a fallback font, keeping its position, size, colors and style. */
+function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number, index: number, obj: number,
+  text: string, fonts: Uint8Array[], keepAlive: number[]) {
+  const original = m.FPDFTextObj_GetFont(obj);
+  // Many embedded fonts only say their style in the name, e.g. "ABCDEF+Lato-Bold".
+  const name = buffer(m, 256, ptr => {
+    const length = m.FPDFFont_GetBaseFontName(original, ptr, 256);
+    return length > 1 && length <= 256 ? m.pdfium.UTF8ToString(ptr) : "";
+  });
+  const bold = m.FPDFFont_GetWeight(original) >= 600 || (m.FPDFFont_GetFlags(original) & (1 << 18)) !== 0
+    || /bold|black|heavy|semibold|demi/i.test(name);
+  const italic = (m.FPDFFont_GetFlags(original) & (1 << 6)) !== 0 || /italic|oblique/i.test(name);
+  const data = fonts[(bold ? 2 : 0) + (italic ? 1 : 0)];
+  const fontPtr = m.pdfium.wasmExports.malloc(data.length);
+  if (!fontPtr) throw new Error("There isn't enough memory to edit this PDF.");
+  keepAlive.push(fontPtr);
+  m.pdfium.HEAPU8.set(data, fontPtr);
+  const font = m.FPDFText_LoadFont(doc, fontPtr, data.length, 2 /* FPDF_FONT_TRUETYPE */, true);
+  if (!font) throw new Error("Couldn't load a replacement font.");
+  try {
+    buffer(m, 32, ptr => {
+      if (!m.FPDFPageObj_GetMatrix(obj, ptr) || !m.FPDFTextObj_GetFontSize(obj, ptr + 24)) {
+        throw new Error("Couldn't change this text.");
+      }
+      const size = m.pdfium.HEAPF32[ptr / 4 + 6];
+      const replacement = m.FPDFPageObj_CreateTextObj(doc, font, size);
+      if (!replacement) throw new Error("Couldn't change this text.");
+      let inserted = false;
+      try {
+        if (!m.FPDFPageObj_SetMatrix(replacement, ptr)) throw new Error("Couldn't change this text.");
+        const mode = m.FPDFTextObj_GetTextRenderMode(obj);
+        if (mode >= 0) m.FPDFTextObj_SetTextRenderMode(replacement, mode);
+        if (m.FPDFPageObj_GetFillColor(obj, ptr, ptr + 4, ptr + 8, ptr + 12)) {
+          const [r, g, b, a] = m.pdfium.HEAPU32.subarray(ptr / 4, ptr / 4 + 4);
+          m.FPDFPageObj_SetFillColor(replacement, r, g, b, a);
+        }
+        if (m.FPDFPageObj_GetStrokeColor(obj, ptr, ptr + 4, ptr + 8, ptr + 12)) {
+          const [r, g, b, a] = m.pdfium.HEAPU32.subarray(ptr / 4, ptr / 4 + 4);
+          m.FPDFPageObj_SetStrokeColor(replacement, r, g, b, a);
+        }
+        const bytes = (text.length + 1) * 2;
+        buffer(m, bytes, textPtr => {
+          m.pdfium.stringToUTF16(text, textPtr, bytes);
+          if (!m.FPDFText_SetText(replacement, textPtr)) throw new Error("Couldn't change this text.");
+        });
+        if (!m.FPDFPage_InsertObjectAtIndex(page, replacement, index)) throw new Error("Couldn't change this text.");
+        inserted = true;
+      } finally {
+        if (!inserted) m.FPDFPageObj_Destroy(replacement);
+      }
+      if (!m.FPDFPage_RemoveObject(page, obj)) throw new Error("Couldn't replace the full text run.");
+      m.FPDFPageObj_Destroy(obj);
+      if (objectText(m, page).get(replacement) !== text) throw new Error("These characters can't be written in this PDF.");
+    });
+  } finally { m.FPDFFont_Close(font); }
+}
+
+function replaceText(m: WrappedPdfiumModule, doc: number, page: number, target: EditTarget, text: string,
+  fonts: Uint8Array[], keepAlive: number[]) {
   const obj = m.FPDFPage_GetObject(page, target.index);
   if (m.FPDFPageObj_GetType(obj) !== 1 || text.length > 32767 || /[\u0000-\u001f]/u.test(text)) {
     throw new Error("Enter a single line of text.");
@@ -154,8 +227,9 @@ function replaceText(m: WrappedPdfiumModule, page: number, target: EditTarget, t
     m.pdfium.stringToUTF16(text, ptr, size);
     if (!m.FPDFText_SetText(obj, ptr)) throw new Error("Couldn't change this text.");
   });
-  // Subset fonts can silently substitute a missing glyph. Read back the changed object before accepting it.
-  if (objectText(m, page).get(obj) !== text) throw new Error("This font can't display all of those characters.");
+  // Subset fonts can silently substitute a missing glyph. Read back the changed object, and when the embedded font
+  // lacks a character, write the line in a full replacement font instead.
+  if (objectText(m, page).get(obj) !== text) rewriteInFallbackFont(m, doc, page, target.index, obj, text, fonts, keepAlive);
 }
 
 self.onmessage = async ({ data }: MessageEvent<EditorRequest>) => {
@@ -169,15 +243,20 @@ self.onmessage = async ({ data }: MessageEvent<EditorRequest>) => {
       return;
     }
     const { change, snapshot } = data;
-    const result = withPage(m, snapshot, page, (doc, handle) => {
-      const { targets, imageCount } = pageView(m, handle);
-      const target = targets.find(t => t.index === change.index && t.kind === change.kind);
-      if (!target) throw new Error("Select the item again.");
-      if (change.kind === "image") return replacePageImage(snapshot, page, target.ordinal!, imageCount, change.file);
-      replaceText(m, handle, target, change.text);
-      if (!m.FPDFPage_GenerateContent(handle)) throw new Error("Couldn't write this page.");
-      return save(m, doc);
-    });
+    const fonts = change.kind === "text" ? await loadFallbackFonts() : [];
+    const keepAlive: number[] = [];
+    let result;
+    try {
+      result = withPage(m, snapshot, page, (doc, handle) => {
+        const { targets, imageCount } = pageView(m, handle);
+        const target = targets.find(t => t.index === change.index && t.kind === change.kind);
+        if (!target) throw new Error("Select the item again.");
+        if (change.kind === "image") return replacePageImage(snapshot, page, target.ordinal!, imageCount, change.file);
+        replaceText(m, doc, handle, target, change.text, fonts, keepAlive);
+        if (!m.FPDFPage_GenerateContent(handle)) throw new Error("Couldn't write this page.");
+        return save(m, doc);
+      });
+    } finally { keepAlive.forEach(ptr => m.pdfium.wasmExports.free(ptr)); }
     const bytes = await result;
     self.postMessage({ bytes } satisfies EditorReply, { transfer: [bytes.buffer as ArrayBuffer] });
   } catch (reason) {
