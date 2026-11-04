@@ -204,7 +204,7 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
       }
       if (!m.FPDFPage_RemoveObject(page, obj)) throw new Error("Couldn't replace the full text run.");
       m.FPDFPageObj_Destroy(obj);
-      if (objectText(m, page).get(replacement) !== text) throw new Error("These characters can't be written in this PDF.");
+      if (objectText(m, page).get(replacement) !== text) throw new Error("This font can't display all of those characters.");
     });
   } finally { m.FPDFFont_Close(font); }
 }

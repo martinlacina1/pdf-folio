@@ -99,6 +99,8 @@ interface OpenDoc {
   sourceId?: string;
   historyAllowed: boolean;
   edits?: { original?: Blob; changes: PdfChange[] };
+  /** The file on disk this document came from, which "Save" overwrites (desktop app only). */
+  path?: string;
 }
 
 function changesForCopy(doc: OpenDoc, annotated: boolean, order?: number[]) {
@@ -353,7 +355,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
   const openBytes = useCallback(
     async (name: string, data: Uint8Array, password?: string, signal = beginOpen(), initialPage?: number,
-      edit?: { doc: OpenDoc; change: PdfChange }, exported?: OpenDoc, exportedOrder?: number[]) => {
+      edit?: { doc: OpenDoc; change: PdfChange }, exported?: OpenDoc, exportedOrder?: number[], filePath?: string) => {
       const revision = edit?.doc;
       const viewer = viewerRef.current!;
       setLoading(true);
@@ -386,7 +388,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         }
 
         const prev = docRef.current;
-        const next: OpenDoc = { id, name, size: data.byteLength, pdf, password, sourceId: revision?.sourceId ?? revision?.id, historyAllowed, edits };
+        const next: OpenDoc = { id, name, size: data.byteLength, pdf, password, sourceId: revision?.sourceId ?? revision?.id, historyAllowed, edits,
+          path: filePath ?? revision?.path };
         docRef.current = next;
         // Password-protected documents aren't stored by Folio (same rule as Recent).
         const reading = previous ? markupRef.current!.state : undefined;
@@ -462,13 +465,13 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     [beginOpen, tabs, tabKey],
   );
 
-  const openBlob = useCallback(async (name: string, blob: Blob) => {
+  const openBlob = useCallback(async (name: string, blob: Blob, filePath?: string) => {
     const signal = beginOpen();
     setLoading(true);
     setError(null);
     try {
       const data = await readPdfBlob(blob, signal);
-      if (!signal.aborted) await openBytes(name, data, undefined, signal);
+      if (!signal.aborted) await openBytes(name, data, undefined, signal, undefined, undefined, undefined, undefined, filePath);
     } catch (error) {
       if (!signal.aborted) {
         setLoading(false);
@@ -485,7 +488,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       if (window.folioDesktop && /\.docx?$/i.test(file.name)) return { kind: "word", name: file.name, file };
       if (file.type && file.type !== "application/pdf" && !/\.pdf$/i.test(file.name))
         return { kind: "error", name: file.name, message: `“${file.name}” isn't a PDF.` };
-      return { kind: "blob", name: file.name, blob: file };
+      return { kind: "blob", name: file.name, blob: file, path: window.folioDesktop?.pathForFile?.(file) };
     }));
   }, [tabs]);
 
@@ -872,6 +875,45 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     } finally { savingCopy.current = false; }
   };
 
+  /** Writes the current document back over the file it was opened from; without one, saves a copy instead. */
+  const save = async () => {
+    const desktop = window.folioDesktop;
+    // Without a file to write back to, Save is Save a copy (which finishes a pending text edit itself).
+    const opened = docRef.current;
+    if (!opened?.path || !desktop?.saveFile || opened.password) return download();
+    if (contentRef.current && !(await contentRef.current.finish())) return;
+    const doc = docRef.current;
+    if (!doc?.path || savingCopy.current) return;
+    savingCopy.current = true;
+    try {
+      const copy = await currentBytes();
+      if (!copy || docRef.current !== doc) return;
+      const changes = changesForCopy(doc, copy.annotated, pageOrder);
+      if (!changes.length && !doc.sourceId) { flash("No changes to save"); return; }
+      const blob = pdfBlob(copy.bytes);
+      let historyMessage = "";
+      // Keep the version being replaced in version history, so an overwrite can be undone.
+      if (changes.length && doc.historyAllowed && blob.size <= MAX_RECENT_FILE_BYTES) {
+        try {
+          const original = doc.edits?.original ?? pdfBlob(await doc.pdf.getData());
+          await saveVersion({ id: doc.sourceId ?? doc.id, name: doc.name, data: original },
+            { id: await contentKey(copy.bytes), name: doc.name, data: blob }, changes);
+        } catch { historyMessage = "Saved. Couldn’t keep the previous version in version history."; }
+      }
+      await desktop.saveFile(doc.path, copy.bytes);
+      if (docRef.current !== doc) return;
+      setError(null);
+      await openBytes(doc.name, copy.bytes, undefined, beginOpen(), pageOrder ? pageOrder.indexOf(pageRef.current) + 1 : pageRef.current,
+        undefined, doc, pageOrder, doc.path);
+      flash(historyMessage || `Saved ${doc.name}`);
+    } catch (error) {
+      if (docRef.current === doc) {
+        if (dirty) setDirty(true);
+        setError(`Couldn't save “${doc.name}”. ${(error as Error)?.message?.replace(/^Error invoking remote method '[^']+': (Error: )?/, "") ?? ""}`.trim());
+      }
+    } finally { savingCopy.current = false; }
+  };
+
   const print = async () => {
     if (contentRef.current && !(await contentRef.current.finish())) return;
     const doc = docRef.current;
@@ -914,11 +956,12 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     const open = async (source: OpenSource) => {
       switch (source.kind) {
         case "bytes":
-          await openBytes(source.name, new Uint8Array(source.data.buffer, source.data.byteOffset, source.data.byteLength), source.password);
+          await openBytes(source.name, new Uint8Array(source.data.buffer, source.data.byteOffset, source.data.byteLength), source.password,
+            undefined, undefined, undefined, undefined, undefined, source.path);
           if (source.note && docRef.current?.name === source.name) flash(source.note);
           break;
         case "blob":
-          if (!await openBlob(source.name, source.blob) && source.recentId) void removeRecent(source.recentId);
+          if (!await openBlob(source.name, source.blob, source.path) && source.recentId) void removeRecent(source.recentId);
           break;
         case "word": {
           const signal = beginOpen();
@@ -1038,7 +1081,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         requestAnimationFrame(() => document.getElementById("folio-search")?.focus());
       } else if (mod && e.key.toLowerCase() === "s") {
         e.preventDefault();
-        download();
+        void (e.shiftKey ? download() : save());
       } else if (mod && e.key.toLowerCase() === "p") {
         e.preventDefault();
         print();
@@ -1226,7 +1269,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                 onClick={() => contentEditing ? leaveEditMode() : chooseTool("select", true)}>
                 <Icon name={contentEditing ? "check" : "edit"} size={16} /><span>{contentEditing ? "Exit edit mode" : "Edit mode"}</span>
               </button>
-              {(doc.sourceId || editorDirty) && <button aria-label="Save copy" title="Save edited copy" onClick={download}><Icon name="download" size={16} /><span>Save copy</span></button>}
+              {unsaved && doc.path && !doc.password && <button aria-label="Save" title={keys(`Save changes to ${doc.name} (Ctrl+S)`)} onClick={() => void save()}><Icon name="save" size={16} /><span>Save</span></button>}
+              {(doc.sourceId || editorDirty) && <button aria-label="Save copy" title={keys("Save edited copy (Ctrl+Shift+S)")} onClick={download}><Icon name="download" size={16} /><span>Save copy</span></button>}
             </div>
           )}
         </div>
@@ -1245,7 +1289,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     { kind: "action", icon: "plus", label: "New tab", shortcut: keys("Ctrl T"), onSelect: () => tabs.library() },
                     { kind: "action", icon: "close", label: "Close document", shortcut: keys("Ctrl W"), onSelect: () => void tabs.close(tabKey) },
                     { kind: "divider" },
-                    { kind: "action", icon: "download", label: "Save a copy", shortcut: keys("Ctrl S"), onSelect: download },
+                    ...(doc.path && !doc.password ? [{ kind: "action", icon: "save", label: "Save", shortcut: keys("Ctrl S"), onSelect: () => void save() }] : []),
+                    { kind: "action", icon: "download", label: "Save a copy", shortcut: keys(doc.path && !doc.password ? "Ctrl Shift S" : "Ctrl S"), onSelect: download },
                     { kind: "action", icon: "history", label: "Version history", onSelect: () => { setAiOpen(false); setHistoryOpen(true); } },
                     { kind: "action", icon: "print", label: "Print", shortcut: keys("Ctrl P"), onSelect: print },
                     { kind: "action", icon: "info", label: "Document info", onSelect: () => setDialog("info") },

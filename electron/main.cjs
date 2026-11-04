@@ -83,14 +83,40 @@ async function sendFiles(files) {
   for (const file of files) await sendFile(file);
 }
 
+// PDFs the user opened from disk. "Save" may only overwrite one of these, never a path the page makes up.
+const savablePaths = new Set();
+const savableKey = (file) => (process.platform === "win32" || IS_MAC ? path.resolve(file).toLowerCase() : path.resolve(file));
+function allowSaving(file) {
+  if (typeof file !== "string" || !path.isAbsolute(file) || !/\.pdf$/i.test(file)) return undefined;
+  savablePaths.add(savableKey(file));
+  return file;
+}
+
+/** Overwrites an opened PDF: writes beside it first, then renames over it so a failed write keeps the original. */
+async function saveOpenedFile(file, data) {
+  if (typeof file !== "string" || !savablePaths.has(savableKey(file))) throw new Error("This file can't be saved in place.");
+  if (!(data instanceof Uint8Array) || !data.length) throw new Error("Nothing to save.");
+  const target = await fs.promises.realpath(file);
+  const temp = `${target}.${crypto.randomUUID()}.folio-tmp`;
+  try {
+    await fs.promises.writeFile(temp, data, { flag: "wx" });
+    await fs.promises.rename(temp, target);
+  } catch (error) {
+    await fs.promises.rm(temp, { force: true }).catch(() => {});
+    throw error;
+  }
+  return true;
+}
+
 async function sendFile(file) {
   const target = win;
   if (!file || !target) return;
   if (WORD_FILE.test(file)) return sendWordFile(file, target);
   try {
     checkDiskPath(file);
-    const data = await readRegular(await fs.promises.realpath(file));
-    if (!target.isDestroyed()) target.webContents.send("folio:open-file", { name: path.basename(file), data });
+    const real = await fs.promises.realpath(file);
+    const data = await readRegular(real);
+    if (!target.isDestroyed()) target.webContents.send("folio:open-file", { name: path.basename(file), data, path: allowSaving(real) });
   } catch (err) {
     dialog.showErrorBox("Couldn't open file", `${file}\n\n${err.userMessage ?? err.message}`);
   }
@@ -359,7 +385,7 @@ function createWindow() {
       cancelId: 1,
       title: "Unsaved changes",
       message: "One or more tabs have unsaved changes.",
-      detail: `Press ${IS_MAC ? "⌘S" : "Ctrl+S"} in each marked tab to save a copy before closing Folio.`,
+      detail: `Press ${IS_MAC ? "⌘S" : "Ctrl+S"} in each marked tab to save it before closing Folio.`,
     });
     if (choice === 0) e.preventDefault();
   });
@@ -532,6 +558,11 @@ if (!app.requestSingleInstanceLock()) {
       if (files.length) setTimeout(() => void sendFiles(files), 0);
       return files.length > 0;
     });
+    // PDFs picked or dropped in Folio: the preload passes their real path (webUtils), so "Save" can write back.
+    on("folio:register-file", (_event, file) => {
+      try { if (allowSaving(file)) allowSaving(fs.realpathSync(file)); } catch {}
+    });
+    handle("folio:save-file", (_event, file, data) => saveOpenedFile(file, data));
     // Word documents picked or dropped in Folio (PDFs are read by the page itself).
     handle("folio:open-document", (_event, file) => {
       if (typeof file !== "string" || !WORD_FILE.test(file) || !path.isAbsolute(file)) throw new Error("Not a Word document");

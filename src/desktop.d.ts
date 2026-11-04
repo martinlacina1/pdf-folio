@@ -9,7 +9,11 @@ interface UpdateStatus {
 // Present only when Folio runs as the desktop app (see electron/preload.cjs).
 interface FolioDesktop {
   /** `note` says where a converted Word document's PDF was saved. */
-  onOpenFile(callback: (name: string, data: Uint8Array, note?: string, token?: string) => void): () => void;
+  onOpenFile(callback: (name: string, data: Uint8Array, note?: string, token?: string, path?: string) => void): () => void;
+  /** The disk path of a picked or dropped PDF, which saveFile may then overwrite. */
+  pathForFile?(file: File): string | undefined;
+  /** Overwrites a PDF that was opened from disk (its path came from onOpenFile or pathForFile). */
+  saveFile?(path: string, data: Uint8Array): Promise<boolean>;
   onConverting(callback: (name: string, token: string) => void): () => void;
   onOpenFailed(callback: (message: string, token: string) => void): () => void;
   onTabCommand(callback: (command: "new" | "close" | "next" | "previous") => void): () => void;

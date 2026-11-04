@@ -4,7 +4,7 @@ const { contextBridge, ipcRenderer, webUtils } = require("electron");
 contextBridge.exposeInMainWorld("folioDesktop", {
   /** Called with (name, data, note?) whenever a PDF is opened from Explorer, or a Word document has been converted. */
   onOpenFile(callback) {
-    const listener = (_e, file) => callback(file.name, new Uint8Array(file.data), file.note ?? undefined, file.token);
+    const listener = (_e, file) => callback(file.name, new Uint8Array(file.data), file.note ?? undefined, file.token, file.path ?? undefined);
     ipcRenderer.on("folio:open-file", listener);
     return () => ipcRenderer.removeListener("folio:open-file", listener);
   },
@@ -26,6 +26,15 @@ contextBridge.exposeInMainWorld("folioDesktop", {
   },
   /** Returns the converted PDF to the tab that opened the Word document. */
   openDocument: (file) => ipcRenderer.invoke("folio:open-document", webUtils.getPathForFile(file)),
+  /** The disk path of a picked or dropped PDF, which "Save" may then overwrite; undefined if it has none. */
+  pathForFile(file) {
+    const filePath = webUtils.getPathForFile(file);
+    if (!filePath || !/\.pdf$/i.test(filePath)) return undefined;
+    ipcRenderer.send("folio:register-file", filePath);
+    return filePath;
+  },
+  /** Overwrites a PDF that was opened from disk. */
+  saveFile: (filePath, data) => ipcRenderer.invoke("folio:save-file", filePath, data),
   ready: () => ipcRenderer.invoke("folio:ready"),
   platform: process.platform,
   openDownload: () => ipcRenderer.invoke("folio:open-download"),

@@ -2,8 +2,8 @@ import { activeDocument, setActiveDocument } from "./session";
 import { getRecent } from "./recent";
 
 export type OpenSource =
-  | { kind: "bytes"; name: string; data: Uint8Array; note?: string; password?: string }
-  | { kind: "blob"; name: string; blob: Blob; recentId?: string }
+  | { kind: "bytes"; name: string; data: Uint8Array; note?: string; password?: string; path?: string }
+  | { kind: "blob"; name: string; blob: Blob; recentId?: string; path?: string }
   | { kind: "word"; name: string; file: File }
   | { kind: "url"; name: string; url: string }
   | { kind: "sample" | "converting"; name: string }
@@ -177,8 +177,8 @@ export class DocumentTabs {
     });
     const conversions = new Map<string, number>();
     desktop?.onConverting((name, token) => conversions.set(token, this.open([{ kind: "converting", name }])));
-    desktop?.onOpenFile((name, data, note, token) => {
-      const source: OpenSource = { kind: "bytes", name, data, note };
+    desktop?.onOpenFile((name, data, note, token, path) => {
+      const source: OpenSource = { kind: "bytes", name, data, note, path };
       const key = token && conversions.get(token);
       if (token && key) { conversions.delete(token); this.finishConversion(key, source); }
       else this.open([source]);
