@@ -56,6 +56,23 @@
 .pop-btn.icon-only {
   padding: 0 8px;
 }
+/* Copy is the main action on a text selection; Ask AI stays a small icon beside it. */
+.pop-btn.copy-btn {
+  padding: 0 14px 0 11px;
+  font-size: 14px;
+  font-weight: 620;
+  color: var(--text);
+  background: var(--hover);
+}
+.pop-btn.copy-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+.pop-btn.ask-small {
+  height: 26px;
+  padding: 0 6px;
+  align-self: center;
+}
 
 /* ── Note box ───────────────────────────────────────────────────────── */
 .note-box {

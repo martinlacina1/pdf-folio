@@ -116,11 +116,8 @@ export function SelectionPopover({ info, stageWidth, colors, current, onHighligh
           />
         ))}
         <span className="divider" />
-        <button className="pop-btn" onClick={onAsk} title="Ask AI about this passage">
-          <Icon name="sparkle" size={15} /> Ask AI
-        </button>
         <button
-          className="pop-btn icon-only"
+          className="pop-btn copy-btn"
           title={copy === "done" ? "Copied" : copy === "failed" ? "Copy failed" : "Copy"}
           aria-label="Copy"
           onClick={async () => {
@@ -129,7 +126,11 @@ export function SelectionPopover({ info, stageWidth, colors, current, onHighligh
             setTimeout(() => setCopy("idle"), ok ? 1200 : 2500);
           }}
         >
-          <Icon name={copy === "done" ? "check" : copy === "failed" ? "close" : "copy"} size={15} />
+          <Icon name={copy === "done" ? "check" : copy === "failed" ? "close" : "copy"} size={18} />
+          {copy === "done" ? "Copied" : copy === "failed" ? "Failed" : "Copy"}
+        </button>
+        <button className="pop-btn icon-only ask-small" onClick={onAsk} title="Ask AI about this passage" aria-label="Ask AI">
+          <Icon name="sparkle" size={13} />
         </button>
       </div>
       <input
