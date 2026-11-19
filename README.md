@@ -1,7 +1,7 @@
 # Folio (pdf-folio)
 
-Upravená verze PDF čtečky [Folio](https://github.com/Forward-Future/folio) s českým prostředím.
-A modified version of the [Folio](https://github.com/Forward-Future/folio) PDF reader with a Czech interface.
+Upravená verze PDF čtečky [Folio](https://github.com/Forward-Future/folio) s prostředím ve 13 jazycích.
+A modified version of the [Folio](https://github.com/Forward-Future/folio) PDF reader, translated into 13 languages.
 
 ## Stažení (Windows)
 
@@ -13,11 +13,15 @@ Instalátor není podepsaný certifikátem. Pokud Windows SmartScreen zobrazí v
 
 ### Co je v této verzi navíc
 
-- **Česká lokalizace**: zapne se automaticky, když máte Windows v češtině (jinak zůstane angličtina).
+- **Lokalizace do 13 jazyků**: čeština, slovenština, angličtina, němčina, francouzština, španělština, italština,
+  portugalština (Brazílie), ruština, polština, čínština (zjednodušená), japonština a korejština. Jazyk se vybere
+  automaticky podle jazyka Windows (u ostatních jazyků zůstane angličtina).
+  *Folio is available in 13 languages and follows your system language.*
 - **Uložit do původního souboru**: Ctrl+S ukládá změny přímo do otevřeného PDF, Ctrl+Shift+S uloží kopii.
   Předchozí podoba souboru zůstane v historii verzí.
 - **Úpravy textu s diakritikou**: když vložený font v PDF nemá potřebné znaky, řádek se přepíše náhradním
-  fontem (Liberation Sans) se zachovanou pozicí, velikostí, barvou a řezem písma.
+  fontem (Liberation Sans) se zachovanou pozicí, velikostí, barvou, řezem i šířkou písma. Před zápisem se u každého
+  znaku ověří, že ho font opravdu umí vykreslit.
 - **Lišta pro označený text** se otevře u kurzoru a tlačítko Kopírovat je vždy nejblíž kurzoru.
 - **Folio jako aplikace pro PDF**: instalátor ho zaregistruje do nabídky „Otevřít v programu“ a do Výchozích
   aplikací, s vlastní ikonou pro aplikaci i PDF soubory.
