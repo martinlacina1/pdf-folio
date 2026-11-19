@@ -56,6 +56,21 @@
 .pop-btn.icon-only {
   padding: 0 8px;
 }
+/* Next to the pointer, the popover turns its button row toward it: Copy comes first when the card opens to the
+   right of the pointer, last when it opens to the left, and the row moves to the bottom when it opens above. */
+.selection-popover.opens-up {
+  flex-direction: column-reverse;
+}
+.selection-popover.at-cursor .pop-row > .copy-btn { order: -3; }
+.selection-popover.at-cursor .pop-row > .ask-small { order: -2; }
+.selection-popover.at-cursor .pop-row > .divider { order: -1; }
+.selection-popover.at-cursor.opens-left .pop-row > .divider { order: 1; }
+.selection-popover.at-cursor.opens-left .pop-row > .ask-small { order: 2; }
+.selection-popover.at-cursor.opens-left .pop-row > .copy-btn { order: 3; }
+.selection-popover.at-cursor {
+  padding: 6px;
+}
+
 /* Copy is the main action on a text selection; Ask AI stays a small icon beside it. */
 .pop-btn.copy-btn {
   padding: 0 14px 0 11px;

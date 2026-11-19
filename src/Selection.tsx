@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Icon } from "./icons";
 import { keys } from "./platform";
 import { copyText } from "./clipboard";
@@ -13,6 +13,10 @@ export interface SelectionInfo {
   x: number;
   top: number;
   bottom: number;
+  /** Where the mouse was released after selecting, relative to the stage; absent for keyboard selections. */
+  cursor?: { x: number; y: number };
+  /** The stage's visible height, so the popover can stay on screen. */
+  stageHeight?: number;
 }
 
 const POPOVER_H = 86;
@@ -27,6 +31,8 @@ export function useTextSelection(container: HTMLElement | null, enabled: boolean
     }
     let frame = 0;
     let pointerDown = false;
+    // The mouse release that ended the selection, with the scroll position then, so the point follows scrolling.
+    let release: { x: number; y: number; scrollLeft: number; scrollTop: number } | null = null;
     const update = () => {
       frame = 0;
       const selection = document.getSelection();
@@ -47,11 +53,24 @@ export function useTextSelection(container: HTMLElement | null, enabled: boolean
         x: (left + right) / 2 - stage.left,
         top: Math.min(...rects.map((r) => r.top)) - stage.top,
         bottom: Math.max(...rects.map((r) => r.bottom)) - stage.top,
+        cursor: release ? {
+          x: release.x - stage.left + release.scrollLeft - container.scrollLeft,
+          y: release.y - stage.top + release.scrollTop - container.scrollTop,
+        } : undefined,
+        stageHeight: stage.height,
       });
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    const down = (e: PointerEvent) => { if (e.button === 0) { pointerDown = true; setInfo(null); } };
-    const up = () => { if (pointerDown) { pointerDown = false; schedule(); } };
+    const down = (e: PointerEvent) => { if (e.button === 0) { pointerDown = true; release = null; setInfo(null); } };
+    const up = (e: PointerEvent) => {
+      if (!pointerDown) return;
+      pointerDown = false;
+      release = { x: e.clientX, y: e.clientY, scrollLeft: container.scrollLeft, scrollTop: container.scrollTop };
+      schedule();
+    };
+    // A selection changed with the keyboard has no mouse position: fall back to placing it by the text.
+    const key = (e: KeyboardEvent) => { if (e.shiftKey || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a")) release = null; };
+    document.addEventListener("keydown", key);
     document.addEventListener("selectionchange", schedule);
     container.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
@@ -60,6 +79,7 @@ export function useTextSelection(container: HTMLElement | null, enabled: boolean
     schedule();
     return () => {
       cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", key);
       document.removeEventListener("selectionchange", schedule);
       container.removeEventListener("pointerdown", down);
       window.removeEventListener("pointerup", up);
@@ -75,6 +95,27 @@ function place(info: { x: number; top: number; bottom: number }, width: number, 
   const left = Math.min(Math.max(8, info.x - width / 2), Math.max(8, stageWidth - width - 8));
   const top = info.top - height - 10 >= 8 ? info.top - height - 10 : info.bottom + 10;
   return { left, top };
+}
+
+/**
+ * Places the selection popover right next to the mouse pointer: below and to the right when there is room,
+ * otherwise flipped to the left and/or above. Returns which way it opened, so the buttons can face the pointer.
+ */
+function placeAtCursor(cursor: { x: number; y: number }, width: number, height: number, stageWidth: number, stageHeight: number) {
+  // The pointer arrow points up-left from its hotspot, so leave it room below and to the right.
+  const GAP_X = 4, GAP_BELOW = 12, GAP_ABOVE = 8, EDGE = 8;
+  const right = cursor.x + GAP_X + width <= stageWidth - EDGE || cursor.x - GAP_X - width < EDGE;
+  const below = cursor.y + GAP_BELOW + height <= stageHeight - EDGE || cursor.y - GAP_ABOVE - height < EDGE;
+  const left = right ? cursor.x - GAP_X : cursor.x + GAP_X - width;
+  const top = below ? cursor.y + GAP_BELOW : cursor.y - GAP_ABOVE - height;
+  return {
+    style: {
+      left: Math.min(Math.max(EDGE, left), Math.max(EDGE, stageWidth - width - EDGE)),
+      top: Math.min(Math.max(EDGE, top), Math.max(EDGE, stageHeight - height - EDGE)),
+    },
+    right,
+    below,
+  };
 }
 
 interface PopoverProps {
@@ -94,13 +135,24 @@ interface PopoverProps {
 export function SelectionPopover({ info, stageWidth, colors, current, onHighlight, onAsk, onPin, onDismiss }: PopoverProps) {
   const [copy, setCopy] = useState<"idle" | "done" | "failed">("idle");
   const [note, setNote] = useState("");
-  const width = 30 * colors.length + 210;
+  const card = useRef<HTMLDivElement>(null);
+  // Start from an estimate, then use the measured size so the card ends exactly beside the pointer.
+  const [size, setSize] = useState({ width: 30 * colors.length + 210, height: POPOVER_H });
+  useLayoutEffect(() => {
+    const el = card.current;
+    if (el && (el.offsetWidth !== size.width || el.offsetHeight !== size.height)) setSize({ width: el.offsetWidth, height: el.offsetHeight });
+  }, [size, copy]);
+  const atCursor = info.cursor && info.stageHeight
+    ? placeAtCursor(info.cursor, size.width, size.height, stageWidth, info.stageHeight) : null;
+  // Facing the pointer: the row with Copy sits on the side of the card nearest to it.
+  const className = "selection-popover" + (atCursor ? " at-cursor" + (atCursor.right ? "" : " opens-left") + (atCursor.below ? "" : " opens-up") : "");
   return (
     <div
-      className="selection-popover"
+      ref={card}
+      className={className}
       role="dialog"
       aria-label="Selected text"
-      style={place(info, width, POPOVER_H, stageWidth)}
+      style={atCursor?.style ?? place(info, size.width, size.height, stageWidth)}
       // Keep the text selection alive while clicking buttons (but let the note field take focus).
       onMouseDown={(e) => { if (!(e.target as HTMLElement).closest("input")) e.preventDefault(); }}
     >
