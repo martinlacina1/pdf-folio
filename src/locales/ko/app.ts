@@ -1,0 +1,129 @@
+// Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
+const ko: Record<string, string> = {
+  // Tools
+  "Select": "선택",
+  "Highlight": "강조 표시",
+  "Draw": "그리기",
+  "Text": "텍스트",
+  "Tools": "도구",
+  "Automatically highlight selected text": "선택한 텍스트 자동 강조 표시",
+  "Sign": "서명",
+  "Add a signature": "서명 추가",
+  "Edit mode": "편집 모드",
+  "Exit edit mode": "편집 모드 종료",
+  "Edit existing text and images": "기존 텍스트 및 이미지 편집",
+  "Save": "저장",
+  "Save changes to {name} (Ctrl+S)": "{name}에 변경 내용 저장 (Ctrl+S)",
+  "Save copy": "사본 저장",
+  "Save edited copy (Ctrl+Shift+S)": "편집한 사본 저장 (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "노란색",
+  "Green": "녹색",
+  "Blue": "파란색",
+  "Pink": "분홍색",
+  "Red": "빨간색",
+  "Black": "검은색",
+  "Purple": "보라색",
+
+  // Top bar and More menu
+  "Back to library": "라이브러리로 돌아가기",
+  "Toggle sidebar (Ctrl+\\)": "사이드바 표시/숨기기 (Ctrl+\\)",
+  "Unsaved changes": "저장되지 않은 변경 내용",
+  "Ask AI": "AI에게 묻기",
+  "Search (Ctrl+F)": "검색 (Ctrl+F)",
+  "New tab": "새 탭",
+  "Close document": "문서 닫기",
+  "Save a copy": "사본 저장",
+  "Version history": "버전 기록",
+  "Print": "인쇄",
+  "Document info": "문서 정보",
+  "PDF dark mode": "PDF 다크 모드",
+  "Focus mode": "집중 모드",
+  "Settings": "설정",
+  "Keyboard shortcuts": "바로 가기 키",
+  "About Folio": "Folio 정보",
+
+  // Annotation options
+  "Annotation options": "주석 옵션",
+  "Drawing tool": "그리기 도구",
+  "Pen": "펜",
+  "Rectangle": "사각형",
+  "Oval": "타원",
+  "Arrow": "화살표",
+  "Color": "색",
+  "Undo (Ctrl+Z)": "실행 취소 (Ctrl+Z)",
+  "Done": "완료",
+
+  // Navigation
+  "Navigation": "탐색",
+  "Previous page": "이전 페이지",
+  "Next page": "다음 페이지",
+  "Page number": "페이지 번호",
+  "of {n}": "/ {n}",
+  "Zoom out (Ctrl −)": "축소 (Ctrl −)",
+  "Zoom in (Ctrl +)": "확대 (Ctrl +)",
+  "Rotate (R)": "회전 (R)",
+  "Exit focus mode": "집중 모드 종료",
+  "to exit focus mode": "키를 눌러 집중 모드 종료",
+
+  // Opening
+  "Incorrect password. Try again.": "암호가 올바르지 않습니다. 다시 시도하세요.",
+  "Couldn't open “{name}”. {reason}": "“{name}”을(를) 열 수 없습니다. {reason}",
+  "The file may be damaged.": "파일이 손상되었을 수 있습니다.",
+  "“{name}” isn't a PDF.": "“{name}”은(는) PDF가 아닙니다.",
+  "Opening {host}…": "{host} 여는 중…",
+  "Couldn't download from {host}. The site may not allow it.": "{host}에서 다운로드할 수 없습니다. 사이트에서 허용하지 않을 수 있습니다.",
+  "Couldn't open that link. {reason}": "링크를 열 수 없습니다. {reason}",
+  "Couldn't open the sample document.": "샘플 문서를 열 수 없습니다.",
+  "Converting {name} to PDF…": "{name}을(를) PDF로 변환하는 중…",
+  "Couldn't convert “{name}” to PDF. {reason}": "“{name}”을(를) PDF로 변환할 수 없습니다. {reason}",
+  "Drop a PDF file or a link to a PDF.": "PDF 파일 또는 PDF 링크를 여기에 끌어다 놓으세요.",
+  "Drop a PDF or link to open": "열려는 PDF 또는 링크를 끌어다 놓으세요",
+
+  // Markup
+  "Annotations aren’t supported for this document": "이 문서는 주석을 지원하지 않습니다",
+  "Couldn't add the shape": "도형을 추가할 수 없습니다",
+  "Couldn't highlight that selection": "선택 영역을 강조 표시할 수 없습니다",
+  "Highlight removed": "강조 표시를 제거했습니다",
+  "Markdown copied": "Markdown을 복사했습니다",
+  "Copy failed": "복사하지 못했습니다",
+  "Couldn't export notes": "메모를 내보낼 수 없습니다",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (순서 변경).pdf",
+  "{name} (edited).pdf": "{name} (편집됨).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "사본을 내보냈습니다. 이 기기에 버전 기록을 저장할 수 없습니다.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "사본을 내보냈습니다. 기록은 암호화되지 않은 50MB 이하의 PDF에서만 사용할 수 있습니다.",
+  "Downloading reordered copy": "순서를 변경한 사본 다운로드 중",
+  "Saved a copy with your highlights and notes": "강조 표시와 메모가 포함된 사본을 저장했습니다",
+  "Download started": "다운로드를 시작했습니다",
+  "Couldn't save a copy of this document.": "이 문서의 사본을 저장할 수 없습니다.",
+  "No changes to save": "저장할 변경 내용이 없습니다",
+  "Saved. Couldn’t keep the previous version in version history.": "저장했습니다. 이전 버전을 버전 기록에 보관할 수 없습니다.",
+  "Saved {name}": "{name} 저장됨",
+  "Couldn't save “{name}”. {reason}": "“{name}”을(를) 저장할 수 없습니다. {reason}",
+  "Couldn't print this document.": "이 문서를 인쇄할 수 없습니다.",
+  "Couldn't print — saved a copy instead": "인쇄할 수 없어 대신 사본을 저장했습니다",
+  "Editing requires an unsigned, unencrypted PDF.": "서명되지 않고 암호화되지 않은 PDF만 편집할 수 있습니다.",
+  "The document changed. Try again.": "문서가 변경되었습니다. 다시 시도하세요.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "PDF 다크 모드를 변경했지만 설정을 저장할 수 없습니다.",
+  "Page scrolling changed, but couldn't save the preference.": "페이지 스크롤 방식을 변경했지만 설정을 저장할 수 없습니다.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "서명을 추가했습니다. Ctrl+Z로 실행 취소하고, 사본 저장으로 내보내세요.",
+  "Signature field detected on page {page}": "{page}페이지에서 서명 필드를 찾았습니다",
+  "Possible signature area on page {page}": "{page}페이지에 서명 영역이 있을 수 있습니다",
+  "Review signature": "서명 검토",
+  "Dismiss signature suggestion": "서명 제안 닫기",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} 준비 완료",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "다시 시작하여 업데이트하세요. 종료 시 설치 여부는 자동 업데이트 설정을 따릅니다.",
+  "Restart": "다시 시작",
+  "Later": "나중에",
+};
+export default ko;

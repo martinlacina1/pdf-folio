@@ -1,0 +1,129 @@
+// Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
+const ru: Record<string, string> = {
+  // Tools
+  "Select": "Выделить",
+  "Highlight": "Выделить цветом",
+  "Draw": "Рисовать",
+  "Text": "Текст",
+  "Tools": "Инструменты",
+  "Automatically highlight selected text": "Автоматически выделять цветом выбранный текст",
+  "Sign": "Подписать",
+  "Add a signature": "Добавить подпись",
+  "Edit mode": "Режим правки",
+  "Exit edit mode": "Выйти из режима правки",
+  "Edit existing text and images": "Изменить существующий текст и изображения",
+  "Save": "Сохранить",
+  "Save changes to {name} (Ctrl+S)": "Сохранить изменения в {name} (Ctrl+S)",
+  "Save copy": "Сохранить копию",
+  "Save edited copy (Ctrl+Shift+S)": "Сохранить измененную копию (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Желтый",
+  "Green": "Зеленый",
+  "Blue": "Синий",
+  "Pink": "Розовый",
+  "Red": "Красный",
+  "Black": "Черный",
+  "Purple": "Фиолетовый",
+
+  // Top bar and More menu
+  "Back to library": "Назад в библиотеку",
+  "Toggle sidebar (Ctrl+\\)": "Показать или скрыть боковую панель (Ctrl+\\)",
+  "Unsaved changes": "Несохраненные изменения",
+  "Ask AI": "Спросить ИИ",
+  "Search (Ctrl+F)": "Поиск (Ctrl+F)",
+  "New tab": "Новая вкладка",
+  "Close document": "Закрыть документ",
+  "Save a copy": "Сохранить копию",
+  "Version history": "Журнал версий",
+  "Print": "Печать",
+  "Document info": "Сведения о документе",
+  "PDF dark mode": "Темный режим PDF",
+  "Focus mode": "Режим фокусировки",
+  "Settings": "Параметры",
+  "Keyboard shortcuts": "Сочетания клавиш",
+  "About Folio": "О программе Folio",
+
+  // Annotation options
+  "Annotation options": "Параметры примечаний",
+  "Drawing tool": "Инструмент рисования",
+  "Pen": "Перо",
+  "Rectangle": "Прямоугольник",
+  "Oval": "Овал",
+  "Arrow": "Стрелка",
+  "Color": "Цвет",
+  "Undo (Ctrl+Z)": "Отменить (Ctrl+Z)",
+  "Done": "Готово",
+
+  // Navigation
+  "Navigation": "Навигация",
+  "Previous page": "Предыдущая страница",
+  "Next page": "Следующая страница",
+  "Page number": "Номер страницы",
+  "of {n}": "из {n}",
+  "Zoom out (Ctrl −)": "Уменьшить (Ctrl −)",
+  "Zoom in (Ctrl +)": "Увеличить (Ctrl +)",
+  "Rotate (R)": "Повернуть (R)",
+  "Exit focus mode": "Выйти из режима фокусировки",
+  "to exit focus mode": "чтобы выйти из режима фокусировки",
+
+  // Opening
+  "Incorrect password. Try again.": "Неверный пароль. Повторите попытку.",
+  "Couldn't open “{name}”. {reason}": "Не удалось открыть «{name}». {reason}",
+  "The file may be damaged.": "Возможно, файл поврежден.",
+  "“{name}” isn't a PDF.": "«{name}» не является файлом PDF.",
+  "Opening {host}…": "Открытие {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Не удалось скачать с {host}. Возможно, сайт это запрещает.",
+  "Couldn't open that link. {reason}": "Не удалось открыть ссылку. {reason}",
+  "Couldn't open the sample document.": "Не удалось открыть пример документа.",
+  "Converting {name} to PDF…": "Преобразование {name} в PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "Не удалось преобразовать «{name}» в PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Перетащите сюда файл PDF или ссылку на PDF.",
+  "Drop a PDF or link to open": "Перетащите PDF или ссылку, чтобы открыть",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Этот документ не поддерживает примечания",
+  "Couldn't add the shape": "Не удалось добавить фигуру",
+  "Couldn't highlight that selection": "Не удалось выделить цветом этот фрагмент",
+  "Highlight removed": "Выделение удалено",
+  "Markdown copied": "Markdown скопирован",
+  "Copy failed": "Не удалось скопировать",
+  "Couldn't export notes": "Не удалось экспортировать заметки",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (новый порядок).pdf",
+  "{name} (edited).pdf": "{name} (изменено).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Копия экспортирована. Не удалось сохранить ее журнал версий на этом устройстве.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Копия экспортирована. Журнал доступен для незашифрованных PDF размером до 50 МБ.",
+  "Downloading reordered copy": "Скачивание копии с новым порядком страниц",
+  "Saved a copy with your highlights and notes": "Копия с выделениями и заметками сохранена",
+  "Download started": "Скачивание начато",
+  "Couldn't save a copy of this document.": "Не удалось сохранить копию документа.",
+  "No changes to save": "Нет изменений для сохранения",
+  "Saved. Couldn’t keep the previous version in version history.": "Сохранено. Не удалось сохранить предыдущую версию в журнале версий.",
+  "Saved {name}": "Сохранено: {name}",
+  "Couldn't save “{name}”. {reason}": "Не удалось сохранить «{name}». {reason}",
+  "Couldn't print this document.": "Не удалось напечатать документ.",
+  "Couldn't print — saved a copy instead": "Не удалось напечатать — вместо этого сохранена копия",
+  "Editing requires an unsigned, unencrypted PDF.": "Для правки нужен неподписанный и незашифрованный PDF.",
+  "The document changed. Try again.": "Документ изменился. Повторите попытку.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Темный режим PDF изменен, но сохранить этот параметр не удалось.",
+  "Page scrolling changed, but couldn't save the preference.": "Прокрутка страниц изменена, но сохранить этот параметр не удалось.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Подпись добавлена. Ctrl+Z — отменить; «Сохранить копию» — экспортировать.",
+  "Signature field detected on page {page}": "На странице {page} найдено поле для подписи",
+  "Possible signature area on page {page}": "На странице {page} может быть место для подписи",
+  "Review signature": "Проверить подпись",
+  "Dismiss signature suggestion": "Скрыть предложение подписи",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} готово к установке",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Перезапустите, чтобы обновить. Установка при закрытии выполняется согласно параметру автообновления.",
+  "Restart": "Перезапустить",
+  "Later": "Позже",
+};
+export default ru;

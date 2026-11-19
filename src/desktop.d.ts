@@ -8,7 +8,7 @@ interface UpdateStatus {
 
 // Present only when Folio runs as the desktop app (see electron/preload.cjs).
 interface FolioDesktop {
-  /** The system's preferred UI language ("cs" or "en"), decided by the main process. */
+  /** The UI language code ("en", "cs", "de", …), decided by the main process from the system language. */
   language?: string;
   /** `note` says where a converted Word document's PDF was saved. */
   onOpenFile(callback: (name: string, data: Uint8Array, note?: string, token?: string, path?: string) => void): () => void;

@@ -17,7 +17,8 @@
     "dist:mac": "npm run build && electron-builder --mac --publish never",
     "dist:linux": "npm run build && electron-builder --linux --publish never",
     "smoke": "node scripts/smoke-test.mjs",
-    "test:chat-math": "node scripts/test-chat-math.mjs"
+    "test:chat-math": "node scripts/test-chat-math.mjs",
+    "test:locales": "node scripts/check-locales.mjs"
   },
   "dependencies": {
     "electron-updater": "^6.8.11",
@@ -62,7 +63,18 @@
     "productName": "Folio",
     "electronLanguages": [
       "en-US",
-      "cs"
+      "cs",
+      "sk",
+      "de",
+      "fr",
+      "es",
+      "it",
+      "pt-BR",
+      "ru",
+      "pl",
+      "zh-CN",
+      "ja",
+      "ko"
     ],
     "directories": {
       "output": "release",

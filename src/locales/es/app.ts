@@ -1,0 +1,129 @@
+// Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
+const es: Record<string, string> = {
+  // Tools
+  "Select": "Seleccionar",
+  "Highlight": "Resaltar",
+  "Draw": "Dibujar",
+  "Text": "Texto",
+  "Tools": "Herramientas",
+  "Automatically highlight selected text": "Resaltar automáticamente el texto seleccionado",
+  "Sign": "Firmar",
+  "Add a signature": "Añadir una firma",
+  "Edit mode": "Modo de edición",
+  "Exit edit mode": "Salir del modo de edición",
+  "Edit existing text and images": "Editar el texto y las imágenes existentes",
+  "Save": "Guardar",
+  "Save changes to {name} (Ctrl+S)": "Guardar los cambios en {name} (Ctrl+S)",
+  "Save copy": "Guardar copia",
+  "Save edited copy (Ctrl+Shift+S)": "Guardar copia editada (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Amarillo",
+  "Green": "Verde",
+  "Blue": "Azul",
+  "Pink": "Rosa",
+  "Red": "Rojo",
+  "Black": "Negro",
+  "Purple": "Morado",
+
+  // Top bar and More menu
+  "Back to library": "Volver a la biblioteca",
+  "Toggle sidebar (Ctrl+\\)": "Mostrar u ocultar la barra lateral (Ctrl+\\)",
+  "Unsaved changes": "Cambios sin guardar",
+  "Ask AI": "Preguntar a la IA",
+  "Search (Ctrl+F)": "Buscar (Ctrl+F)",
+  "New tab": "Nueva pestaña",
+  "Close document": "Cerrar documento",
+  "Save a copy": "Guardar una copia",
+  "Version history": "Historial de versiones",
+  "Print": "Imprimir",
+  "Document info": "Información del documento",
+  "PDF dark mode": "Modo oscuro para PDF",
+  "Focus mode": "Modo concentración",
+  "Settings": "Configuración",
+  "Keyboard shortcuts": "Atajos de teclado",
+  "About Folio": "Acerca de Folio",
+
+  // Annotation options
+  "Annotation options": "Opciones de anotación",
+  "Drawing tool": "Herramienta de dibujo",
+  "Pen": "Lápiz",
+  "Rectangle": "Rectángulo",
+  "Oval": "Óvalo",
+  "Arrow": "Flecha",
+  "Color": "Color",
+  "Undo (Ctrl+Z)": "Deshacer (Ctrl+Z)",
+  "Done": "Listo",
+
+  // Navigation
+  "Navigation": "Navegación",
+  "Previous page": "Página anterior",
+  "Next page": "Página siguiente",
+  "Page number": "Número de página",
+  "of {n}": "de {n}",
+  "Zoom out (Ctrl −)": "Alejar (Ctrl −)",
+  "Zoom in (Ctrl +)": "Acercar (Ctrl +)",
+  "Rotate (R)": "Girar (R)",
+  "Exit focus mode": "Salir del modo concentración",
+  "to exit focus mode": "para salir del modo concentración",
+
+  // Opening
+  "Incorrect password. Try again.": "Contraseña incorrecta. Inténtalo de nuevo.",
+  "Couldn't open “{name}”. {reason}": "No se pudo abrir “{name}”. {reason}",
+  "The file may be damaged.": "Es posible que el archivo esté dañado.",
+  "“{name}” isn't a PDF.": "“{name}” no es un PDF.",
+  "Opening {host}…": "Abriendo {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "No se pudo descargar desde {host}. Es posible que el sitio no lo permita.",
+  "Couldn't open that link. {reason}": "No se pudo abrir ese enlace. {reason}",
+  "Couldn't open the sample document.": "No se pudo abrir el documento de ejemplo.",
+  "Converting {name} to PDF…": "Convirtiendo {name} a PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "No se pudo convertir “{name}” a PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Suelta un archivo PDF o un enlace a un PDF.",
+  "Drop a PDF or link to open": "Suelta un PDF o un enlace para abrirlo",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Este documento no admite anotaciones",
+  "Couldn't add the shape": "No se pudo añadir la forma",
+  "Couldn't highlight that selection": "No se pudo resaltar esa selección",
+  "Highlight removed": "Resaltado eliminado",
+  "Markdown copied": "Markdown copiado",
+  "Copy failed": "No se pudo copiar",
+  "Couldn't export notes": "No se pudieron exportar las notas",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (reordenado).pdf",
+  "{name} (edited).pdf": "{name} (editado).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Copia exportada. No se pudo guardar su historial de versiones en este dispositivo.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Copia exportada. El historial está disponible para PDF sin cifrar de hasta 50 MB.",
+  "Downloading reordered copy": "Descargando la copia reordenada",
+  "Saved a copy with your highlights and notes": "Se guardó una copia con tus resaltados y notas",
+  "Download started": "Descarga iniciada",
+  "Couldn't save a copy of this document.": "No se pudo guardar una copia de este documento.",
+  "No changes to save": "No hay cambios que guardar",
+  "Saved. Couldn’t keep the previous version in version history.": "Guardado. No se pudo conservar la versión anterior en el historial de versiones.",
+  "Saved {name}": "Se guardó {name}",
+  "Couldn't save “{name}”. {reason}": "No se pudo guardar “{name}”. {reason}",
+  "Couldn't print this document.": "No se pudo imprimir este documento.",
+  "Couldn't print — saved a copy instead": "No se pudo imprimir; en su lugar se guardó una copia",
+  "Editing requires an unsigned, unencrypted PDF.": "Para editar se necesita un PDF sin firmar y sin cifrar.",
+  "The document changed. Try again.": "El documento ha cambiado. Inténtalo de nuevo.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Se cambió el modo oscuro para PDF, pero no se pudo guardar la preferencia.",
+  "Page scrolling changed, but couldn't save the preference.": "Se cambió el desplazamiento de páginas, pero no se pudo guardar la preferencia.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Firma añadida. Pulsa Ctrl+Z para deshacer; usa Guardar copia para exportar.",
+  "Signature field detected on page {page}": "Se detectó un campo de firma en la página {page}",
+  "Possible signature area on page {page}": "Posible área de firma en la página {page}",
+  "Review signature": "Revisar firma",
+  "Dismiss signature suggestion": "Descartar sugerencia de firma",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} está listo",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Reinicia para actualizar. La instalación al cerrar sigue tu configuración de actualizaciones automáticas.",
+  "Restart": "Reiniciar",
+  "Later": "Más tarde",
+};
+export default es;
