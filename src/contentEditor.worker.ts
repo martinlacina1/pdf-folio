@@ -152,9 +152,32 @@ function save(m: WrappedPdfiumModule, doc: number) {
   } finally { m.PDFiumExt_CloseFileWriter(writer); }
 }
 
-/** Replaces `obj` with a new text object in a fallback font, keeping its position, size, colors and style. */
-function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number, index: number, obj: number,
+/** Text extraction collapses runs of spaces, so compare written and read-back text with whitespace normalized. */
+const sameText = (a: string | undefined, b: string) => (a ?? "").replace(/\s+/g, " ").trim() === b.replace(/\s+/g, " ").trim();
+
+/**
+ * Whether `font` can really draw every character of `text`. Embedded subset fonts often map a missing letter to
+ * nothing, or to a zero-width placeholder box (.notdef), while text extraction still reads the letter back, so
+ * each character needs its own outline and a width. Spaces only need a width.
+ */
+function fontCovers(m: WrappedPdfiumModule, font: number, text: string) {
+  return buffer(m, 4, widthPtr => [...new Set(text)].every(ch => {
+    const code = ch.codePointAt(0)!;
+    const width = m.FPDFFont_GetGlyphWidth(font, code, 12, widthPtr) ? m.pdfium.HEAPF32[widthPtr / 4] : 0;
+    if (/\s/.test(ch)) return width > 0;
+    const glyph = m.FPDFFont_GetGlyphPath(font, code, 12);
+    return !!glyph && m.FPDFGlyphPath_CountGlyphSegments(glyph) > 0 && width > 0;
+  }));
+}
+
+/**
+ * Replaces `obj` with a new text object in a fallback font, keeping its position, size, colors and style. The
+ * fallback is stretched or narrowed horizontally so the original text would take the same width as before, which
+ * keeps condensed or wide fonts looking close to the original.
+ */
+function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number, target: EditTarget, obj: number,
   text: string, fonts: Uint8Array[], keepAlive: number[]) {
+  const index = target.index;
   const original = m.FPDFTextObj_GetFont(obj);
   // Many embedded fonts only say their style in the name, e.g. "ABCDEF+Lato-Bold".
   const name = buffer(m, 256, ptr => {
@@ -172,6 +195,7 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
   const font = m.FPDFText_LoadFont(doc, fontPtr, data.length, 2 /* FPDF_FONT_TRUETYPE */, true);
   if (!font) throw new Error("Couldn't load a replacement font.");
   try {
+    if (!fontCovers(m, font, text)) throw new Error("This font can't display all of those characters.");
     buffer(m, 32, ptr => {
       if (!m.FPDFPageObj_GetMatrix(obj, ptr) || !m.FPDFTextObj_GetFontSize(obj, ptr + 24)) {
         throw new Error("Couldn't change this text.");
@@ -179,8 +203,27 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
       const size = m.pdfium.HEAPF32[ptr / 4 + 6];
       const replacement = m.FPDFPageObj_CreateTextObj(doc, font, size);
       if (!replacement) throw new Error("Couldn't change this text.");
+      const setText = (value: string) => {
+        const bytes = (value.length + 1) * 2;
+        buffer(m, bytes, textPtr => {
+          m.pdfium.stringToUTF16(value, textPtr, bytes);
+          if (!m.FPDFText_SetText(replacement, textPtr)) throw new Error("Couldn't change this text.");
+        });
+      };
       let inserted = false;
       try {
+        // Match the original run's width: lay out its old text in the fallback font and compare.
+        const oldWidth = target.box[2] - target.box[0];
+        const [a, b] = m.pdfium.HEAPF32.subarray(ptr / 4, ptr / 4 + 2);
+        if (target.label.trim() && oldWidth > 0 && b === 0 && a > 0 && fontCovers(m, font, target.label)) {
+          setText(target.label);
+          if (m.FPDFPageObj_SetMatrix(replacement, ptr)) {
+            const widthNow = buffer(m, 16, box => m.FPDFPageObj_GetBounds(replacement, box, box + 4, box + 8, box + 12)
+              ? m.pdfium.HEAPF32[box / 4 + 2] - m.pdfium.HEAPF32[box / 4] : 0);
+            const scale = widthNow > 0 ? Math.min(1.3, Math.max(0.5, oldWidth / widthNow)) : 1;
+            if (Math.abs(scale - 1) > 0.03) m.pdfium.HEAPF32[ptr / 4] = a * scale;
+          }
+        }
         if (!m.FPDFPageObj_SetMatrix(replacement, ptr)) throw new Error("Couldn't change this text.");
         const mode = m.FPDFTextObj_GetTextRenderMode(obj);
         if (mode >= 0) m.FPDFTextObj_SetTextRenderMode(replacement, mode);
@@ -192,11 +235,7 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
           const [r, g, b, a] = m.pdfium.HEAPU32.subarray(ptr / 4, ptr / 4 + 4);
           m.FPDFPageObj_SetStrokeColor(replacement, r, g, b, a);
         }
-        const bytes = (text.length + 1) * 2;
-        buffer(m, bytes, textPtr => {
-          m.pdfium.stringToUTF16(text, textPtr, bytes);
-          if (!m.FPDFText_SetText(replacement, textPtr)) throw new Error("Couldn't change this text.");
-        });
+        setText(text);
         if (!m.FPDFPage_InsertObjectAtIndex(page, replacement, index)) throw new Error("Couldn't change this text.");
         inserted = true;
       } finally {
@@ -204,7 +243,7 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
       }
       if (!m.FPDFPage_RemoveObject(page, obj)) throw new Error("Couldn't replace the full text run.");
       m.FPDFPageObj_Destroy(obj);
-      if (objectText(m, page).get(replacement) !== text) throw new Error("This font can't display all of those characters.");
+      if (!sameText(objectText(m, page).get(replacement), text)) throw new Error("This font can't display all of those characters.");
     });
   } finally { m.FPDFFont_Close(font); }
 }
@@ -222,14 +261,19 @@ function replaceText(m: WrappedPdfiumModule, doc: number, page: number, target: 
     m.FPDFPageObj_Destroy(fragment);
   }
   if (!text) return;
+  // Keep the document's own font when it can draw every character; otherwise write the line in a full fallback font.
+  if (!fontCovers(m, m.FPDFTextObj_GetFont(obj), text)) {
+    rewriteInFallbackFont(m, doc, page, target, obj, text, fonts, keepAlive);
+    return;
+  }
   const size = (text.length + 1) * 2;
-  buffer(m, size, ptr => {
+  const written = buffer(m, size, ptr => {
     m.pdfium.stringToUTF16(text, ptr, size);
-    if (!m.FPDFText_SetText(obj, ptr)) throw new Error("Couldn't change this text.");
+    return m.FPDFText_SetText(obj, ptr);
   });
-  // Subset fonts can silently substitute a missing glyph. Read back the changed object, and when the embedded font
-  // lacks a character, write the line in a full replacement font instead.
-  if (objectText(m, page).get(obj) !== text) rewriteInFallbackFont(m, doc, page, target.index, obj, text, fonts, keepAlive);
+  // Some fonts still can't encode a character they seem to have (no code for it in the PDF's encoding): check what
+  // was written and fall back if it differs.
+  if (!written || !sameText(objectText(m, page).get(obj), text)) rewriteInFallbackFont(m, doc, page, target, obj, text, fonts, keepAlive);
 }
 
 self.onmessage = async ({ data }: MessageEvent<EditorRequest>) => {
