@@ -142,7 +142,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const findRef = useRef<PDFFindController | null>(null);
   const restoreRef = useRef<ReadingView | null>(null);
   const restoringRef = useRef(false);
-  const preferencesRef = useRef({ sidebar: true, spread: false });
+  const preferencesRef = useRef({ sidebar: false, spread: false });
   const opening = useRef<AbortController | null>(null);
   const lastPageRef = useRef<number>(1);
   const docRef = useRef<OpenDoc | null>(null);
@@ -162,7 +162,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const wheelPagingRef = useRef(wheelPaging);
   wheelPagingRef.current = wheelPaging;
   const [rotation, setRotation] = useState(0);
-  const [sidebar, setSidebar] = useState(() => localStorage.getItem("folio:sidebar") !== "0" && window.innerWidth > 760);
+  const [sidebar, setSidebar] = useState(() => localStorage.getItem("folio:sidebar") === "1" && window.innerWidth > 760);
   const [searchOpen, setSearchOpen] = useState(false);
   const [find, setFind] = useState<FindResult>({ current: 0, total: 0, state: null });
   const [theme, setTheme] = useState(document.documentElement.dataset.theme || "light");
@@ -1240,7 +1240,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           </button>
           {doc && (
             <>
-              <IconButton icon="sidebar" label={keys(t("Toggle sidebar (Ctrl+\\)"))} active={sidebar} onClick={() => setSidebar(!sidebar)} />
+              <IconButton icon="sidebar" className="sidebar-toggle" label={keys(t("Toggle sidebar (Ctrl+\\)"))} active={sidebar} onClick={() => setSidebar(!sidebar)} />
               {!multipleTabs && <div className="doc-title" title={doc.name}>
                 <span>{doc.name}</span>
                 {unsaved && <span className="dirty-dot" role="img" aria-label={t("Unsaved changes")} title={t("Unsaved changes")} />}
@@ -1601,9 +1601,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   );
 }
 
-function IconButton({ icon, label, onClick, active }: { icon: IconName; label: string; onClick: () => void; active?: boolean }) {
+function IconButton({ icon, label, onClick, active, className = "" }: { icon: IconName; label: string; onClick: () => void; active?: boolean; className?: string }) {
   return (
-    <button className={`icon-btn ${active ? "on" : ""}`} onClick={onClick} title={label} aria-label={label} aria-pressed={active}>
+    <button className={`icon-btn ${className} ${active ? "on" : ""}`.trim()} onClick={onClick} title={label} aria-label={label} aria-pressed={active}>
       <Icon name={icon} />
     </button>
   );

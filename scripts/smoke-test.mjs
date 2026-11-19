@@ -60,6 +60,9 @@ try {
   assert.equal(await page.evaluate(() => localStorage.getItem("folio:last-opened-version")), installed);
 
   // An older profile has a sidebar preference but has never recorded its Folio version.
+  // A fresh profile starts with the sidebar closed; the rest of this test expects it open.
+  assert.equal(await page.evaluate(() => localStorage.getItem("folio:sidebar")), "0");
+  await page.evaluate(() => localStorage.setItem("folio:sidebar", "1"));
   await page.evaluate(() => localStorage.removeItem("folio:last-opened-version"));
   await page.reload();
   await whatsNew.getByRole("heading", { name: "Folio " + installed, exact: true }).waitFor();

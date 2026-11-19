@@ -271,6 +271,19 @@ kbd {
   background: var(--active);
   color: var(--text);
 }
+/* The sidebar toggle stands out, so it's easy to find; while the sidebar is open it shows the accent color. */
+.icon-btn.sidebar-toggle {
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+.icon-btn.sidebar-toggle.on {
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.icon-btn.sidebar-toggle.on:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
 
 /* Tool switcher */
 .segmented {
