@@ -1,3 +1,36 @@
+# Folio (pdf-folio)
+
+Upravená verze PDF čtečky [Folio](https://github.com/Forward-Future/folio) s českým prostředím.
+A modified version of the [Folio](https://github.com/Forward-Future/folio) PDF reader with a Czech interface.
+
+## Stažení (Windows)
+
+**[Stáhnout Folio-Setup.exe](https://github.com/martinlacina1/pdf-folio/releases/latest/download/Folio-Setup.exe)**
+· [Všechna vydání](https://github.com/martinlacina1/pdf-folio/releases)
+
+Instalátor není podepsaný certifikátem. Pokud Windows SmartScreen zobrazí varování, zvolte
+**Další informace → Přesto spustit**.
+
+### Co je v této verzi navíc
+
+- **Česká lokalizace**: zapne se automaticky, když máte Windows v češtině (jinak zůstane angličtina).
+- **Uložit do původního souboru**: Ctrl+S ukládá změny přímo do otevřeného PDF, Ctrl+Shift+S uloží kopii.
+  Předchozí podoba souboru zůstane v historii verzí.
+- **Úpravy textu s diakritikou**: když vložený font v PDF nemá potřebné znaky, řádek se přepíše náhradním
+  fontem (Liberation Sans) se zachovanou pozicí, velikostí, barvou a řezem písma.
+- **Lišta pro označený text** se otevře u kurzoru a tlačítko Kopírovat je vždy nejblíž kurzoru.
+- **Folio jako aplikace pro PDF**: instalátor ho zaregistruje do nabídky „Otevřít v programu“ a do Výchozích
+  aplikací, s vlastní ikonou pro aplikaci i PDF soubory.
+- Automatické aktualizace jsou vypnuté, aby tuto verzi nepřepsalo oficiální vydání.
+
+Pro sestavení s vlastními ikonami (bez commitu) vložte `icon.ico` a `icon.png` do složky `local/` a spusťte
+`npm run dist:win:local`.
+
+---
+
+*The rest of this README is the original Folio documentation. Download links below point to the original
+Folio releases, not to this modified version.*
+
 # Folio
 
 A fast, clean PDF reader for Windows, macOS, and Linux. Read, highlight, annotate, sign, and ask AI about your
