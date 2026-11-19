@@ -11,6 +11,7 @@ const { captureWebpage } = require("./webpage.cjs");
 const { guardSession, resolveDestination } = require("./network.cjs");
 const { safePdfName } = require("./filenames.cjs");
 const { csp } = require("./csp.cjs");
+const { t, uiLanguage } = require("./i18n.cjs");
 const { WORD_FILE, openWord } = require("./convert.cjs");
 const { MAX_DOCUMENT_BYTES, checkDiskPath, readRegular } = require("./document-files.cjs");
 
@@ -94,8 +95,8 @@ function allowSaving(file) {
 
 /** Overwrites an opened PDF: writes beside it first, then renames over it so a failed write keeps the original. */
 async function saveOpenedFile(file, data) {
-  if (typeof file !== "string" || !savablePaths.has(savableKey(file))) throw new Error("This file can't be saved in place.");
-  if (!(data instanceof Uint8Array) || !data.length) throw new Error("Nothing to save.");
+  if (typeof file !== "string" || !savablePaths.has(savableKey(file))) throw new Error(t("This file can't be saved in place."));
+  if (!(data instanceof Uint8Array) || !data.length) throw new Error(t("Nothing to save."));
   const target = await fs.promises.realpath(file);
   const temp = `${target}.${crypto.randomUUID()}.folio-tmp`;
   try {
@@ -118,7 +119,7 @@ async function sendFile(file) {
     const data = await readRegular(real);
     if (!target.isDestroyed()) target.webContents.send("folio:open-file", { name: path.basename(file), data, path: allowSaving(real) });
   } catch (err) {
-    dialog.showErrorBox("Couldn't open file", `${file}\n\n${err.userMessage ?? err.message}`);
+    dialog.showErrorBox(t("Couldn't open file"), `${file}\n\n${t(err.userMessage ?? err.message)}`);
   }
 }
 
@@ -133,7 +134,9 @@ async function sendWordFile(file, target) {
     send("folio:open-file", { ...await openWord(file, (msg) => logConvert(`${file}: ${msg}`)), token });
   } catch (error) {
     logConvert(`${file}: ${error?.stack || error}`);
-    send("folio:open-failed", { token, message: `Couldn't convert “${original}” to PDF. ${error?.userMessage ?? ""}`.trim() });
+    send("folio:open-failed", { token, message: error?.userMessage
+      ? t("Couldn't convert “{name}” to PDF. {reason}", { name: original, reason: t(error.userMessage) })
+      : t("Couldn't convert “{name}” to PDF.", { name: original }) });
   }
 }
 
@@ -297,6 +300,7 @@ function createWindow() {
     ...(IS_MAC ? { trafficLightPosition: { x: 18, y: 18 } } : { titleBarOverlay: TITLEBAR[theme] }),
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
+      additionalArguments: [`--folio-language=${uiLanguage()}`],
       contextIsolation: true,
       sandbox: true,
       plugins: true, // Chromium's PDF viewer, used for printing
@@ -317,8 +321,8 @@ function createWindow() {
     if (contents !== cameraOwner || permission !== "media" || !details.isMainFrame
       || !trustedCameraOrigin(details.requestingUrl) || !details.mediaTypes?.length
       || details.mediaTypes.some(type => type !== "video")) return callback(false);
-    dialog.showMessageBox(win, { type: "question", title: "Use camera for signature?", message: "Allow Folio to use your camera to capture a signature?",
-      detail: "Camera images are processed on this device. No microphone is requested.", buttons: ["Allow camera", "Cancel"], defaultId: 1, cancelId: 1 })
+    dialog.showMessageBox(win, { type: "question", title: t("Use camera for signature?"), message: t("Allow Folio to use your camera to capture a signature?"),
+      detail: t("Camera images are processed on this device. No microphone is requested."), buttons: [t("Allow camera"), t("Cancel")], defaultId: 1, cancelId: 1 })
       .then(result => callback(result.response === 0)).catch(() => callback(false));
   });
 
@@ -380,12 +384,12 @@ function createWindow() {
   win.webContents.on("will-prevent-unload", (e) => {
     const choice = dialog.showMessageBoxSync(win, {
       type: "question",
-      buttons: ["Close without saving", "Cancel"],
+      buttons: [t("Close without saving"), t("Cancel")],
       defaultId: 1,
       cancelId: 1,
-      title: "Unsaved changes",
-      message: "One or more tabs have unsaved changes.",
-      detail: `Press ${IS_MAC ? "⌘S" : "Ctrl+S"} in each marked tab to save it before closing Folio.`,
+      title: t("Unsaved changes"),
+      message: t("One or more tabs have unsaved changes."),
+      detail: t("Press {shortcut} in each marked tab to save it before closing Folio.", { shortcut: IS_MAC ? "⌘S" : "Ctrl+S" }),
     });
     if (choice === 0) e.preventDefault();
   });
@@ -414,10 +418,10 @@ async function openLink(rawUrl) {
     const mail = url.protocol === "mailto:";
     const { response } = await dialog.showMessageBox(win, {
       type: "question",
-      title: "Open link?",
-      message: mail ? "Open this email link in your mail app?" : `Open ${url.host} in your browser?`,
+      title: t("Open link?"),
+      message: mail ? t("Open this email link in your mail app?") : t("Open {host} in your browser?", { host: url.host }),
       detail: shortUrl(url),
-      buttons: [mail ? "Open mail app" : "Open link", "Cancel"],
+      buttons: [mail ? t("Open mail app") : t("Open link"), t("Cancel")],
       defaultId: 0,
       cancelId: 1,
     }).finally(() => { askingAboutLink = false; });
@@ -431,10 +435,11 @@ async function openLink(rawUrl) {
 async function confirmLocalAddress(url, addresses) {
   const { response } = await dialog.showMessageBox(win, {
     type: "warning",
-    title: "Open a local address?",
-    message: `Open ${url.host}?`,
-    detail: `Allow ${url.origin} to connect to the following resolved addresses?\n\n${addresses.join(", ")}\n\n${shortUrl(url)}`,
-    buttons: ["Open", "Cancel"],
+    title: t("Open a local address?"),
+    message: t("Open {host}?", { host: url.host }),
+    detail: t("Allow {origin} to connect to the following resolved addresses?\n\n{addresses}\n\n{url}",
+      { origin: url.origin, addresses: addresses.join(", "), url: shortUrl(url) }),
+    buttons: [t("Open"), t("Cancel")],
     defaultId: 1,
     cancelId: 1,
   });
@@ -464,22 +469,23 @@ async function downloadPdf(url, approvedLocal) {
       if (result.error) request.abort();
       resolve(result);
     };
-    const timer = setTimeout(() => finish({ error: "The download timed out." }), 60_000);
+    const timer = setTimeout(() => finish({ error: t("The download timed out.") }), 60_000);
     let hops = 0;
     request.setHeader("Accept", "application/pdf,*/*;q=0.8");
     // Track redirects ourselves: the final address usually carries the real file name.
     request.on("redirect", (_status, _method, redirectUrl) => {
       const next = new URL(redirectUrl, url);
-      if (++hops > 10) return finish({ error: "That link redirects too many times." });
-      if (next.protocol !== "http:" && next.protocol !== "https:") return finish({ error: "That link redirects somewhere Folio can't open." });
+      if (++hops > 10) return finish({ error: t("That link redirects too many times.") });
+      if (next.protocol !== "http:" && next.protocol !== "https:") return finish({ error: t("That link redirects somewhere Folio can't open.") });
       url = next;
       request.followRedirect();
     });
     request.on("error", () => finish({ error: guard.refusedLocal()
-      ? "That link leads to a local network address, so Folio didn't follow it." : `Couldn't reach ${url.hostname}.` }));
+      ? t("That link leads to a local network address, so Folio didn't follow it.") : t("Couldn't reach {host}.", { host: url.hostname }) }));
     request.on("response", (response) => {
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        return finish({ error: `The server responded with ${response.statusCode}${response.statusMessage ? " " + response.statusMessage : ""}.` });
+        const status = `${response.statusCode}${response.statusMessage ? " " + response.statusMessage : ""}`;
+        return finish({ error: t("The server responded with {status}.", { status }) });
       }
       const header = (key) => [].concat(response.headers[key] ?? [])[0];
       // A webpage: stop downloading and let the caller render it to PDF instead.
@@ -487,7 +493,7 @@ async function downloadPdf(url, approvedLocal) {
         request.abort();
         return finish({ webpage: url.toString() });
       }
-      const tooBig = { error: "That PDF is larger than 300 MB." };
+      const tooBig = { error: t("That PDF is larger than 300 MB.") };
       if (Number(header("content-length")) > MAX_URL_PDF_BYTES) return finish(tooBig);
       const chunks = [];
       let size = 0;
@@ -496,13 +502,13 @@ async function downloadPdf(url, approvedLocal) {
         if (size > MAX_URL_PDF_BYTES) finish(tooBig);
         else chunks.push(chunk);
       });
-      response.on("error", () => finish({ error: "The download was interrupted." }));
+      response.on("error", () => finish({ error: t("The download was interrupted.") }));
       response.on("end", () => {
         const data = Buffer.concat(chunks);
         if (data.subarray(0, 1024).indexOf("%PDF-") < 0) {
           // Some servers don't label HTML; recognize it by its start.
           if (/^\s*(<!doctype html|<html|<head|<body)/i.test(data.subarray(0, 512).toString("latin1"))) return finish({ webpage: url.toString() });
-          return finish({ error: "That link isn't a PDF or a webpage." });
+          return finish({ error: t("That link isn't a PDF or a webpage.") });
         }
         finish({ name: pdfNameFromResponse(url, header("content-disposition")), data });
       });
@@ -574,9 +580,9 @@ if (!app.requestSingleInstanceLock()) {
     handle("folio:fetch-pdf", async (_event, rawUrl) => {
       let url;
       try { url = new URL(typeof rawUrl === "string" && rawUrl.length <= 8192 ? rawUrl.trim() : ""); }
-      catch { return { error: "That isn't a valid web address." }; }
-      if (url.protocol !== "http:" && url.protocol !== "https:") return { error: "Only http:// and https:// links can be opened." };
-      if (importing) return { error: "Another link is still opening." };
+      catch { return { error: t("That isn't a valid web address.") }; }
+      if (url.protocol !== "http:" && url.protocol !== "https:") return { error: t("Only http:// and https:// links can be opened.") };
+      if (importing) return { error: t("Another link is still opening.") };
       importing = true;
       try {
         const destination = await resolveDestination(url, session.defaultSession);
@@ -586,7 +592,7 @@ if (!app.requestSingleInstanceLock()) {
         if (!result.webpage) return result;
         return await captureWebpage(result.webpage, approved?.origin === new URL(result.webpage).origin ? approved : null);
       } catch {
-        return { error: `Couldn't open a verified connection to ${url.hostname}.` };
+        return { error: t("Couldn't open a verified connection to {host}.", { host: url.hostname }) };
       } finally { importing = false; }
     });
     handle("folio:app-info", () => ({ version: app.getVersion(), mode: installKind(), location: installLocation(), platform: process.platform,

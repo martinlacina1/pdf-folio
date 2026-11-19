@@ -4,6 +4,7 @@ import remarkMath from "remark-math";
 import remarkBreaks from "remark-breaks";
 import rehypeKatex from "rehype-katex";
 import { normalizeMathDelimiters } from "./chatMath";
+import { t } from "./i18n";
 import "katex/dist/katex.min.css";
 
 interface MarkdownNode {
@@ -48,7 +49,7 @@ export const AiMarkdown = memo(function AiMarkdown({ text, onPage }: { text: str
         a: ({ node, children }) => {
           const page = Number(node?.properties["data-folio-page"]);
           return Number.isSafeInteger(page) && page > 0
-            ? <button className="page-ref" onClick={() => onPage(page)} title={`Go to page ${page}`}>{children}</button>
+            ? <button className="page-ref" onClick={() => onPage(page)} title={t("Go to page {page}", { page })}>{children}</button>
             : <>{children}</>;
         },
       }}

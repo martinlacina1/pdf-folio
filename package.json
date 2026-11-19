@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "app": "npm run build && electron .",
     "dist:win": "npm run build && electron-builder --win nsis portable",
+    "dist:win:local": "node scripts/dist-win-local.mjs",
     "release": "node scripts/release.mjs",
     "dist:mac": "npm run build && electron-builder --mac --publish never",
     "dist:linux": "npm run build && electron-builder --linux --publish never",
@@ -50,9 +51,9 @@
   "productName": "Folio",
   "description": "A simple, clean PDF reader for Windows, macOS, and Linux",
   "license": "MIT",
-  "homepage": "https://github.com/Forward-Future/folio",
+  "homepage": "https://github.com/martinlacina1/pdf-folio",
   "bugs": {
-    "url": "https://github.com/Forward-Future/folio/issues"
+    "url": "https://github.com/martinlacina1/pdf-folio/issues"
   },
   "main": "electron/main.cjs",
   "folioDisableUpdates": true,
@@ -60,7 +61,8 @@
     "appId": "app.folio.reader",
     "productName": "Folio",
     "electronLanguages": [
-      "en-US"
+      "en-US",
+      "cs"
     ],
     "directories": {
       "output": "release",
@@ -103,8 +105,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "Forward-Future",
-        "repo": "folio-releases",
+        "owner": "martinlacina1",
+        "repo": "pdf-folio",
         "releaseType": "release"
       }
     ],
@@ -203,7 +205,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Forward-Future/folio.git"
+    "url": "https://github.com/martinlacina1/pdf-folio.git"
   },
   "author": "Forward Future",
   "desktopName": "folio-pdf-reader.desktop",

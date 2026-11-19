@@ -1,22 +1,23 @@
 import type { Mark, MarkupState } from "./markup";
 import type { OutlineItem, PDFDocumentProxy } from "./pdf";
+import { t } from "./i18n";
 
 export function notesMarkdown(name: string, { note, marks, bookmarkedPages }: MarkupState) {
-  const lines = [`# Notes: ${name.replace(/\.pdf$/i, "")}`, ""];
+  const lines = [`# ${t("Notes: {name}", { name: name.replace(/\.pdf$/i, "") })}`, ""];
   if (note.trim()) lines.push(note.trim(), "");
   for (const mark of marks) {
-    const page = `p. ${mark.page + 1}`;
+    const page = t("p. {n}", { n: mark.page + 1 });
     if (mark.type === "highlight") {
       lines.push(`> ${mark.text.replace(/\n+/g, " ")} (${page})`);
       if (mark.note) lines.push("", mark.note);
       lines.push("");
     } else if (mark.type === "freetext" && mark.text) {
-      lines.push(`- Text box (${page}): ${mark.text}`, "");
+      lines.push(`- ${t("Text box")} (${page}): ${mark.text}`, "");
     } else if (mark.type === "ink") {
-      lines.push(`- ${mark.shape ?? "Drawing"} (${page})`, "");
+      lines.push(`- ${t(mark.shape ?? "Drawing")} (${page})`, "");
     }
   }
-  if (bookmarkedPages?.length) lines.push("## Bookmarked pages", "", ...bookmarkedPages.map(n => `- p. ${n}`));
+  if (bookmarkedPages?.length) lines.push(`## ${t("Bookmarked pages")}`, "", ...bookmarkedPages.map(n => `- ${t("p. {n}", { n })}`));
   return lines.join("\n").trim() + "\n";
 }
 

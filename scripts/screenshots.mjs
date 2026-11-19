@@ -14,7 +14,7 @@ const require = createRequire(import.meta.url);
 const out = path.join(root, "docs", "screenshots");
 mkdirSync(out, { recursive: true });
 
-const env = { ...process.env, FOLIO_TEST_USER_DATA: mkdtempSync(path.join(tmpdir(), "folio-shots-")), FOLIO_TEST_HIDDEN: "1" };
+const env = { ...process.env, FOLIO_LANG: "en", FOLIO_TEST_USER_DATA: mkdtempSync(path.join(tmpdir(), "folio-shots-")), FOLIO_TEST_HIDDEN: "1" };
 delete env.ELECTRON_RUN_AS_NODE;
 const app = await electron.launch({ executablePath: require("electron"), args: [root, "--mute-audio", "--force-device-scale-factor=2"], env, timeout: 60_000 });
 try {

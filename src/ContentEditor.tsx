@@ -5,6 +5,7 @@ import type { PDFDocumentProxy } from "./pdf";
 import type { EventBus, PDFViewer } from "./viewer";
 import type { Change, EditorReply, EditorRequest, EditTarget } from "./contentEditor.worker";
 import type { PdfChange } from "./versionHistory";
+import { t as tr } from "./i18n";
 
 export interface ContentEditorHandle { finish: () => Promise<boolean>; deselect: () => boolean }
 interface Surface { page: number; host: HTMLDivElement; viewport: PageViewport }
@@ -209,7 +210,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot, 
         }} />)}
       {selected?.page === s.page && (selected.target.kind === "text" ? <>
         <div className="folio-old-text" style={{ ...rectangle(selected.target,s.viewport), background: selected.paper }} />
-        <input ref={input} className="folio-inline-text" aria-label="Edit text on page" maxLength={32767}
+        <input ref={input} className="folio-inline-text" aria-label={tr("Edit text on page")} maxLength={32767}
           style={{ ...inputStyle(selected.target,s.viewport,selected.paper),
             ...(face?.target === selected.target ? { fontFamily: face.family } : {}) }} value={value} readOnly={busy}
           onChange={e => { setValue(e.target.value); setError(""); }}
@@ -220,14 +221,14 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot, 
             if (e.key === "Escape" && !pending.current) { e.stopPropagation(); selectedRef.current = null; setSelected(null); setError(""); }
           }} />
       </> : <div className="folio-image-actions" style={{ left: rectangle(selected.target,s.viewport).left, top: rectangle(selected.target,s.viewport).top }}>
-        <button className="btn" disabled={busy} onClick={() => file.current?.click()}>Replace image…</button>
-        <input hidden ref={file} type="file" aria-label="Replacement image" accept="image/png,image/jpeg" onChange={e => {
+        <button className="btn" disabled={busy} onClick={() => file.current?.click()}>{tr("Replace image…")}</button>
+        <input hidden ref={file} type="file" aria-label={tr("Replacement image")} accept="image/png,image/jpeg" onChange={e => {
           const picked = e.target.files?.[0]; e.target.value = "";
           if (picked) void commit({ kind: "image", index: selected.target.index, file: picked });
         }} />
       </div>)}
     </>,s.host,s.page))}
-    <div className="folio-edit-status" role={error ? "alert" : "status"}>{error || (busy ? "Applying edit…" :
-      surfaces.length > 0 && surfaces.every(s => targets.get(s.page)?.length === 0) ? "No editable text or images on this page." : "")}</div>
+    <div className="folio-edit-status" role={error ? "alert" : "status"}>{error ? tr(error) : busy ? tr("Applying edit…") :
+      surfaces.length > 0 && surfaces.every(s => targets.get(s.page)?.length === 0) ? tr("No editable text or images on this page.") : ""}</div>
   </>;
 }

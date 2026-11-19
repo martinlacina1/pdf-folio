@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon, type IconName } from "./icons";
+import { t } from "./i18n";
 
 const PRESETS: { value: string; label: string; icon?: IconName }[] = [
-  { value: "auto", label: "Automatic" },
-  { value: "page-width", label: "Fit width", icon: "fitWidth" },
-  { value: "page-fit", label: "Fit page", icon: "fitPage" },
+  { value: "auto", label: t("Automatic") },
+  { value: "page-width", label: t("Fit width"), icon: "fitWidth" },
+  { value: "page-fit", label: t("Fit page"), icon: "fitPage" },
 ];
 const LEVELS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
@@ -36,7 +37,7 @@ export function ZoomMenu({
 
   return (
     <div className="zoom" ref={ref}>
-      <button className="zoom-value" onClick={() => setOpen(!open)} aria-haspopup="menu" aria-expanded={open} title="Zoom">
+      <button className="zoom-value" onClick={() => setOpen(!open)} aria-haspopup="menu" aria-expanded={open} title={t("Zoom")}>
         {Math.round(scale * 100)}%
       </button>
       {open && (
@@ -58,7 +59,7 @@ export function ZoomMenu({
             }}
           >
             <Icon name="book" size={15} />
-            Two-page view
+            {t("Two-page view")}
             <kbd className="menu-kbd">2</kbd>
           </button>
           <hr />

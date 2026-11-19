@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { DocumentTabs, type ReaderFrame } from "./documentTabs";
 import { takeUpgradeNotes } from "./releaseNotes";
+import { t } from "./i18n";
 import "pdfjs-dist/web/pdf_viewer.css";
 import "./styles.css";
 import "./reading-tools.css";
@@ -11,7 +12,7 @@ if (reader) {
   const desktop = window.parent.folioDesktop;
   if (desktop) {
     window.folioDesktop = { ...desktop, installUpdate: () => {
-      if (reader.tabs.all.some(tab => tab.dirty) && !window.parent.confirm("Restart Folio and discard unsaved changes?")) return;
+      if (reader.tabs.all.some(tab => tab.dirty) && !window.parent.confirm(t("Restart Folio and discard unsaved changes?"))) return;
       desktop.installUpdate();
     } };
     document.documentElement.classList.add("desktop", `platform-${desktop.platform}`);

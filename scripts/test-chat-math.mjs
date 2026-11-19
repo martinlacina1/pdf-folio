@@ -5,6 +5,8 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
 
+// Checks expect the English UI text, whatever language this computer uses (see src/i18n.ts).
+process.env.FOLIO_LANG = "en";
 const root = path.resolve(import.meta.dirname, "..");
 const server = await createServer({ root, server: { middlewareMode: true }, appType: "custom" });
 let passed = 0;

@@ -5,6 +5,7 @@ import { AnnotationEditorParamsType, AnnotationEditorType } from "pdfjs-dist";
 import type { EventBus, PDFViewer } from "./viewer";
 import type { PDFDocumentProxy } from "./pdf";
 import { getNotes, saveNotes, type DocNotes, type StoredMark } from "./recent";
+import { t } from "./i18n";
 
 export type Mark = StoredMark;
 
@@ -248,10 +249,10 @@ export class MarkupController {
 
   async addShape(page: number, shape: NonNullable<Mark["shape"]>, data: Record<string, unknown>) {
     const layer = this.#ui?.getLayer(page);
-    if (!layer) throw new Error("The page is not ready.");
+    if (!layer) throw new Error(t("The page is not ready."));
     const editor = await layer.deserialize(data);
     if (this.#ui?.getLayer(page) !== layer) return;
-    if (!editor) throw new Error("The drawing could not be created.");
+    if (!editor) throw new Error(t("The drawing could not be created."));
     editor.__folioShape = shape;
     layer.add(editor);
     this.sync();
@@ -352,7 +353,7 @@ export class MarkupController {
     const marks: Record<string, unknown>[] = [];
     for (const [pageIndex, pending] of this.#pending) {
       const [, , pageRight] = (await pdf.getPage(pageIndex + 1)).view;
-      if (generation !== this.#generation) throw new Error("The document changed.");
+      if (generation !== this.#generation) throw new Error(t("The document changed."));
       for (const mark of pending) {
         const data: Record<string, unknown> = { ...mark.data, pageIndex, deleted: false };
         const top = (mark.data.rect as number[] | undefined)?.[3];

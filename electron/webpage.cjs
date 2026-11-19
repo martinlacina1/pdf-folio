@@ -6,6 +6,7 @@ const crypto = require("node:crypto");
 const { safePdfName } = require("./filenames.cjs");
 const { guardSession } = require("./network.cjs");
 const { MAX_DOCUMENT_BYTES } = require("./document-files.cjs");
+const { t } = require("./i18n.cjs");
 
 const TOTAL_TIMEOUT_MS = 60_000;
 // Pages are laid out like a desktop browser window: 1280 CSS px wide, no margins.
@@ -135,12 +136,12 @@ async function captureWebpage(rawUrl, approvedLocal) {
         generateDocumentOutline: true,
         generateTaggedPDF: true,
       });
-      if (data.length > MAX_DOCUMENT_BYTES) return { error: "The converted webpage is larger than 300 MB." };
+      if (data.length > MAX_DOCUMENT_BYTES) return { error: t("The converted webpage is larger than 300 MB.") };
       return { name: safePdfName(contents.getTitle(), new URL(contents.getURL() || url.toString()).hostname), data };
     })(), TOTAL_TIMEOUT_MS, "timeout");
   } catch (error) {
-    if (error?.message === "timeout") return { error: "The webpage took too long to load." };
-    return { error: `Couldn't load that webpage${error?.code ? ` (${error.code})` : ""}.` };
+    if (error?.message === "timeout") return { error: t("The webpage took too long to load.") };
+    return { error: error?.code ? t("Couldn't load that webpage ({code}).", { code: error.code }) : t("Couldn't load that webpage.") };
   } finally {
     win?.destroy();
     guard.close();

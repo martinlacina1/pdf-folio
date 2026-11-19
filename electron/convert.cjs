@@ -9,6 +9,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { fileURLToPath, pathToFileURL } = require("node:url");
 const { systemPowerShell } = require("./windows-powershell.cjs");
+const { t } = require("./i18n.cjs");
 const { MAX_DOCUMENT_BYTES, MAX_HTML_BYTES, tooLarge, readRegular, stageWord, pdfName, cachedPdf, rememberPdf } = require("./document-files.cjs");
 
 const WORD_FILE = /\.docx?$/i;
@@ -212,7 +213,7 @@ async function convertDocument(file, log) {
         if (index) {
           const name = pdfName(staged.location.name, index);
           await rememberPdf(profile, staged, index, data).catch((error) => log(error.message));
-          return { name, data, note: `Saved ${name} next to ${original}.` };
+          return { name, data, note: t("Saved {name} next to {original}.", { name, original }) };
         }
       } catch (error) { log(error.message); }
     }

@@ -1,0 +1,129 @@
+// Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
+const cs: Record<string, string> = {
+  // Tools
+  "Select": "Vybrat",
+  "Highlight": "Zvýraznit",
+  "Draw": "Kreslit",
+  "Text": "Text",
+  "Tools": "Nástroje",
+  "Automatically highlight selected text": "Automaticky zvýraznit vybraný text",
+  "Sign": "Podepsat",
+  "Add a signature": "Přidat podpis",
+  "Edit mode": "Režim úprav",
+  "Exit edit mode": "Ukončit úpravy",
+  "Edit existing text and images": "Upravit existující text a obrázky",
+  "Save": "Uložit",
+  "Save changes to {name} (Ctrl+S)": "Uložit změny do {name} (Ctrl+S)",
+  "Save copy": "Uložit kopii",
+  "Save edited copy (Ctrl+Shift+S)": "Uložit upravenou kopii (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Žlutá",
+  "Green": "Zelená",
+  "Blue": "Modrá",
+  "Pink": "Růžová",
+  "Red": "Červená",
+  "Black": "Černá",
+  "Purple": "Fialová",
+
+  // Top bar and More menu
+  "Back to library": "Zpět do knihovny",
+  "Toggle sidebar (Ctrl+\\)": "Zobrazit/skrýt postranní panel (Ctrl+\\)",
+  "Unsaved changes": "Neuložené změny",
+  "Ask AI": "Zeptat se AI",
+  "Search (Ctrl+F)": "Hledat (Ctrl+F)",
+  "New tab": "Nová karta",
+  "Close document": "Zavřít dokument",
+  "Save a copy": "Uložit kopii",
+  "Version history": "Historie verzí",
+  "Print": "Tisk",
+  "Document info": "Informace o dokumentu",
+  "PDF dark mode": "Tmavý režim PDF",
+  "Focus mode": "Režim soustředění",
+  "Settings": "Nastavení",
+  "Keyboard shortcuts": "Klávesové zkratky",
+  "About Folio": "O aplikaci Folio",
+
+  // Annotation options
+  "Annotation options": "Možnosti anotací",
+  "Drawing tool": "Nástroj kreslení",
+  "Pen": "Pero",
+  "Rectangle": "Obdélník",
+  "Oval": "Elipsa",
+  "Arrow": "Šipka",
+  "Color": "Barva",
+  "Undo (Ctrl+Z)": "Zpět (Ctrl+Z)",
+  "Done": "Hotovo",
+
+  // Navigation
+  "Navigation": "Navigace",
+  "Previous page": "Předchozí strana",
+  "Next page": "Další strana",
+  "Page number": "Číslo strany",
+  "of {n}": "z {n}",
+  "Zoom out (Ctrl −)": "Oddálit (Ctrl −)",
+  "Zoom in (Ctrl +)": "Přiblížit (Ctrl +)",
+  "Rotate (R)": "Otočit (R)",
+  "Exit focus mode": "Ukončit režim soustředění",
+  "to exit focus mode": "ukončí režim soustředění",
+
+  // Opening
+  "Incorrect password. Try again.": "Nesprávné heslo. Zkuste to znovu.",
+  "Couldn't open “{name}”. {reason}": "Soubor „{name}“ se nepodařilo otevřít. {reason}",
+  "The file may be damaged.": "Soubor je možná poškozený.",
+  "“{name}” isn't a PDF.": "„{name}“ není PDF.",
+  "Opening {host}…": "Otevírání {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Z {host} se nepodařilo stahovat. Web to možná nepovoluje.",
+  "Couldn't open that link. {reason}": "Odkaz se nepodařilo otevřít. {reason}",
+  "Couldn't open the sample document.": "Ukázkový dokument se nepodařilo otevřít.",
+  "Converting {name} to PDF…": "Převádění {name} do PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "Soubor „{name}“ se nepodařilo převést do PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Přetáhněte sem soubor PDF nebo odkaz na PDF.",
+  "Drop a PDF or link to open": "Přetáhněte sem PDF nebo odkaz k otevření",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Tento dokument nepodporuje anotace",
+  "Couldn't add the shape": "Tvar se nepodařilo přidat",
+  "Couldn't highlight that selection": "Výběr se nepodařilo zvýraznit",
+  "Highlight removed": "Zvýraznění odstraněno",
+  "Markdown copied": "Markdown zkopírován",
+  "Copy failed": "Kopírování se nezdařilo",
+  "Couldn't export notes": "Poznámky se nepodařilo exportovat",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (změněné pořadí).pdf",
+  "{name} (edited).pdf": "{name} (upraveno).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Kopie exportována. Historii verzí se na tomto zařízení nepodařilo uložit.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Kopie exportována. Historie je k dispozici pro nešifrované PDF do 50 MB.",
+  "Downloading reordered copy": "Stahování kopie se změněným pořadím stran",
+  "Saved a copy with your highlights and notes": "Kopie se zvýrazněním a poznámkami uložena",
+  "Download started": "Stahování zahájeno",
+  "Couldn't save a copy of this document.": "Kopii dokumentu se nepodařilo uložit.",
+  "No changes to save": "Žádné změny k uložení",
+  "Saved. Couldn’t keep the previous version in version history.": "Uloženo. Předchozí verzi se nepodařilo zachovat v historii verzí.",
+  "Saved {name}": "Uloženo: {name}",
+  "Couldn't save “{name}”. {reason}": "Soubor „{name}“ se nepodařilo uložit. {reason}",
+  "Couldn't print this document.": "Dokument se nepodařilo vytisknout.",
+  "Couldn't print — saved a copy instead": "Tisk se nezdařil – místo toho byla uložena kopie",
+  "Editing requires an unsigned, unencrypted PDF.": "Úpravy vyžadují nepodepsané a nešifrované PDF.",
+  "The document changed. Try again.": "Dokument se změnil. Zkuste to znovu.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Tmavý režim PDF byl změněn, ale nastavení se nepodařilo uložit.",
+  "Page scrolling changed, but couldn't save the preference.": "Posouvání stránek bylo změněno, ale nastavení se nepodařilo uložit.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Podpis přidán. Ctrl+Z vrátí zpět; exportujte pomocí Uložit kopii.",
+  "Signature field detected on page {page}": "Na straně {page} je pole pro podpis",
+  "Possible signature area on page {page}": "Na straně {page} může být místo pro podpis",
+  "Review signature": "Zkontrolovat podpis",
+  "Dismiss signature suggestion": "Zavřít návrh podpisu",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} je připraveno",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Aktualizujte restartem. Instalace při zavření se řídí nastavením automatických aktualizací.",
+  "Restart": "Restartovat",
+  "Later": "Později",
+};
+export default cs;

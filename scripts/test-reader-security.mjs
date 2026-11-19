@@ -46,7 +46,7 @@ let app;
 try {
   await server.listen();
   const origin = `http://127.0.0.1:${server.httpServer.address().port}`;
-  const env = { ...process.env, FOLIO_DEV_URL: origin, FOLIO_TEST_HIDDEN: "1", FOLIO_TEST_USER_DATA: profile };
+  const env = { ...process.env, FOLIO_LANG: "en", FOLIO_DEV_URL: origin, FOLIO_TEST_HIDDEN: "1", FOLIO_TEST_USER_DATA: profile };
   delete env.ELECTRON_RUN_AS_NODE;
   app = await electron.launch({ executablePath: createRequire(import.meta.url)("electron"), env,
     args: [root, "--mute-audio", ...(process.platform === "linux" && process.getuid?.() === 0 ? ["--no-sandbox"] : [])] });

@@ -4,6 +4,7 @@ import type { PageViewport } from "pdfjs-dist";
 import { Modal } from "./Dialogs";
 import { keys } from "./platform";
 import { Icon } from "./icons";
+import { t } from "./i18n";
 import { cleanSignature, fitSignature, readSignature, type SignatureImage, type SignatureTarget } from "./signatures";
 
 export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }: {
@@ -54,14 +55,14 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
       const task = page.render({ canvas, viewport }); render = task;
       await task.promise;
       if (!cancelled) setPreview({ url: canvas.toDataURL(), width: viewport.width, height: viewport.height, viewport });
-    })().catch(reason => { if (!cancelled) setError("Couldn't preview this page: " + String(reason)); });
+    })().catch(reason => { if (!cancelled) setError(t("Couldn't preview this page: {reason}", { reason: String(reason) })); });
     return () => { cancelled = true; render?.cancel(); };
   }, [pdf, pageNumber]);
 
   useEffect(() => {
     if (camera && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
-      void videoRef.current.play().catch(() => setError("Camera preview couldn't start. Try uploading a photo instead."));
+      void videoRef.current.play().catch(() => setError(t("Camera preview couldn't start. Try uploading a photo instead.")));
     }
   }, [camera]);
 
@@ -100,11 +101,11 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
     try {
       // Desktop camera permission belongs to the Folio window that asks for consent.
       const devices = window.folioDesktop ? window.parent.navigator.mediaDevices : navigator.mediaDevices;
-      if (!devices?.getUserMedia) throw new Error("Camera isn't available. Upload a photo instead.");
+      if (!devices?.getUserMedia) throw new Error(t("Camera isn't available. Upload a photo instead."));
       const stream = await devices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1280 } }, audio: false });
       if (!mounted.current || generation !== captureGeneration.current) { stream.getTracks().forEach(track => track.stop()); return; }
       streamRef.current?.getTracks().forEach(track => track.stop()); streamRef.current = stream; setCamera(true);
-    } catch (reason) { if (mounted.current && generation === captureGeneration.current) setError("Couldn't access the camera. Check your camera permissions or upload a photo. " + (reason as Error).message); }
+    } catch (reason) { if (mounted.current && generation === captureGeneration.current) setError(t("Couldn't access the camera. Check your camera permissions or upload a photo. {reason}", { reason: (reason as Error).message })); }
     finally { if (mounted.current && generation === captureGeneration.current) setCameraStarting(false); }
   };
   const acceptSource = (image: CanvasImageSource, width: number, height: number) => {
@@ -123,8 +124,8 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
     stopCamera();
     const generation = ++captureGeneration.current;
     try {
-      if (file.size > 20 * 1024 * 1024) throw new Error("Please use a photo smaller than 20 MB.");
-      if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) throw new Error("Choose a PNG, JPEG, or WebP image.");
+      if (file.size > 20 * 1024 * 1024) throw new Error(t("Please use a photo smaller than 20 MB."));
+      if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) throw new Error(t("Choose a PNG, JPEG, or WebP image."));
       const bitmap = await createImageBitmap(file);
       try { if (mounted.current && generation === captureGeneration.current) acceptSource(bitmap, bitmap.width, bitmap.height); }
       finally { bitmap.close(); }
@@ -142,7 +143,7 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
       await onApprove(signature, rect);
       if (remember) {
         try { localStorage.setItem("folio:signature", JSON.stringify(signature)); }
-        catch { setError("Signature added, but couldn't remember it on this device. Close to continue."); setBusy(false); return; }
+        catch { setError(t("Signature added, but couldn't remember it on this device. Close to continue.")); setBusy(false); return; }
       }
       onClose();
     } catch (reason) { setError((reason as Error).message); setBusy(false); }
@@ -160,54 +161,54 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
     setManualRect([positionX, positionY, positionX + width, positionY + height]);
   };
 
-  return <Modal title={"Sign page " + pageNumber} onClose={() => { if (!busy) onClose(); }}>
+  return <Modal title={t("Sign page {page}", { page: pageNumber })} onClose={() => { if (!busy) onClose(); }}>
     <div className="signature-dialog">
       <div className="signature-intro">
-        <p>Add your handwritten signature. Review the placement before adding it.</p>
-        <ol className="signature-steps" aria-label="Signing progress">
-          <li aria-current={!ready ? "step" : undefined} data-complete={ready || undefined}><span>{ready ? <Icon name="check" size={12} /> : "1"}</span> Add signature</li>
-          <li aria-current={ready ? "step" : undefined}><span>2</span> Place on page</li>
+        <p>{t("Add your handwritten signature. Review the placement before adding it.")}</p>
+        <ol className="signature-steps" aria-label={t("Signing progress")}>
+          <li aria-current={!ready ? "step" : undefined} data-complete={ready || undefined}><span>{ready ? <Icon name="check" size={12} /> : "1"}</span> {t("Add signature")}</li>
+          <li aria-current={ready ? "step" : undefined}><span>2</span> {t("Place on page")}</li>
         </ol>
       </div>
       <div className="signature-workspace-scroll"><fieldset disabled={busy} className="signature-workspace">
-        <section className="signature-editor" aria-label="Signature capture">
-          <div className="signature-section-head"><h3>Your signature</h3>{saved && ready && <span className="signature-badge">Saved on this device</span>}</div>
+        <section className="signature-editor" aria-label={t("Signature capture")}>
+          <div className="signature-section-head"><h3>{t("Your signature")}</h3>{saved && ready && <span className="signature-badge">{t("Saved on this device")}</span>}</div>
           {!signature && !source && !camera && <div className="signature-empty">
             <div className="signature-paper"><Icon name="signature" size={76} /></div>
-            <h4>Start with pen and paper</h4><p>Sign white paper with dark ink, then capture or upload a photo.</p>
+            <h4>{t("Start with pen and paper")}</h4><p>{t("Sign white paper with dark ink, then capture or upload a photo.")}</p>
           </div>}
           {!source && !camera && <div className="signature-source-actions" data-compact={ready || undefined}>
-            <button className="signature-source" disabled={cameraStarting} onClick={() => void startCamera()}><span className="signature-source-icon"><Icon name="camera" size={21} /></span><span><strong>{cameraStarting ? "Opening camera..." : "Use camera"}</strong><small>Capture from paper</small></span><Icon name="chevronRight" size={15} /></button>
-            <button className="signature-source" onClick={() => uploadRef.current?.click()}><span className="signature-source-icon"><Icon name="upload" size={21} /></span><span><strong>Upload photo</strong><small>PNG, JPG or WebP</small></span><Icon name="chevronRight" size={15} /></button>
+            <button className="signature-source" disabled={cameraStarting} onClick={() => void startCamera()}><span className="signature-source-icon"><Icon name="camera" size={21} /></span><span><strong>{cameraStarting ? t("Opening camera...") : t("Use camera")}</strong><small>{t("Capture from paper")}</small></span><Icon name="chevronRight" size={15} /></button>
+            <button className="signature-source" onClick={() => uploadRef.current?.click()}><span className="signature-source-icon"><Icon name="upload" size={21} /></span><span><strong>{t("Upload photo")}</strong><small>{t("PNG, JPG or WebP")}</small></span><Icon name="chevronRight" size={15} /></button>
           </div>}
-          <input ref={uploadRef} className="signature-upload" aria-label="Upload signature photo" type="file" accept="image/png,image/jpeg,image/webp" onChange={event => { void upload(event.target.files?.[0]); event.target.value = ""; }} />
+          <input ref={uploadRef} className="signature-upload" aria-label={t("Upload signature photo")} type="file" accept="image/png,image/jpeg,image/webp" onChange={event => { void upload(event.target.files?.[0]); event.target.value = ""; }} />
           {camera && <div className="signature-camera">
             <div className="signature-camera-frame"><video ref={videoRef} muted playsInline onLoadedData={() => setCameraReady(true)} /><span className="signature-camera-guide" aria-hidden="true" /></div>
-            <p className="signature-hint">Keep the paper flat and your signature inside the frame.</p>
-            <div className="form-actions"><button className="btn ghost" onClick={stopCamera}>Stop camera</button><button className="btn primary" disabled={!cameraReady} onClick={capture}><Icon name="camera" size={15} /> Capture paper</button></div>
+            <p className="signature-hint">{t("Keep the paper flat and your signature inside the frame.")}</p>
+            <div className="form-actions"><button className="btn ghost" onClick={stopCamera}>{t("Stop camera")}</button><button className="btn primary" disabled={!cameraReady} onClick={capture}><Icon name="camera" size={15} /> {t("Capture paper")}</button></div>
           </div>}
           {source && <div className="signature-crop">
-            <p className="signature-hint">Drag a box around the signature to remove paper edges and shadows.</p>
-            <div className="signature-photo"><canvas ref={cropCanvas} aria-label="Crop signature photo" onPointerDown={event => { if (event.button !== 0) return; dragStart.current = cropPoint(event); event.currentTarget.setPointerCapture(event.pointerId); }}
+            <p className="signature-hint">{t("Drag a box around the signature to remove paper edges and shadows.")}</p>
+            <div className="signature-photo"><canvas ref={cropCanvas} aria-label={t("Crop signature photo")} onPointerDown={event => { if (event.button !== 0) return; dragStart.current = cropPoint(event); event.currentTarget.setPointerCapture(event.pointerId); }}
               onPointerMove={event => { if (!dragStart.current) return; const point = cropPoint(event); setCrop([Math.min(point[0], dragStart.current[0]), Math.min(point[1], dragStart.current[1]), Math.max(1, Math.abs(point[0] - dragStart.current[0])), Math.max(1, Math.abs(point[1] - dragStart.current[1]))]); }}
               onPointerUp={() => { dragStart.current = null; }} onPointerCancel={() => { dragStart.current = null; }} /></div>
-            <label className="signature-range">Ink sensitivity <input aria-label="Ink sensitivity" type="range" min="70" max="245" value={threshold} onChange={event => setThreshold(+event.target.value)} /></label>
+            <label className="signature-range">{t("Ink sensitivity")} <input aria-label={t("Ink sensitivity")} type="range" min="70" max="245" value={threshold} onChange={event => setThreshold(+event.target.value)} /></label>
             <button className="btn primary signature-use" disabled={!signature} onClick={() => {
               try { setSignature(cleanSignature(source, crop!, threshold)); setSource(null); setError(""); }
               catch (reason) { setError((reason as Error).message); }
-            }}>Use this signature <Icon name="chevronRight" size={15} /></button>
-            <button className="btn ghost" onClick={() => { setSource(null); setSignature(null); setError(""); }}>Choose another photo</button>
+            }}>{t("Use this signature")} <Icon name="chevronRight" size={15} /></button>
+            <button className="btn ghost" onClick={() => { setSource(null); setSignature(null); setError(""); }}>{t("Choose another photo")}</button>
           </div>}
-          {signature && !camera && <div className="signature-image"><img src={signature.url} alt="Your signature preview" /><span><Icon name="check" size={13} /> Background removed</span></div>}
-          {ready && <label className="signature-remember"><input type="checkbox" checked={remember} onChange={event => setRemember(event.target.checked)} /><span>Remember this signature<small>Only on this device. Forget it in Settings.</small></span></label>}
-          <div className="signature-privacy"><Icon name="lock" size={14} /><span>Processed on this device. Never uploaded.</span></div>
-          <details className="signature-details"><summary>About signatures and saved copies</summary><p>This adds a visual signature, not a digital certificate. Changes can affect existing digital signatures. Remembered signatures are stored unencrypted on this computer. Use {keys("Ctrl+Z")} to undo; Save copy exports the signed PDF.</p></details>
+          {signature && !camera && <div className="signature-image"><img src={signature.url} alt={t("Your signature preview")} /><span><Icon name="check" size={13} /> {t("Background removed")}</span></div>}
+          {ready && <label className="signature-remember"><input type="checkbox" checked={remember} onChange={event => setRemember(event.target.checked)} /><span>{t("Remember this signature")}<small>{t("Only on this device. Forget it in Settings.")}</small></span></label>}
+          <div className="signature-privacy"><Icon name="lock" size={14} /><span>{t("Processed on this device. Never uploaded.")}</span></div>
+          <details className="signature-details"><summary>{t("About signatures and saved copies")}</summary><p>{keys(t("This adds a visual signature, not a digital certificate. Changes can affect existing digital signatures. Remembered signatures are stored unencrypted on this computer. Use Ctrl+Z to undo; Save copy exports the signed PDF."))}</p></details>
         </section>
-        <section className="signature-document" aria-label="Signature placement preview">
-          <div className="signature-section-head"><h3>Page {pageNumber}</h3><span className="signature-badge">{selected ? "Suggested position" : "Page preview"}</span></div>
+        <section className="signature-document" aria-label={t("Signature placement preview")}>
+          <div className="signature-section-head"><h3>{t("Page {n}", { n: pageNumber })}</h3><span className="signature-badge">{selected ? t("Suggested position") : t("Page preview")}</span></div>
           {ready && <div className="signature-placement-controls">
-            <label className="signature-field">Placement<select aria-label="Signature placement" value={targetId} onChange={event => setTargetId(event.target.value)}>{targets.map(target => <option key={target.id} value={target.id}>{target.label}</option>)}<option value="manual">Choose a position on this page</option></select></label>
-            {targetId === "manual" && <label className="signature-range">Signature width <input aria-label="Signature width" type="range" min="40" max="300" value={size} onChange={event => {
+            <label className="signature-field">{t("Placement")}<select aria-label={t("Signature placement")} value={targetId} onChange={event => setTargetId(event.target.value)}>{targets.map(target => <option key={target.id} value={target.id}>{target.label}</option>)}<option value="manual">{t("Choose a position on this page")}</option></select></label>
+            {targetId === "manual" && <label className="signature-range">{t("Signature width")} <input aria-label={t("Signature width")} type="range" min="40" max="300" value={size} onChange={event => {
               const width = +event.target.value;
               setSize(width);
               if (manualRect) placeAt((manualRect[0] + manualRect[2]) / 2, (manualRect[1] + manualRect[3]) / 2, width);
@@ -215,7 +216,7 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
           </div>}
           <div className="signature-page-stage">
             {preview ? <div className="signature-page" data-placeable={ready && targetId === "manual" || undefined} style={{ width: Math.min(280, preview.width), aspectRatio: preview.width / preview.height }}
-              role={ready && targetId === "manual" ? "button" : undefined} tabIndex={ready && targetId === "manual" ? 0 : undefined} aria-label={ready && targetId === "manual" ? "Place signature on page " + pageNumber : undefined} aria-describedby="signature-placement-hint"
+              role={ready && targetId === "manual" ? "button" : undefined} tabIndex={ready && targetId === "manual" ? 0 : undefined} aria-label={ready && targetId === "manual" ? t("Place signature on page {page}", { page: pageNumber }) : undefined} aria-describedby="signature-placement-hint"
               onClick={event => {
                 if (!ready || targetId !== "manual") return;
                 const area = event.currentTarget.getBoundingClientRect();
@@ -226,15 +227,15 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
                 event.preventDefault();
                 const area = manualRect || preview.viewport.viewBox;
                 placeAt((area[0] + area[2]) / 2 + (event.key === "ArrowLeft" ? -5 : event.key === "ArrowRight" ? 5 : 0), (area[1] + area[3]) / 2 + (event.key === "ArrowDown" ? -5 : event.key === "ArrowUp" ? 5 : 0));
-              }}><img className="signature-page-background" src={preview.url} alt={"Page " + pageNumber + " placement preview"} />
-                {signature && screenRect && <img className="signature-placement" src={signature.url} alt="Proposed signature location" style={{ left: Math.min(screenRect[0], screenRect[2]) / preview.width * 100 + "%", top: Math.min(screenRect[1], screenRect[3]) / preview.height * 100 + "%", width: Math.abs(screenRect[2] - screenRect[0]) / preview.width * 100 + "%", height: Math.abs(screenRect[3] - screenRect[1]) / preview.height * 100 + "%" }} />}
-              </div> : <div className="signature-page-loading" role="status"><Icon name="file" size={30} /><span>Loading page preview...</span></div>}
+              }}><img className="signature-page-background" src={preview.url} alt={t("Page {page} placement preview", { page: pageNumber })} />
+                {signature && screenRect && <img className="signature-placement" src={signature.url} alt={t("Proposed signature location")} style={{ left: Math.min(screenRect[0], screenRect[2]) / preview.width * 100 + "%", top: Math.min(screenRect[1], screenRect[3]) / preview.height * 100 + "%", width: Math.abs(screenRect[2] - screenRect[0]) / preview.width * 100 + "%", height: Math.abs(screenRect[3] - screenRect[1]) / preview.height * 100 + "%" }} />}
+              </div> : <div className="signature-page-loading" role="status"><Icon name="file" size={30} /><span>{t("Loading page preview...")}</span></div>}
           </div>
-          <p className="signature-hint" id="signature-placement-hint" aria-live="polite">{!ready ? "Your signature will appear here for review." : selected ? "Signature field or line detected. Check the suggested position." : manualRect ? "Click to reposition, or use the arrow keys to fine-tune." : "Click the page to place your signature, or focus it and press Enter."}</p>
+          <p className="signature-hint" id="signature-placement-hint" aria-live="polite">{!ready ? t("Your signature will appear here for review.") : selected ? t("Signature field or line detected. Check the suggested position.") : manualRect ? t("Click to reposition, or use the arrow keys to fine-tune.") : t("Click the page to place your signature, or focus it and press Enter.")}</p>
         </section>
       </fieldset></div>
-      {error && <p className="form-error signature-error" role="alert">{error}</p>}
-      <div className="signature-footer"><span>Nothing is added until you approve.</span><div className="form-actions"><button className="btn ghost" disabled={busy} onClick={onClose}>Cancel</button><button className="btn primary" disabled={!ready || !rect || !preview || busy} onClick={() => void approve()}><Icon name="check" size={15} />{busy ? "Adding signature..." : "Approve and add signature"}</button></div></div>
+      {error && <p className="form-error signature-error" role="alert">{t(error)}</p>}
+      <div className="signature-footer"><span>{t("Nothing is added until you approve.")}</span><div className="form-actions"><button className="btn ghost" disabled={busy} onClick={onClose}>{t("Cancel")}</button><button className="btn primary" disabled={!ready || !rect || !preview || busy} onClick={() => void approve()}><Icon name="check" size={15} />{busy ? t("Adding signature...") : t("Approve and add signature")}</button></div></div>
     </div>
   </Modal>;
 }

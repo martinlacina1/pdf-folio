@@ -1,6 +1,7 @@
 import { memo, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { renderThumbnail, type OutlineItem, type PDFDocumentProxy } from "./pdf";
 import { Icon } from "./icons";
+import { t } from "./i18n";
 
 interface Props {
   pdf: PDFDocumentProxy;
@@ -40,19 +41,19 @@ export function Sidebar({ pdf, page, rotation, onSelectPage, onSelectDest, order
     <aside className={`sidebar tab-${tab}`}>
       <div className="sidebar-tabs" role="tablist">
         <button role="tab" aria-selected={tab === "pages"} className={tab === "pages" ? "on" : ""} onClick={() => setTab("pages")}>
-          Pages
+          {t("Pages")}
         </button>
         <button role="tab" aria-selected={tab === "outline"} className={tab === "outline" ? "on" : ""} onClick={() => setTab("outline")}>
-          Outline
+          {t("Outline")}
         </button>
         <button role="tab" aria-selected={tab === "notes"} className={tab === "notes" ? "on" : ""} onClick={() => setTab("notes")}>
-          Notes{noteCount > 0 && <span className="tab-count">{noteCount}</span>}
+          {t("Notes")}{noteCount > 0 && <span className="tab-count">{noteCount}</span>}
         </button>
       </div>
       {tab === "pages" && (
         <button type="button" className="bookmark-filter" aria-pressed={bookmarkedOnly} disabled={bookmarkedPages === null}
-          title={bookmarkedOnly ? "Show all pages" : "Show bookmarked pages"} onClick={() => setBookmarkedOnly(only => !only)}>
-          <Icon name="bookmark" size={13} /> Bookmarked
+          title={bookmarkedOnly ? t("Show all pages") : t("Show bookmarked pages")} onClick={() => setBookmarkedOnly(only => !only)}>
+          <Icon name="bookmark" size={13} /> {t("Bookmarked")}
         </button>
       )}
       <div className="sidebar-scroll">
@@ -64,7 +65,7 @@ export function Sidebar({ pdf, page, rotation, onSelectPage, onSelectDest, order
         ) : outline === null ? null : outline.length === 0 ? (
           <div className="empty-outline">
             <Icon name="list" size={22} />
-            <p>This document has no outline.</p>
+            <p>{t("This document has no outline.")}</p>
           </div>
         ) : (
           <ul className="outline">
@@ -77,7 +78,7 @@ export function Sidebar({ pdf, page, rotation, onSelectPage, onSelectDest, order
       {tab !== "notes" && pdf.numPages > 1 && (
         <div className="organize-actions">
           <button className="link small" onClick={() => onOrder(Array.from({ length: pdf.numPages }, (_, i) => i + 1))}>
-            <Icon name="grid" size={14} /> Reorder pages
+            <Icon name="grid" size={14} /> {t("Reorder pages")}
           </button>
         </div>
       )}
@@ -91,7 +92,7 @@ function OutlineNode({ item, onSelect, depth }: { item: OutlineItem; onSelect: (
   return (
     <li>
       <div className="outline-row" style={{ paddingLeft: 8 + depth * 14 }}>
-        <button className={`outline-toggle ${hasKids ? "" : "hidden"} ${open ? "open" : ""}`} onClick={() => setOpen(!open)} tabIndex={hasKids ? 0 : -1} aria-label="Expand">
+        <button className={`outline-toggle ${hasKids ? "" : "hidden"} ${open ? "open" : ""}`} onClick={() => setOpen(!open)} tabIndex={hasKids ? 0 : -1} aria-label={t("Expand")}>
           <Icon name="chevronRight" size={13} />
         </button>
         <button
@@ -153,29 +154,29 @@ function PageOrganizer({ pdf, page, rotation, onSelect, order, onOrder, onSave, 
   };
 
   return (
-    <aside className="sidebar" aria-label="Reorder pages">
+    <aside className="sidebar" aria-label={t("Reorder pages")}>
       <div className="organize-head">
-        <strong>Reorder pages</strong>
-        <p>Drag a page to its new position, or enter a position below. Save the order as a new PDF.</p>
+        <strong>{t("Reorder pages")}</strong>
+        <p>{t("Drag a page to its new position, or enter a position below. Save the order as a new PDF.")}</p>
         <form className="page-field" onSubmit={e => {
           e.preventDefault();
           move(selected, (e.currentTarget.elements.namedItem("position") as HTMLInputElement).valueAsNumber);
         }}>
-          <label htmlFor="page-position">Move page {selected} to</label>
+          <label htmlFor="page-position">{t("Move page {page} to", { page: selected })}</label>
           <input key={`${selected}-${position}`} id="page-position" name="position" type="number" required
             min={1} max={order.length} defaultValue={position} disabled={saving} />
-          <button className="link small" disabled={saving}>Move</button>
+          <button className="link small" disabled={saving}>{t("Move")}</button>
         </form>
       </div>
       <div className="sidebar-scroll">
         <Thumbnails pdf={pdf} page={selected} rotation={rotation} onSelect={select} order={order} onMove={saving ? undefined : move} />
       </div>
       <div className="organize-actions">
-        <button className="btn ghost" onClick={() => onOrder(null)} disabled={saving}>{onOpenCopy ? "Done" : "Cancel"}</button>
-        <button className="btn primary" onClick={save} disabled={!changed || saving}>{saving ? "Saving…" : "Save reordered copy"}</button>
+        <button className="btn ghost" onClick={() => onOrder(null)} disabled={saving}>{onOpenCopy ? t("Done") : t("Cancel")}</button>
+        <button className="btn primary" onClick={save} disabled={!changed || saving}>{saving ? t("Saving…") : t("Save reordered copy")}</button>
       </div>
       {onOpenCopy && <div className="organize-actions"><button className="link small" onClick={onOpenCopy}>
-        <Icon name="book" size={14} /> Open reordered copy
+        <Icon name="book" size={14} /> {t("Open reordered copy")}
       </button></div>}
     </aside>
   );
@@ -268,7 +269,7 @@ function Thumbnails({ pdf, page, rotation, onSelect, order, onMove, bookmarkedPa
       onDragEnd={() => setDropTarget(null)}>
       {count === 0 && <div className="empty-outline" role="status">
         <Icon name="bookmark" size={22} />
-        <p>No bookmarked pages yet.</p>
+        <p>{t("No bookmarked pages yet.")}</p>
       </div>}
       <div aria-hidden="true" style={{ height: Math.min(range.start, count) * rowHeight, flexShrink: 0 }} />
       {Array.from({ length: Math.max(0, Math.min(range.end, count) - range.start) }, (_, i) => {
@@ -340,17 +341,17 @@ const Thumb = memo(function Thumb({
   return (
     <div className="thumb-row" style={{ height: Math.ceil(THUMB_W * ratio) + 48 }}>
       <button ref={ref} id={id} data-page={n} draggable={draggable} className={`thumb ${active ? "on" : ""} ${dropTarget ? "drop-target" : ""}`}
-        onClick={() => onSelect(n)} aria-label={position ? `Page ${n}, position ${position}` : `Page ${n}`}>
+        onClick={() => onSelect(n)} aria-label={position ? t("Page {n}, position {position}", { n, position }) : t("Page {n}", { n })}>
         <span className="thumb-frame" style={{ width: THUMB_W, height: THUMB_W * ratio, flexShrink: 0 }}>
           <canvas ref={canvasRef} style={{ opacity: ready ? 1 : 0 }} />
         </span>
-        {position && <span className="thumb-num">{position} · Page {n}</span>}
+        {position && <span className="thumb-num">{t("{position} · Page {n}", { position, n })}</span>}
       </button>
       {onToggleBookmark && <div className="thumb-caption">
         <label className="thumb-num" htmlFor={id}>{n}</label>
         <button type="button" className="thumb-bookmark" disabled={bookmarked === undefined}
-          aria-label={`Bookmark page ${n}`} aria-pressed={bookmarked ?? false}
-          title={bookmarked ? `Remove bookmark from page ${n}` : `Bookmark page ${n}`} onClick={() => onToggleBookmark(n)}>
+          aria-label={t("Bookmark page {n}", { n })} aria-pressed={bookmarked ?? false}
+          title={bookmarked ? t("Remove bookmark from page {n}", { n }) : t("Bookmark page {n}", { n })} onClick={() => onToggleBookmark(n)}>
           <Icon name="bookmark" size={15} />
         </button>
       </div>}

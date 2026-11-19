@@ -30,6 +30,7 @@ import { recognizeScannedPages } from "./pageOcr";
 import { ImageMenu, ImageViewer, type ImageTarget } from "./ImageViewer";
 import { MoreMenu, type MoreItem } from "./MoreMenu";
 import { keys } from "./platform";
+import { t } from "./i18n";
 import { AiPanel, type AiContext } from "./AiPanel";
 import { ZoomMenu } from "./ZoomMenu";
 import { SearchBar, type FindResult } from "./SearchBar";
@@ -452,10 +453,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         if (signal.aborted) return;
         const e = err as { name?: string; code?: number; message?: string };
         if (e?.name === "PasswordException") {
-          setPending({ name, data, error: e.code === 2 ? "Incorrect password. Try again." : undefined });
+          setPending({ name, data, error: e.code === 2 ? t("Incorrect password. Try again.") : undefined });
         } else {
           tabs.failed(tabKey);
-          setError(`Couldn't open “${name}”. ${e?.message ?? "The file may be damaged."}`);
+          setError(t("Couldn't open “{name}”. {reason}", { name, reason: e?.message ? t(e.message) : t("The file may be damaged.") }));
         }
       } finally {
         if (unattached) void unattached.loadingTask.destroy().catch(() => {});
@@ -476,7 +477,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       if (!signal.aborted) {
         setLoading(false);
         tabs.failed(tabKey);
-        setError(`Couldn't open “${name}”. ${(error as Error).message}`);
+        setError(t("Couldn't open “{name}”. {reason}", { name, reason: t((error as Error).message) }));
         return false;
       }
     }
@@ -487,7 +488,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     tabs.open(Array.from(files, (file): OpenSource => {
       if (window.folioDesktop && /\.docx?$/i.test(file.name)) return { kind: "word", name: file.name, file };
       if (file.type && file.type !== "application/pdf" && !/\.pdf$/i.test(file.name))
-        return { kind: "error", name: file.name, message: `“${file.name}” isn't a PDF.` };
+        return { kind: "error", name: file.name, message: t("“{name}” isn't a PDF.", { name: file.name }) };
       return { kind: "blob", name: file.name, blob: file, path: window.folioDesktop?.pathForFile?.(file) };
     }));
   }, [tabs]);
@@ -507,7 +508,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       const host = new URL(url).hostname;
       setLoading(true);
       setError(null);
-      setToast(`Opening ${host}…`);
+      setToast(t("Opening {host}…", { host }));
       try {
         let file: { name: string; data: Uint8Array } | null;
         if (window.folioDesktop) {
@@ -516,7 +517,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           // The browser edition can only read links whose server allows cross-origin requests.
           const transfer = AbortSignal.any([signal, AbortSignal.timeout(60_000)]);
           const res = await fetch(url, { signal: transfer }).catch(() => {
-            throw new Error(`Couldn't download from ${host}. The site may not allow it.`);
+            throw new Error(t("Couldn't download from {host}. The site may not allow it.", { host }));
           });
           const data = await readPdfResponse(res, transfer);
           const name = decodeURIComponent(new URL(res.url || url).pathname.split("/").filter(Boolean).pop() || host);
@@ -531,7 +532,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         setToast(null);
         setLoading(false);
         tabs.failed(tabKey);
-        setError(`Couldn't open that link. ${e?.message ?? ""}`.trim());
+        setError(t("Couldn't open that link. {reason}", { reason: e?.message ? t(e.message) : "" }).trim());
       }
     },
     [beginOpen, openBytes, tabs, tabKey],
@@ -544,7 +545,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       const data = await readPdfResponse(res, signal);
       if (!signal.aborted) await openBytes("Folio sample.pdf", data, undefined, signal);
     } catch {
-      if (!signal.aborted) { setLoading(false); tabs.failed(tabKey); setError("Couldn't open the sample document."); }
+      if (!signal.aborted) { setLoading(false); tabs.failed(tabKey); setError(t("Couldn't open the sample document.")); }
     }
   }, [beginOpen, openBytes, tabs, tabKey]);
 
@@ -605,7 +606,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       nextSelection.current = null;
       setPinned(null);
       setTool(next); setContentEditing(editContent); return true;
-    } catch { flash("Annotations aren’t supported for this document"); return false; }
+    } catch { flash(t("Annotations aren’t supported for this document")); return false; }
   };
   const leaveEditMode = () => chooseTool("select");
   const startSigning = async () => { if (await chooseTool("select")) setSigning(true); };
@@ -613,7 +614,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   useEffect(() => {
     if (!doc || tool !== "ink" || drawTool === "Pen") return;
     return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, (page, data) => {
-      void markupRef.current!.addShape(page, drawTool, data).catch(() => flash("Couldn't add the shape"));
+      void markupRef.current!.addShape(page, drawTool, data).catch(() => flash(t("Couldn't add the shape")));
     });
   }, [doc, tool, drawTool, colors.ink, scale, rotation, flash]);
 
@@ -647,7 +648,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     const id = await markupRef.current!.highlightSelection(hex);
     if (owner !== docRef.current) return;
     if (!id) {
-      flash("Couldn't highlight that selection");
+      flash(t("Couldn't highlight that selection"));
       return;
     }
     if (note) markupRef.current!.setNote(id, note);
@@ -734,7 +735,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const removeHighlight = (id: string) => {
     markupRef.current!.remove(id);
     setHighlightMenu(null);
-    flash("Highlight removed");
+    flash(t("Highlight removed"));
   };
 
   const askAbout = (text: string, pageNumber: number) => {
@@ -812,7 +813,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     }
   };
 
-  const copyName = pageOrder && doc ? doc.name.replace(/\.pdf$/i, "") + " (reordered).pdf" : doc?.name ?? "document.pdf";
+  const copyName = pageOrder && doc ? t("{name} (reordered).pdf", { name: doc.name.replace(/\.pdf$/i, "") }) : doc?.name ?? "document.pdf";
   const saveBytes = (bytes: Uint8Array) => {
     saveBlob(pdfBlob(bytes), copyName.toLowerCase().endsWith(".pdf") ? copyName : `${copyName}.pdf`);
   };
@@ -824,13 +825,13 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     try {
       if (format === "markdown") {
         const ok = await copyText(notesMarkdown(doc.name, controller.state));
-        if (docRef.current === doc) flash(ok ? "Markdown copied" : "Copy failed");
+        if (docRef.current === doc) flash(ok ? t("Markdown copied") : t("Copy failed"));
       } else {
         const json = await notesJson(doc, controller.state);
         if (docRef.current === doc) saveBlob(new Blob([json], { type: "application/json" }), doc.name.replace(/\.pdf$/i, "") + ".notes.json");
       }
     } catch {
-      if (docRef.current === doc) flash("Couldn't export notes");
+      if (docRef.current === doc) flash(t("Couldn't export notes"));
     }
   };
 
@@ -842,7 +843,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     try {
       const copy = await currentBytes();
       if (!copy || docRef.current !== doc) return;
-      const name = doc.sourceId ? copyName.replace(/\.pdf$/i, "") + " (edited).pdf" : copyName;
+      const name = doc.sourceId ? t("{name} (edited).pdf", { name: copyName.replace(/\.pdf$/i, "") }) : copyName;
       const blob = pdfBlob(copy.bytes);
       saveBlob(blob, /\.pdf$/i.test(name) ? name : name + ".pdf");
       const changes = changesForCopy(doc, copy.annotated, pageOrder);
@@ -852,9 +853,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           const original = doc.edits?.original ?? pdfBlob(await doc.pdf.getData());
           await saveVersion({ id: doc.sourceId ?? doc.id, name: doc.name, data: original },
             { id: await contentKey(copy.bytes), name, data: blob }, changes);
-        } catch { historyMessage = "Copy exported. Couldn’t save its version history on this device."; }
+        } catch { historyMessage = t("Copy exported. Couldn’t save its version history on this device."); }
       } else if (changes.length) {
-        historyMessage = "Copy exported. History is available for unencrypted PDFs up to 50 MB.";
+        historyMessage = t("Copy exported. History is available for unencrypted PDFs up to 50 MB.");
       }
       if (docRef.current !== doc) return;
       setError(null);
@@ -862,15 +863,15 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         await openBytes(name, copy.bytes, undefined, beginOpen(), pageOrder ? pageOrder.indexOf(pageRef.current) + 1 : pageRef.current, undefined, doc, pageOrder);
       } else if (pageOrder) {
         setPageDraft(draft => draft?.order === pageOrder ? { order: pageOrder, copy: copy.bytes } : draft);
-        flash("Downloading reordered copy");
+        flash(t("Downloading reordered copy"));
       } else {
-        flash(copy.annotated ? "Saved a copy with your highlights and notes" : "Download started");
+        flash(copy.annotated ? t("Saved a copy with your highlights and notes") : t("Download started"));
       }
       if (historyMessage) flash(historyMessage);
     } catch {
       if (docRef.current === doc) {
         if (dirty) setDirty(true);
-        setError("Couldn't save a copy of this document.");
+        setError(t("Couldn't save a copy of this document."));
       }
     } finally { savingCopy.current = false; }
   };
@@ -889,7 +890,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       const copy = await currentBytes();
       if (!copy || docRef.current !== doc) return;
       const changes = changesForCopy(doc, copy.annotated, pageOrder);
-      if (!changes.length && !doc.sourceId) { flash("No changes to save"); return; }
+      if (!changes.length && !doc.sourceId) { flash(t("No changes to save")); return; }
       const blob = pdfBlob(copy.bytes);
       let historyMessage = "";
       // Keep the version being replaced in version history, so an overwrite can be undone.
@@ -898,18 +899,19 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           const original = doc.edits?.original ?? pdfBlob(await doc.pdf.getData());
           await saveVersion({ id: doc.sourceId ?? doc.id, name: doc.name, data: original },
             { id: await contentKey(copy.bytes), name: doc.name, data: blob }, changes);
-        } catch { historyMessage = "Saved. Couldn’t keep the previous version in version history."; }
+        } catch { historyMessage = t("Saved. Couldn’t keep the previous version in version history."); }
       }
       await desktop.saveFile(doc.path, copy.bytes);
       if (docRef.current !== doc) return;
       setError(null);
       await openBytes(doc.name, copy.bytes, undefined, beginOpen(), pageOrder ? pageOrder.indexOf(pageRef.current) + 1 : pageRef.current,
         undefined, doc, pageOrder, doc.path);
-      flash(historyMessage || `Saved ${doc.name}`);
+      flash(historyMessage || t("Saved {name}", { name: doc.name }));
     } catch (error) {
       if (docRef.current === doc) {
         if (dirty) setDirty(true);
-        setError(`Couldn't save “${doc.name}”. ${(error as Error)?.message?.replace(/^Error invoking remote method '[^']+': (Error: )?/, "") ?? ""}`.trim());
+        const reason = (error as Error)?.message?.replace(/^Error invoking remote method '[^']+': (Error: )?/, "") ?? "";
+        setError(t("Couldn't save “{name}”. {reason}", { name: doc.name, reason: reason && t(reason) }).trim());
       }
     } finally { savingCopy.current = false; }
   };
@@ -922,7 +924,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     try {
       copy = await currentBytes();
     } catch {
-      if (docRef.current === doc) setError("Couldn't print this document.");
+      if (docRef.current === doc) setError(t("Couldn't print this document."));
       return;
     } finally {
       if (dirty && docRef.current === doc) setDirty(true);
@@ -940,7 +942,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           frame.contentWindow?.print();
         } catch {
           // The desktop shell denies blob: pop-ups, so a saved copy is the working fallback there.
-          if (window.folioDesktop) { saveBytes(bytes); flash("Couldn't print — saved a copy instead"); }
+          if (window.folioDesktop) { saveBytes(bytes); flash(t("Couldn't print — saved a copy instead")); }
           else window.open(url, "_blank");
         }
       }, 250);
@@ -958,31 +960,31 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         case "bytes":
           await openBytes(source.name, new Uint8Array(source.data.buffer, source.data.byteOffset, source.data.byteLength), source.password,
             undefined, undefined, undefined, undefined, undefined, source.path);
-          if (source.note && docRef.current?.name === source.name) flash(source.note);
+          if (source.note && docRef.current?.name === source.name) flash(t(source.note));
           break;
         case "blob":
           if (!await openBlob(source.name, source.blob, source.path) && source.recentId) void removeRecent(source.recentId);
           break;
         case "word": {
           const signal = beginOpen();
-          setLoading(true); setError(null); setToast(`Converting ${source.name} to PDF…`);
+          setLoading(true); setError(null); setToast(t("Converting {name} to PDF…", { name: source.name }));
           try {
             const file = await window.folioDesktop!.openDocument(source.file);
             if (signal.aborted) return;
             setToast(null);
             await openBytes(file.name, new Uint8Array(file.data), undefined, signal);
-            if (file.note && docRef.current?.name === file.name) flash(file.note);
+            if (file.note && docRef.current?.name === file.name) flash(t(file.note));
           } catch (error) {
             if (signal.aborted) return;
             setToast(null); setLoading(false); tabs.failed(tabKey);
-            setError(`Couldn't convert “${source.name}” to PDF. ${(error as Error).message}`);
+            setError(t("Couldn't convert “{name}” to PDF. {reason}", { name: source.name, reason: t((error as Error).message) }));
           }
           break;
         }
         case "sample": await openSample(); break;
         case "url": await openUrl(source.url); break;
-        case "converting": setLoading(true); setToast(`Converting ${source.name} to PDF…`); break;
-        case "error": setLoading(false); setToast(null); setError(source.message); tabs.failed(tabKey); break;
+        case "converting": setLoading(true); setToast(t("Converting {name} to PDF…", { name: source.name })); break;
+        case "error": setLoading(false); setToast(null); setError(t(source.message)); tabs.failed(tabKey); break;
       }
     };
     tabs.bind(tabKey, { open: source => { void open(source); }, flush: async () => {
@@ -1036,7 +1038,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   useEffect(() => localStorage.setItem("folio:sidebar", sidebar ? "1" : "0"), [sidebar]);
   const setNightTo = (next: boolean) => {
     try { localStorage.setItem("folio:night", next ? "1" : "0"); }
-    catch { flash("PDF dark mode changed, but couldn't save the preference."); }
+    catch { flash(t("PDF dark mode changed, but couldn't save the preference.")); }
     setNight(next);
   };
 
@@ -1126,10 +1128,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       } else if (e.key === "r" || e.key === "R") {
         rotate();
       } else {
-        const t = TOOLS.find((t) => t.key.toLowerCase() === e.key.toLowerCase());
-        if (t && !dialog && !pending && !imageView) {
-          if (focus && t.id !== "select") void toggleFocus();
-          chooseTool(t.id);
+        const match = TOOLS.find((item) => item.key.toLowerCase() === e.key.toLowerCase());
+        if (match && !dialog && !pending && !imageView) {
+          if (focus && match.id !== "select") void toggleFocus();
+          chooseTool(match.id);
         }
         else if (e.key === "Home") goTo(1);
         else if (e.key === "End") goTo(numPages);
@@ -1176,7 +1178,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       const url = !files?.length && e.dataTransfer ? droppedUrl(e.dataTransfer) : null;
       if (files?.length) openFiles(files);
       else if (url) openUrlDialog(url);
-      else setError("Drop a PDF file or a link to a PDF.");
+      else setError(t("Drop a PDF file or a link to a PDF."));
     };
     // Pasting a link (outside text fields) fills in Open from URL too.
     const paste = (e: ClipboardEvent) => {
@@ -1232,16 +1234,16 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     >
       <header className="topbar" ref={headerRef}>
         <div className="topbar-left">
-          <button className="brand" onClick={doc ? () => tabs.library() : undefined} title={doc ? "Back to library" : "Folio"}>
+          <button className="brand" onClick={doc ? () => tabs.library() : undefined} title={doc ? t("Back to library") : "Folio"}>
             <span className="brand-mark" />
             <span className="brand-name">Folio</span>
           </button>
           {doc && (
             <>
-              <IconButton icon="sidebar" label={keys("Toggle sidebar (Ctrl+\\)")} active={sidebar} onClick={() => setSidebar(!sidebar)} />
+              <IconButton icon="sidebar" label={keys(t("Toggle sidebar (Ctrl+\\)"))} active={sidebar} onClick={() => setSidebar(!sidebar)} />
               {!multipleTabs && <div className="doc-title" title={doc.name}>
                 <span>{doc.name}</span>
-                {unsaved && <span className="dirty-dot" role="img" aria-label="Unsaved changes" title="Unsaved changes" />}
+                {unsaved && <span className="dirty-dot" role="img" aria-label={t("Unsaved changes")} title={t("Unsaved changes")} />}
               </div>}
             </>
           )}
@@ -1249,28 +1251,28 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
         <div className="topbar-center">
           {doc && (
-            <div className="segmented" role="toolbar" aria-label="Tools">
-              {TOOLS.map((t) => (
+            <div className="segmented" role="toolbar" aria-label={t("Tools")}>
+              {TOOLS.map((item) => (
                 <button
-                  key={t.id}
-                  className={!contentEditing && tool === t.id ? "on" : ""}
-                  aria-label={t.label}
-                  aria-pressed={!contentEditing && tool === t.id}
-                  onClick={() => chooseTool(t.id)}
-                  title={`${t.id === "highlight" ? "Automatically highlight selected text" : t.label} (${t.key})`}
+                  key={item.id}
+                  className={!contentEditing && tool === item.id ? "on" : ""}
+                  aria-label={t(item.label)}
+                  aria-pressed={!contentEditing && tool === item.id}
+                  onClick={() => chooseTool(item.id)}
+                  title={`${item.id === "highlight" ? t("Automatically highlight selected text") : t(item.label)} (${item.key})`}
                 >
-                  <Icon name={t.icon} size={16} />
-                  <span>{t.label}</span>
+                  <Icon name={item.icon} size={16} />
+                  <span>{t(item.label)}</span>
                 </button>
               ))}
-              <button onClick={startSigning} aria-label="Sign" title="Add a signature"><Icon name="signature" size={16} /><span>Sign</span></button>
+              <button onClick={startSigning} aria-label={t("Sign")} title={t("Add a signature")}><Icon name="signature" size={16} /><span>{t("Sign")}</span></button>
               <button className={contentEditing ? "on edit-mode-toggle" : "edit-mode-toggle"} aria-pressed={contentEditing}
-                aria-label={contentEditing ? "Exit edit mode" : "Edit mode"} title={contentEditing ? "Exit edit mode" : "Edit existing text and images"}
+                aria-label={contentEditing ? t("Exit edit mode") : t("Edit mode")} title={contentEditing ? t("Exit edit mode") : t("Edit existing text and images")}
                 onClick={() => contentEditing ? leaveEditMode() : chooseTool("select", true)}>
-                <Icon name={contentEditing ? "check" : "edit"} size={16} /><span>{contentEditing ? "Exit edit mode" : "Edit mode"}</span>
+                <Icon name={contentEditing ? "check" : "edit"} size={16} /><span>{contentEditing ? t("Exit edit mode") : t("Edit mode")}</span>
               </button>
-              {unsaved && doc.path && !doc.password && <button aria-label="Save" title={keys(`Save changes to ${doc.name} (Ctrl+S)`)} onClick={() => void save()}><Icon name="save" size={16} /><span>Save</span></button>}
-              {(doc.sourceId || editorDirty) && <button aria-label="Save copy" title={keys("Save edited copy (Ctrl+Shift+S)")} onClick={download}><Icon name="download" size={16} /><span>Save copy</span></button>}
+              {unsaved && doc.path && !doc.password && <button aria-label={t("Save")} title={keys(t("Save changes to {name} (Ctrl+S)", { name: doc.name }))} onClick={() => void save()}><Icon name="save" size={16} /><span>{t("Save")}</span></button>}
+              {(doc.sourceId || editorDirty) && <button aria-label={t("Save copy")} title={keys(t("Save edited copy (Ctrl+Shift+S)"))} onClick={download}><Icon name="download" size={16} /><span>{t("Save copy")}</span></button>}
             </div>
           )}
         </div>
@@ -1278,30 +1280,30 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         <div className="topbar-right">
           {doc && (
             <>
-              <IconButton icon="sparkle" label="Ask AI" active={aiOpen} onClick={() => { setHistoryOpen(false); setAiOpen(!aiOpen); }} />
-              <IconButton icon="search" label={keys("Search (Ctrl+F)")} active={searchOpen} onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))} />
+              <IconButton icon="sparkle" label={t("Ask AI")} active={aiOpen} onClick={() => { setHistoryOpen(false); setAiOpen(!aiOpen); }} />
+              <IconButton icon="search" label={keys(t("Search (Ctrl+F)"))} active={searchOpen} onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))} />
             </>
           )}
           <MoreMenu
             items={[
               ...(doc
                 ? ([
-                    { kind: "action", icon: "plus", label: "New tab", shortcut: keys("Ctrl T"), onSelect: () => tabs.library() },
-                    { kind: "action", icon: "close", label: "Close document", shortcut: keys("Ctrl W"), onSelect: () => void tabs.close(tabKey) },
+                    { kind: "action", icon: "plus", label: t("New tab"), shortcut: keys("Ctrl T"), onSelect: () => tabs.library() },
+                    { kind: "action", icon: "close", label: t("Close document"), shortcut: keys("Ctrl W"), onSelect: () => void tabs.close(tabKey) },
                     { kind: "divider" },
-                    ...(doc.path && !doc.password ? [{ kind: "action", icon: "save", label: "Save", shortcut: keys("Ctrl S"), onSelect: () => void save() }] : []),
-                    { kind: "action", icon: "download", label: "Save a copy", shortcut: keys(doc.path && !doc.password ? "Ctrl Shift S" : "Ctrl S"), onSelect: download },
-                    { kind: "action", icon: "history", label: "Version history", onSelect: () => { setAiOpen(false); setHistoryOpen(true); } },
-                    { kind: "action", icon: "print", label: "Print", shortcut: keys("Ctrl P"), onSelect: print },
-                    { kind: "action", icon: "info", label: "Document info", onSelect: () => setDialog("info") },
+                    ...(doc.path && !doc.password ? [{ kind: "action", icon: "save", label: t("Save"), shortcut: keys("Ctrl S"), onSelect: () => void save() }] : []),
+                    { kind: "action", icon: "download", label: t("Save a copy"), shortcut: keys(doc.path && !doc.password ? "Ctrl Shift S" : "Ctrl S"), onSelect: download },
+                    { kind: "action", icon: "history", label: t("Version history"), onSelect: () => { setAiOpen(false); setHistoryOpen(true); } },
+                    { kind: "action", icon: "print", label: t("Print"), shortcut: keys("Ctrl P"), onSelect: print },
+                    { kind: "action", icon: "info", label: t("Document info"), onSelect: () => setDialog("info") },
                     { kind: "divider" },
-                    { kind: "toggle", icon: "moon", label: "PDF dark mode", checked: night, onSelect: () => setNightTo(!night) },
-                    { kind: "action", icon: "expand", label: "Focus mode", shortcut: "F", onSelect: toggleFocus },
+                    { kind: "toggle", icon: "moon", label: t("PDF dark mode"), checked: night, onSelect: () => setNightTo(!night) },
+                    { kind: "action", icon: "expand", label: t("Focus mode"), shortcut: "F", onSelect: toggleFocus },
                   ] as MoreItem[])
                 : []),
-              { kind: "action", icon: "settings", label: "Settings", shortcut: keys("Ctrl ,"), onSelect: () => setDialog("settings") },
-              { kind: "action", icon: "keyboard", label: "Keyboard shortcuts", shortcut: "?", onSelect: () => setDialog("shortcuts") },
-              { kind: "action", icon: "info", label: "About Folio", onSelect: () => setDialog("about") },
+              { kind: "action", icon: "settings", label: t("Settings"), shortcut: keys("Ctrl ,"), onSelect: () => setDialog("settings") },
+              { kind: "action", icon: "keyboard", label: t("Keyboard shortcuts"), shortcut: "?", onSelect: () => setDialog("shortcuts") },
+              { kind: "action", icon: "info", label: t("About Folio"), onSelect: () => setDialog("about") },
             ]}
           />
         </div>
@@ -1354,10 +1356,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           </div>
           {contentEditing && doc && <ContentEditor key={doc.pdf.loadingTask.docId} ref={contentRef} nextSelection={nextSelection} pdf={doc.pdf} viewer={viewerRef.current!} bus={busRef.current!}
             onDirty={setEditorDirty} snapshot={async () => {
-              if (doc.password || await doc.pdf.getPermissions() || (await doc.pdf.getSignatures())?.length) throw new Error("Editing requires an unsigned, unencrypted PDF.");
+              if (doc.password || await doc.pdf.getPermissions() || (await doc.pdf.getSignatures())?.length) throw new Error(t("Editing requires an unsigned, unencrypted PDF."));
               try {
                 const copy = await currentBytes(doc, []);
-                if (!copy || docRef.current !== doc) throw new Error("The document changed. Try again.");
+                if (!copy || docRef.current !== doc) throw new Error(t("The document changed. Try again."));
                 return copy.bytes;
               } finally { if (dirty && docRef.current === doc) setDirty(true); }
             }} apply={async (bytes, change) => docRef.current === doc && !!await openBytes(doc.name, bytes, undefined, opening.current!.signal, undefined, { doc, change })} />}
@@ -1371,37 +1373,37 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           )}
 
           {doc && !contentEditing && PALETTE[tool] && (
-            <div className="color-pill" role="toolbar" aria-label="Annotation options">
+            <div className="color-pill" role="toolbar" aria-label={t("Annotation options")}>
               {tool === "ink" && (
-                <select className="draw-tool" aria-label="Drawing tool" value={drawTool}
+                <select className="draw-tool" aria-label={t("Drawing tool")} value={drawTool}
                   onChange={e => setDrawTool(e.target.value as typeof drawTool)}>
-                  {["Pen", "Rectangle", "Oval", "Arrow"].map(name => <option key={name}>{name}</option>)}
+                  {["Pen", "Rectangle", "Oval", "Arrow"].map(name => <option key={name} value={name}>{t(name)}</option>)}
                 </select>
               )}
-              <div className="color-options" role="radiogroup" aria-label="Color">
+              <div className="color-options" role="radiogroup" aria-label={t("Color")}>
                 {PALETTE[tool]!.map((c) => (
                   <button
                     key={c.hex}
                     className={colors[tool] === c.hex ? "on" : ""}
                     style={{ "--swatch": c.hex } as React.CSSProperties}
                     onClick={() => chooseColor(c.hex)}
-                    title={c.name}
+                    title={t(c.name)}
                     role="radio"
                     aria-checked={colors[tool] === c.hex}
                   />
                 ))}
               </div>
               <span className="divider" />
-              <button className="pill-btn" onClick={() => busRef.current!.dispatch("editingaction", { source: null, name: "undo" })} title={keys("Undo (Ctrl+Z)")}>
+              <button className="pill-btn" onClick={() => busRef.current!.dispatch("editingaction", { source: null, name: "undo" })} title={keys(t("Undo (Ctrl+Z)"))}>
                 <Icon name="undo" size={16} />
               </button>
-              <button className="pill-done" onClick={() => chooseTool("select")}>Done</button>
+              <button className="pill-done" onClick={() => chooseTool("select")}>{t("Done")}</button>
             </div>
           )}
 
           {doc && (
-            <div className="pill" role="toolbar" aria-label="Navigation">
-              <button className="pill-btn" onClick={() => goTo(page - 1)} disabled={page <= 1} title="Previous page">
+            <div className="pill" role="toolbar" aria-label={t("Navigation")}>
+              <button className="pill-btn" onClick={() => goTo(page - 1)} disabled={page <= 1} title={t("Previous page")}>
                 <Icon name="chevronUp" size={17} />
               </button>
               <form
@@ -1420,23 +1422,23 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                   onFocus={(e) => e.target.select()}
                   onBlur={() => setPageInput(String(pageRef.current))}
                   style={{ width: `calc(${Math.max(2, String(numPages).length)}ch + 22px)` }}
-                  aria-label="Page number"
+                  aria-label={t("Page number")}
                 />
-                <span className="page-total">of {numPages}</span>
+                <span className="page-total">{t("of {n}", { n: numPages })}</span>
               </form>
-              <button className="pill-btn" onClick={() => goTo(page + 1)} disabled={page >= numPages} title="Next page">
+              <button className="pill-btn" onClick={() => goTo(page + 1)} disabled={page >= numPages} title={t("Next page")}>
                 <Icon name="chevronDown" size={17} />
               </button>
               <span className="divider" />
-              <button className="pill-btn" onClick={() => zoom(-1)} title={keys("Zoom out (Ctrl −)")}>
+              <button className="pill-btn" onClick={() => zoom(-1)} title={keys(t("Zoom out (Ctrl −)"))}>
                 <Icon name="minus" size={17} />
               </button>
               <ZoomMenu scale={scale} onPick={setScaleValue} spread={spread} onToggleSpread={toggleSpread} />
-              <button className="pill-btn" onClick={() => zoom(1)} title={keys("Zoom in (Ctrl +)")}>
+              <button className="pill-btn" onClick={() => zoom(1)} title={keys(t("Zoom in (Ctrl +)"))}>
                 <Icon name="plus" size={17} />
               </button>
               <span className="divider wide-only" />
-              <button className="pill-btn wide-only" onClick={rotate} title="Rotate (R)">
+              <button className="pill-btn wide-only" onClick={rotate} title={t("Rotate (R)")}>
                 <Icon name="rotate" size={17} />
               </button>
             </div>
@@ -1495,8 +1497,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           )}
 
           {focus && (
-            <button className="exit-focus" onClick={toggleFocus} title="Exit focus mode">
-              <kbd>Esc</kbd> to exit focus mode
+            <button className="exit-focus" onClick={toggleFocus} title={t("Exit focus mode")}>
+              <kbd>Esc</kbd> {t("to exit focus mode")}
             </button>
           )}
         </main>
@@ -1531,7 +1533,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         <div className="drop-overlay">
           <div className="drop-card">
             <Icon name="upload" size={30} />
-            <p>Drop a PDF or link to open</p>
+            <p>{t("Drop a PDF or link to open")}</p>
           </div>
         </div>
       )}
@@ -1551,7 +1553,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         wheelPaging={wheelPaging} onWheelPaging={(next) => {
           setWheelPaging(next);
           try { localStorage.setItem("folio:wheel-paging", next ? "1" : "0"); }
-          catch { flash("Page scrolling changed, but couldn't save the preference."); }
+          catch { flash(t("Page scrolling changed, but couldn't save the preference.")); }
         }}
         onOpenChangelog={() => setDialog("changelog")} onClose={() => setDialog(null)} />}
       {/* Closing goes back to Settings, where the changelog is opened from. */}
@@ -1562,19 +1564,19 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       {doc && signing && <SignatureDialog key={doc.id + ":" + page} pdf={doc.pdf} pageNumber={page} targets={signatureTargets}
         onClose={() => setSigning(false)} onApprove={async (signature, rect) => {
           await placeSignature(viewerRef.current!, doc.pdf, page, signature, rect);
-          setDirty(true); setSignatureDismissed(true); flash(keys("Signature added. Ctrl+Z to undo; Save copy to export."));
+          setDirty(true); setSignatureDismissed(true); flash(keys(t("Signature added. Ctrl+Z to undo; Save copy to export.")));
         }} />}
       {doc && !contentEditing && !signing && signatureTargets.length > 0 && !signatureDismissed && <div className="signature-suggestion" role="status">
-        <span>{signatureTargets[0].kind === "field" ? "Signature field detected" : "Possible signature area"} on page {page}</span>
-        <button className="btn primary" onClick={startSigning}>Review signature</button>
-        <button className="pill-btn" aria-label="Dismiss signature suggestion" onClick={() => setSignatureDismissed(true)}><Icon name="close" size={14} /></button>
+        <span>{signatureTargets[0].kind === "field" ? t("Signature field detected on page {page}", { page }) : t("Possible signature area on page {page}", { page })}</span>
+        <button className="btn primary" onClick={startSigning}>{t("Review signature")}</button>
+        <button className="pill-btn" aria-label={t("Dismiss signature suggestion")} onClick={() => setSignatureDismissed(true)}><Icon name="close" size={14} /></button>
       </div>}
 
       {updateVersion && (
         <div className="update-card" role="status">
           <div>
-            <strong>Folio {updateVersion} is ready</strong>
-            <span>Restart to update. Installation on close follows your auto-update setting.</span>
+            <strong>{t("Folio {version} is ready", { version: updateVersion })}</strong>
+            <span>{t("Restart to update. Installation on close follows your auto-update setting.")}</span>
           </div>
           <button
             className="btn primary"
@@ -1582,9 +1584,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
               window.folioDesktop?.installUpdate();
             }}
           >
-            Restart
+            {t("Restart")}
           </button>
-          <button className="pill-btn" onClick={() => setUpdateVersion(null)} aria-label="Later" title="Later">
+          <button className="pill-btn" onClick={() => setUpdateVersion(null)} aria-label={t("Later")} title={t("Later")}>
             <Icon name="close" size={15} />
           </button>
         </div>

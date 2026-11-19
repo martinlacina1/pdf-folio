@@ -1,7 +1,10 @@
 // Minimal bridge between the Folio page and the desktop shell.
 const { contextBridge, ipcRenderer, webUtils } = require("electron");
 
+const language = process.argv.find((a) => a.startsWith("--folio-language="))?.slice("--folio-language=".length);
+
 contextBridge.exposeInMainWorld("folioDesktop", {
+  language,
   /** Called with (name, data, note?) whenever a PDF is opened from Explorer, or a Word document has been converted. */
   onOpenFile(callback) {
     const listener = (_e, file) => callback(file.name, new Uint8Array(file.data), file.note ?? undefined, file.token, file.path ?? undefined);

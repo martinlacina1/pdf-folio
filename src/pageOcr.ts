@@ -1,6 +1,7 @@
 import { AnnotationMode, OPS, type PDFPageProxy } from "pdfjs-dist";
 import type { Worker as OcrWorker } from "tesseract.js";
 import type { EventBus, PDFPageView, PDFViewer } from "./viewer";
+import { t } from "./i18n";
 
 interface Word {
   text: string;
@@ -142,11 +143,11 @@ export function recognizeScannedPages(bus: EventBus, viewer: PDFViewer, onStatus
     const view: PDFPageView = viewer.getPageView(n - 1);
     const layer = view.textLayer?.div;
     if (layer?.isConnected && !layer.hidden && layer.textContent.trim()) onStatus(null);
-    else if (notices.get(n) === "noWords") onStatus(`No readable text found on page ${n}.`);
-    else if (notices.has(n)) onStatus(`Text unavailable on page ${n}.`);
-    else if (active === n && recognizing) onStatus(`Recognizing text on page ${n}…`);
+    else if (notices.get(n) === "noWords") onStatus(t("No readable text found on page {n}.", { n }));
+    else if (notices.has(n)) onStatus(t("Text unavailable on page {n}.", { n }));
+    else if (active === n && recognizing) onStatus(t("Recognizing text on page {n}…", { n }));
     else if (pending.has(n) || active === n || !layer?.isConnected || layer.hidden || !layer.querySelector(".endOfContent")) {
-      onStatus(`Preparing text on page ${n}…`);
+      onStatus(t("Preparing text on page {n}…", { n }));
     } else onStatus(null);
   }
 

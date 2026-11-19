@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon, type IconName } from "./icons";
+import { t } from "./i18n";
 
 export type MoreItem =
   | { kind: "action"; icon: IconName; label: string; shortcut?: string; disabled?: boolean; onSelect: () => void }
@@ -34,8 +35,8 @@ export function MoreMenu({ items, label }: { items: MoreItem[]; label?: string }
         onClick={() => setOpen(!open)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={label ?? "More"}
-        title={label ?? "More"}
+        aria-label={label ?? t("More")}
+        title={label ?? t("More")}
       >
         {label ? <>{label}<Icon name="chevronDown" size={13} /></> : <Icon name="more" />}
       </button>

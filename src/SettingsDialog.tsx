@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Modal } from "./Dialogs";
 import { CLAUDE_CODE_URL, signInChatGPT, USAGE_URL, type AiProvider } from "./ai";
 import { updateSummary } from "./updates";
+import { LOCALE, t } from "./i18n";
 
 /** One place for every Folio preference. */
 interface Props {
@@ -99,40 +100,40 @@ export function SettingsDialog({ theme, onTheme, night, onNight, wheelPaging, on
   });
 
   return (
-    <Modal title="Settings" onClose={onClose}>
+    <Modal title={t("Settings")} onClose={onClose}>
       <div className="settings">
-        {desktop && <p className="search-hint">Manage updates, appearance, and Ask AI accounts.</p>}
-        <Section title="Appearance">
-          <Row label="Theme">
-            <Choice label="Theme" value={theme === "dark" ? "dark" : "light"} onChange={onTheme}
-              options={[{ id: "light", name: "Light" }, { id: "dark", name: "Dark" }]} />
+        {desktop && <p className="search-hint">{t("Manage updates, appearance, and Ask AI accounts.")}</p>}
+        <Section title={t("Appearance")}>
+          <Row label={t("Theme")}>
+            <Choice label={t("Theme")} value={theme === "dark" ? "dark" : "light"} onChange={onTheme}
+              options={[{ id: "light", name: t("Light") }, { id: "dark", name: t("Dark") }]} />
           </Row>
-          <Row label="PDF dark mode" hint="Dims bright pages for night reading. Images keep their colors.">
-            <Switch label="PDF dark mode" checked={night} onChange={onNight} />
+          <Row label={t("PDF dark mode")} hint={t("Dims bright pages for night reading. Images keep their colors.")}>
+            <Switch label={t("PDF dark mode")} checked={night} onChange={onNight} />
           </Row>
         </Section>
 
-        <Section title="Reading">
-          <Row label="Scroll one page at a time" hint="Turn a page with each mouse wheel click or trackpad swipe.">
-            <Switch label="Scroll one page at a time" checked={wheelPaging} onChange={onWheelPaging} />
+        <Section title={t("Reading")}>
+          <Row label={t("Scroll one page at a time")} hint={t("Turn a page with each mouse wheel click or trackpad swipe.")}>
+            <Switch label={t("Scroll one page at a time")} checked={wheelPaging} onChange={onWheelPaging} />
           </Row>
         </Section>
 
         {desktop && (
-          <Section title="Ask AI">
-            <Row label="Default provider" hint="Which assistant Ask AI opens with.">
-              <Choice label="Default provider" value={provider as AiProvider}
+          <Section title={t("Ask AI")}>
+            <Row label={t("Default provider")} hint={t("Which assistant Ask AI opens with.")}>
+              <Choice label={t("Default provider")} value={provider as AiProvider}
                 onChange={(p) => { setProvider(p); localStorage.setItem("folio:ai-provider", p); }}
                 options={[{ id: "chatgpt", name: "ChatGPT" }, { id: "claude", name: "Claude" }]} />
             </Row>
             <Row
               label="ChatGPT"
-              hint={!aiStatus ? "Checking…" : aiStatus.chatgpt.connected
-                ? <>Signed in{aiStatus.chatgpt.email ? ` as ${aiStatus.chatgpt.email}` : ""}. Uses your ChatGPT plan · <a href={USAGE_URL} target="_blank" rel="noreferrer">Manage usage</a></>
-                : "Use your ChatGPT plan (Go, Plus, or Pro). No API key needed."}
+              hint={!aiStatus ? t("Checking…") : aiStatus.chatgpt.connected
+                ? <>{aiStatus.chatgpt.email ? t("Signed in as {email}.", { email: aiStatus.chatgpt.email }) : t("Signed in.")} {t("Uses your ChatGPT plan")} · <a href={USAGE_URL} target="_blank" rel="noreferrer">{t("Manage usage")}</a></>
+                : t("Use your ChatGPT plan (Go, Plus, or Pro). No API key needed.")}
             >
               {aiStatus?.chatgpt.connected ? (
-                <button className="btn ghost" onClick={async () => setAiStatus({ ...aiStatus, chatgpt: await ai!.signOutChatGPT() })}>Sign out</button>
+                <button className="btn ghost" onClick={async () => setAiStatus({ ...aiStatus, chatgpt: await ai!.signOutChatGPT() })}>{t("Sign out")}</button>
               ) : (
                 <button className="btn primary" disabled={!aiStatus || signingIn} onClick={async () => {
                   setSigningIn(true);
@@ -141,68 +142,70 @@ export function SettingsDialog({ theme, onTheme, night, onNight, wheelPaging, on
                   setSigningIn(false);
                   setError(result.error);
                   setAiStatus(result.status);
-                }}>{signingIn ? "Waiting for browser…" : "Continue with ChatGPT"}</button>
+                }}>{signingIn ? t("Waiting for browser…") : t("Continue with ChatGPT")}</button>
               )}
             </Row>
             <Row
               label="Claude"
-              hint={!aiStatus ? "Checking…" : !aiStatus.claude.installed
-                ? <>Uses your Claude subscription through <a href={CLAUDE_CODE_URL} target="_blank" rel="noreferrer">Claude Code</a>. Install it and sign in once.</>
+              hint={!aiStatus ? t("Checking…") : !aiStatus.claude.installed
+                ? <>{t("Uses your Claude subscription through")} <a href={CLAUDE_CODE_URL} target="_blank" rel="noreferrer">Claude Code</a>. {t("Install it and sign in once.")}</>
                 : aiStatus.claude.loggedIn
-                  ? `Claude Code ${aiStatus.claude.version ?? ""} is signed in${aiStatus.claude.subscription ? " with your Claude subscription" : ""}.`
-                  : "Claude Code is installed but not signed in. Run claude in a terminal and sign in."}
+                  ? (aiStatus.claude.subscription
+                    ? t("Claude Code {version} is signed in with your Claude subscription.", { version: aiStatus.claude.version ?? "" })
+                    : t("Claude Code {version} is signed in.", { version: aiStatus.claude.version ?? "" })).replace("  ", " ")
+                  : t("Claude Code is installed but not signed in. Run claude in a terminal and sign in.")}
             >
-              <button className="btn ghost" disabled={!aiStatus} onClick={async () => setAiStatus({ ...aiStatus!, claude: await ai!.recheckClaude() })}>Check again</button>
+              <button className="btn ghost" disabled={!aiStatus} onClick={async () => setAiStatus({ ...aiStatus!, claude: await ai!.recheckClaude() })}>{t("Check again")}</button>
             </Row>
           </Section>
         )}
 
-        <Section title="Signature">
-          <Row label="Remembered signature" hint={savedSignature
-            ? "Saved on this computer (unencrypted) for quick signing."
-            : "None. You can choose to remember one when you sign a document."}>
+        <Section title={t("Signature")}>
+          <Row label={t("Remembered signature")} hint={savedSignature
+            ? t("Saved on this computer (unencrypted) for quick signing.")
+            : t("None. You can choose to remember one when you sign a document.")}>
             <button className="btn ghost" disabled={!savedSignature} onClick={() => {
               try { localStorage.removeItem("folio:signature"); setSavedSignature(false); }
-              catch { setError("Couldn't forget the signature. Please try again."); }
-            }}>Forget</button>
+              catch { setError(t("Couldn't forget the signature. Please try again.")); }
+            }}>{t("Forget")}</button>
           </Row>
         </Section>
 
         {desktop && (
-          <Section title="Updates">
+          <Section title={t("Updates")}>
             {updatable && (
-              <Row label="Automatic updates" hint={autoUpdate === false
-                ? "Off: no background checks or downloads. You can still check manually."
+              <Row label={t("Automatic updates")} hint={autoUpdate === false
+                ? t("Off: no background checks or downloads. You can still check manually.")
                 : notifyOnly
-                  ? "Folio checks for new versions and lets you know; download them from the releases page."
-                  : "Downloads updates in the background and installs them when Folio closes."}>
-                <Switch label="Automatic updates" checked={autoUpdate === true} disabled={autoUpdate === null || savingUpdate} onChange={async (on) => {
+                  ? t("Folio checks for new versions and lets you know; download them from the releases page.")
+                  : t("Downloads updates in the background and installs them when Folio closes.")}>
+                <Switch label={t("Automatic updates")} checked={autoUpdate === true} disabled={autoUpdate === null || savingUpdate} onChange={async (on) => {
                   setSavingUpdate(true);
                   setError(null);
                   try { setAutoUpdate(await desktop.setAutoUpdateEnabled(on)); }
-                  catch { setError("Couldn't save the update setting. Try again."); }
+                  catch { setError(t("Couldn't save the update setting. Try again.")); }
                   finally { setSavingUpdate(false); }
                 }} />
               </Row>
             )}
-            <Row label={`Folio ${info?.version ?? ""}`.trim()} hint={updateSummary(status) || (status.checkedAt ? `Last checked ${new Date(status.checkedAt).toLocaleString()}` : undefined)}>
+            <Row label={`Folio ${info?.version ?? ""}`.trim()} hint={updateSummary(status) || (status.checkedAt ? t("Last checked {time}", { time: new Date(status.checkedAt).toLocaleString(LOCALE) }) : undefined)}>
               {updatable ? (
                 <button className="btn ghost" disabled={status.state === "checking" || status.state === "downloading"}
                   onClick={() => status.state === "ready" ? desktop.installUpdate() : status.state === "available" ? void desktop.openDownload() : desktop.checkForUpdates()}>
-                  {status.state === "ready" ? "Restart and update" : status.state === "available" ? `Download ${status.version}` : "Check for updates"}
+                  {status.state === "ready" ? t("Restart and update") : status.state === "available" ? t("Download {version}", { version: status.version ?? "" }) : t("Check for updates")}
                 </button>
               ) : null}
             </Row>
           </Section>
         )}
 
-        <Section title="About">
-          <Row label="What's new" hint="Changes in each version of Folio.">
-            <button className="btn ghost" onClick={onOpenChangelog}>View changelog</button>
+        <Section title={t("About")}>
+          <Row label={t("What's new")} hint={t("Changes in each version of Folio.")}>
+            <button className="btn ghost" onClick={onOpenChangelog}>{t("View changelog")}</button>
           </Row>
         </Section>
 
-        {error && <p className="form-error">{error}</p>}
+        {error && <p className="form-error">{t(error)}</p>}
       </div>
     </Modal>
   );

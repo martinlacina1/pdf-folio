@@ -1,5 +1,6 @@
 import { activeDocument, setActiveDocument } from "./session";
 import { getRecent } from "./recent";
+import { t } from "./i18n";
 
 export type OpenSource =
   | { kind: "bytes"; name: string; data: Uint8Array; note?: string; password?: string; path?: string }
@@ -68,7 +69,7 @@ export class DocumentTabs {
       const frame: ReaderFrame = document.createElement("iframe");
       frame.readerContext = { tabs: this, key };
       frame.className = "document-reader active";
-      frame.title = next.name || "Library";
+      frame.title = next.name || t("Library");
       frame.name = "folio-reader-" + key;
       frame.allowFullscreen = true;
       frame.src = new URL("index.html?reader", location.href).href;
@@ -138,18 +139,18 @@ export class DocumentTabs {
   }
   failed(key: number) {
     const tab = this.entry(key);
-    if (tab && !tab.contentId) { tab.name = ""; if (tab.frame) tab.frame.title = "Library"; this.changed(); }
+    if (tab && !tab.contentId) { tab.name = ""; if (tab.frame) tab.frame.title = t("Library"); this.changed(); }
   }
   async close(key: number) {
     const tab = this.entry(key);
-    if (!tab || tab.closing || (tab.dirty && !window.confirm(`Close “${tab.name}” and discard its unsaved changes?`))) return;
+    if (!tab || tab.closing || (tab.dirty && !window.confirm(t("Close “{name}” and discard its unsaved changes?", { name: tab.name })))) return;
     tab.closing = true;
     try {
       await tab.reader?.flush();
     } catch {
       tab.closing = false;
       this.select(key);
-      tab.reader?.open({ kind: "error", name: tab.name, message: "Couldn't finish saving your notes. The tab is still open." });
+      tab.reader?.open({ kind: "error", name: tab.name, message: t("Couldn't finish saving your notes. The tab is still open.") });
       return;
     }
     const index = this.entries.indexOf(tab);
