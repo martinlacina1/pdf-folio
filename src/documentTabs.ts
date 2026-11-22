@@ -13,6 +13,8 @@ export type OpenSource =
 interface Reader {
   open(source: OpenSource): void;
   flush(): Promise<void>;
+  /** Saves the document (to its file, or Save as… when it has none); false when cancelled or failed. */
+  save?(): Promise<boolean>;
 }
 
 export interface ReaderContext { tabs: DocumentTabs; key: number }
@@ -162,6 +164,16 @@ export class DocumentTabs {
       this.select((next ?? this.create()).key);
     } else this.changed();
   }
+  /** Saves every tab with unsaved changes, one at a time (each may ask where to save). True when none is left unsaved. */
+  async saveAll() {
+    for (const tab of this.entries.filter(entry => entry.dirty && !entry.closing)) {
+      this.select(tab.key);
+      if (!await tab.reader?.save?.()) return false;
+      // The tab reports it is clean once the saved document has reloaded.
+      for (let waited = 0; tab.dirty && waited < 5000; waited += 50) await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    return !this.entries.some(tab => tab.dirty && !tab.closing);
+  }
   cycle(direction: number) {
     const index = this.entries.findIndex(tab => tab.key === this.active);
     this.select(this.entries[(index + direction + this.entries.length) % this.entries.length].key, true);
@@ -176,6 +188,7 @@ export class DocumentTabs {
       else if (command === "close") void this.close(this.active);
       else this.cycle(command === "next" ? 1 : -1);
     });
+    desktop?.onSaveAll?.(() => this.saveAll());
     const conversions = new Map<string, number>();
     desktop?.onConverting((name, token) => conversions.set(token, this.open([{ kind: "converting", name }])));
     desktop?.onOpenFile((name, data, note, token, path) => {
@@ -193,6 +206,6 @@ export class DocumentTabs {
     });
     if (await desktop?.ready() || !last || this.revision !== initial) return;
     const recent = await getRecent(last);
-    if (recent && this.revision === initial) this.open([{ kind: "blob", name: recent.name, blob: recent.data, recentId: recent.id }]);
+    if (recent && this.revision === initial) this.open([{ kind: "blob", name: recent.name, blob: recent.data, recentId: recent.id, path: recent.path }]);
   }
 }

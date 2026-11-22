@@ -1,5 +1,6 @@
 // Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Save as…": "Sačuvaj kao…",
   // Tools
   "Select": "Izaberi",
   "Highlight": "Istakni",

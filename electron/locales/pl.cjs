@@ -1,5 +1,8 @@
 // Polish text for electron/i18n.cjs: English → Polish.
 module.exports = {
+  "Save": "Zapisz",
+  "Save as": "Zapisz jako",
+  "Do you want to save your changes before closing Folio?": "Czy zapisać zmiany przed zamknięciem aplikacji Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Nie można zapisać tego pliku w jego pierwotnej lokalizacji.",
   "Nothing to save.": "Brak zmian do zapisania.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Zamknij bez zapisywania",
   "Unsaved changes": "Niezapisane zmiany",
   "One or more tabs have unsaved changes.": "Co najmniej jedna karta zawiera niezapisane zmiany.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Przed zamknięciem aplikacji Folio zapisz każdą oznaczoną kartę skrótem {shortcut}.",
 
   // main.cjs: links
   "Open link?": "Otworzyć link?",

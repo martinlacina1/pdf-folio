@@ -1,5 +1,6 @@
 // Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Save as…": "Guardar como…",
   // Tools
   "Select": "Seleccionar",
   "Highlight": "Resaltar",

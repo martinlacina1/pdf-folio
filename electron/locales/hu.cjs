@@ -1,5 +1,8 @@
 // Hungarian text for electron/i18n.cjs: English → Hungarian.
 module.exports = {
+  "Save": "Mentés",
+  "Save as": "Mentés másként",
+  "Do you want to save your changes before closing Folio?": "Menti a módosításokat a Folio bezárása előtt?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Ez a fájl nem menthető az eredeti helyére.",
   "Nothing to save.": "Nincs mit menteni.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Bezárás mentés nélkül",
   "Unsaved changes": "Nem mentett módosítások",
   "One or more tabs have unsaved changes.": "Egy vagy több lapon nem mentett módosítások vannak.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "A Folio bezárása előtt mentse az egyes megjelölt lapokat a(z) {shortcut} billentyűparanccsal.",
 
   // main.cjs: links
   "Open link?": "Megnyitja a hivatkozást?",

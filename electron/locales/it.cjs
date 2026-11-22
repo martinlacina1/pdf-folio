@@ -1,5 +1,8 @@
 // Italian text for electron/i18n.cjs: English → Italian.
 module.exports = {
+  "Save": "Salva",
+  "Save as": "Salva con nome",
+  "Do you want to save your changes before closing Folio?": "Vuoi salvare le modifiche prima di chiudere Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Impossibile salvare questo file nella posizione originale.",
   "Nothing to save.": "Niente da salvare.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Chiudi senza salvare",
   "Unsaved changes": "Modifiche non salvate",
   "One or more tabs have unsaved changes.": "Una o più schede contengono modifiche non salvate.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Premi {shortcut} in ogni scheda contrassegnata per salvarla prima di chiudere Folio.",
 
   // main.cjs: links
   "Open link?": "Aprire il link?",

@@ -1,5 +1,8 @@
 // Catalan text for electron/i18n.cjs: English → Catalan.
 module.exports = {
+  "Save": "Desa",
+  "Save as": "Desa com a",
+  "Do you want to save your changes before closing Folio?": "Vols desar els canvis abans de tancar Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Aquest fitxer no es pot desar a la ubicació original.",
   "Nothing to save.": "No hi ha res per desar.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Tancar sense desar",
   "Unsaved changes": "Canvis no desats",
   "One or more tabs have unsaved changes.": "Una o més pestanyes tenen canvis no desats.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Prem {shortcut} a cada pestanya marcada per desar-la abans de tancar Folio.",
 
   // main.cjs: links
   "Open link?": "Vols obrir l'enllaç?",

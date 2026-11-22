@@ -1,5 +1,6 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Save as…": "Speichern unter…",
   // Tools
   "Select": "Auswählen",
   "Highlight": "Hervorheben",

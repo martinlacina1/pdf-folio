@@ -1,5 +1,6 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Save as…": "Tallenna nimellä…",
   // Tools
   "Select": "Valitse",
   "Highlight": "Korosta",

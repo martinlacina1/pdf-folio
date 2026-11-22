@@ -1,5 +1,8 @@
 // French text for electron/i18n.cjs: English → French.
 module.exports = {
+  "Save": "Enregistrer",
+  "Save as": "Enregistrer sous",
+  "Do you want to save your changes before closing Folio?": "Voulez-vous enregistrer vos modifications avant de fermer Folio ?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Ce fichier ne peut pas être enregistré à son emplacement d’origine.",
   "Nothing to save.": "Rien à enregistrer.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Fermer sans enregistrer",
   "Unsaved changes": "Modifications non enregistrées",
   "One or more tabs have unsaved changes.": "Un ou plusieurs onglets contiennent des modifications non enregistrées.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Appuyez sur {shortcut} dans chaque onglet signalé pour l’enregistrer avant de fermer Folio.",
 
   // main.cjs: links
   "Open link?": "Ouvrir le lien ?",

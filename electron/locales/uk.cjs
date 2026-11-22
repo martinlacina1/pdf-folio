@@ -1,5 +1,8 @@
 // Ukrainian text for electron/i18n.cjs: English → Ukrainian.
 module.exports = {
+  "Save": "Зберегти",
+  "Save as": "Зберегти як",
+  "Do you want to save your changes before closing Folio?": "Зберегти зміни перед закриттям Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Цей файл не можна зберегти в початковому розташуванні.",
   "Nothing to save.": "Немає що зберігати.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Закрити без збереження",
   "Unsaved changes": "Незбережені зміни",
   "One or more tabs have unsaved changes.": "Одна або кілька вкладок містять незбережені зміни.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Перед закриттям Folio натисніть {shortcut} у кожній позначеній вкладці, щоб зберегти її.",
 
   // main.cjs: links
   "Open link?": "Відкрити посилання?",

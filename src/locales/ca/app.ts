@@ -1,5 +1,6 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Save as…": "Desa com a…",
   // Tools
   "Select": "Seleccionar",
   "Highlight": "Ressaltar",

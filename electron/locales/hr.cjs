@@ -1,5 +1,8 @@
 // Croatian text for electron/i18n.cjs: English → Croatian.
 module.exports = {
+  "Save": "Spremi",
+  "Save as": "Spremi kao",
+  "Do you want to save your changes before closing Folio?": "Želite li spremiti promjene prije zatvaranja aplikacije Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Ova se datoteka ne može spremiti na izvorno mjesto.",
   "Nothing to save.": "Nema ničega za spremanje.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Zatvori bez spremanja",
   "Unsaved changes": "Nespremljene promjene",
   "One or more tabs have unsaved changes.": "Jedna ili više kartica sadrži nespremljene promjene.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Prije zatvaranja aplikacije Folio pritisnite {shortcut} u svakoj označenoj kartici da biste je spremili.",
 
   // main.cjs: links
   "Open link?": "Otvoriti poveznicu?",

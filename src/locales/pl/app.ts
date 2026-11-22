@@ -1,5 +1,6 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Save as…": "Zapisz jako…",
   // Tools
   "Select": "Zaznacz",
   "Highlight": "Wyróżnij",

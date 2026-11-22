@@ -1,5 +1,6 @@
 // Dutch UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Save as…": "Opslaan als…",
   // Tools
   "Select": "Selecteren",
   "Highlight": "Markeren",

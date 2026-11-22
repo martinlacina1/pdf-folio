@@ -1,5 +1,6 @@
 // Croatian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Save as…": "Spremi kao…",
   // Tools
   "Select": "Odaberi",
   "Highlight": "Istakni",

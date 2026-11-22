@@ -9,6 +9,8 @@ export interface RecentFile {
   lastPage: number;
   thumb: string;
   data: Blob;
+  /** The file it was last opened from or saved to (desktop app). Save only uses it after checking it's unchanged. */
+  path?: string;
 }
 
 const DB_NAME = "folio";

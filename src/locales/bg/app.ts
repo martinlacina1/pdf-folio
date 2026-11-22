@@ -1,5 +1,6 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Save as…": "Запиши като…",
   // Tools
   "Select": "Избор",
   "Highlight": "Осветяване",

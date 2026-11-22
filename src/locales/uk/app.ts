@@ -1,5 +1,6 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Save as…": "Зберегти як…",
   // Tools
   "Select": "Вибрати",
   "Highlight": "Виділити",

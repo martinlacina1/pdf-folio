@@ -1,5 +1,8 @@
 // Finnish text for electron/i18n.cjs: English → Finnish.
 module.exports = {
+  "Save": "Tallenna",
+  "Save as": "Tallenna nimellä",
+  "Do you want to save your changes before closing Folio?": "Haluatko tallentaa muutokset ennen kuin suljet Folion?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Tätä tiedostoa ei voi tallentaa alkuperäiseen sijaintiinsa.",
   "Nothing to save.": "Ei tallennettavaa.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Sulje tallentamatta",
   "Unsaved changes": "Tallentamattomia muutoksia",
   "One or more tabs have unsaved changes.": "Yhdessä tai useammassa välilehdessä on tallentamattomia muutoksia.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Tallenna jokainen merkitty välilehti pikanäppäimellä {shortcut} ennen kuin suljet Folion.",
 
   // main.cjs: links
   "Open link?": "Avataanko linkki?",

@@ -1,5 +1,6 @@
 // Slovak UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Save as…": "Uložiť ako…",
   // Tools
   "Select": "Vybrať",
   "Highlight": "Zvýrazniť",

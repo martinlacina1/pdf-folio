@@ -1,5 +1,6 @@
 // Italian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Save as…": "Salva con nome…",
   // Tools
   "Select": "Seleziona",
   "Highlight": "Evidenzia",

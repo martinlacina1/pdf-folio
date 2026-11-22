@@ -1,5 +1,6 @@
 // Simplified Chinese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Save as…": "另存为…",
   // Tools
   "Select": "选择",
   "Highlight": "高亮",

@@ -675,17 +675,19 @@ try {
   }
   console.log("ok  local network addresses need the user's OK");
 
-  // The question asked before closing over unsaved work names this platform's Save shortcut.
+  // The question asked before closing over unsaved work offers to save first (Cancel is chosen here).
   const closePrompt = await app.evaluate(({ BrowserWindow, dialog }) => {
     const ask = dialog.showMessageBoxSync;
-    let detail = null;
-    dialog.showMessageBoxSync = (_window, options) => { detail = options.detail; return 1; };
+    let shown = null;
+    dialog.showMessageBoxSync = (_window, options) => { shown = { buttons: options.buttons, detail: options.detail, cancelId: options.cancelId }; return options.cancelId; };
     try { BrowserWindow.getAllWindows()[0].webContents.emit("will-prevent-unload", { preventDefault() {} }); }
     finally { dialog.showMessageBoxSync = ask; }
-    return detail;
+    return shown;
   });
-  assert.match(closePrompt, process.platform === "darwin" ? /⌘S/ : /Ctrl\+S/);
-  console.log("ok  the unsaved-work prompt shows this platform's Save shortcut");
+  assert.deepEqual(closePrompt.buttons, ["Save", "Close without saving", "Cancel"]);
+  assert.equal(closePrompt.cancelId, 2);
+  assert.match(closePrompt.detail, /save your changes/);
+  console.log("ok  the unsaved-work prompt offers to save before closing");
 
   // Closing Ask AI mid-answer stops the answer, like Stop: it doesn't run on unseen or come back unfinished. A stand-in
   // provider starts each answer and never finishes it.

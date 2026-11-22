@@ -1,5 +1,6 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Save as…": "Salvare ca…",
   // Tools
   "Select": "Selectare",
   "Highlight": "Evidențiere",

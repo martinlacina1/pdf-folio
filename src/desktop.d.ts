@@ -16,6 +16,12 @@ interface FolioDesktop {
   pathForFile?(file: File): string | undefined;
   /** Overwrites a PDF that was opened from disk (its path came from onOpenFile or pathForFile). */
   saveFile?(path: string, data: Uint8Array): Promise<boolean>;
+  /** Asks where to save a document that has no file; resolves to the chosen path, or null if cancelled. */
+  saveFileAs?(name: string, data: Uint8Array): Promise<string | null>;
+  /** Whether a file remembered in Recent still holds the document with this content key. */
+  verifyFile?(path: string, id: string): Promise<boolean>;
+  /** Closing Folio asks the page to save every tab with unsaved changes; resolve true when all were saved. */
+  onSaveAll?(callback: () => Promise<boolean>): () => void;
   onConverting(callback: (name: string, token: string) => void): () => void;
   onOpenFailed(callback: (message: string, token: string) => void): () => void;
   onTabCommand(callback: (command: "new" | "close" | "next" | "previous") => void): () => void;

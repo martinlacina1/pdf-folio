@@ -1,5 +1,6 @@
 // Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Save as…": "Uložit jako…",
   // Tools
   "Select": "Vybrat",
   "Highlight": "Zvýraznit",

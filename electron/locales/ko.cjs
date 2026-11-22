@@ -1,5 +1,8 @@
 // Korean text for electron/i18n.cjs: English → Korean.
 module.exports = {
+  "Save": "저장",
+  "Save as": "다른 이름으로 저장",
+  "Do you want to save your changes before closing Folio?": "Folio를 닫기 전에 변경 내용을 저장하시겠습니까?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "이 파일은 원래 위치에 저장할 수 없습니다.",
   "Nothing to save.": "저장할 내용이 없습니다.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "저장하지 않고 닫기",
   "Unsaved changes": "저장되지 않은 변경 내용",
   "One or more tabs have unsaved changes.": "하나 이상의 탭에 저장되지 않은 변경 내용이 있습니다.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Folio를 닫기 전에 표시된 각 탭에서 {shortcut}을(를) 눌러 저장하세요.",
 
   // main.cjs: links
   "Open link?": "링크를 여시겠습니까?",

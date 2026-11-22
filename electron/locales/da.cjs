@@ -1,5 +1,8 @@
 // Danish text for electron/i18n.cjs: English → Danish.
 module.exports = {
+  "Save": "Gem",
+  "Save as": "Gem som",
+  "Do you want to save your changes before closing Folio?": "Vil du gemme dine ændringer, før du lukker Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Denne fil kan ikke gemmes på den oprindelige placering.",
   "Nothing to save.": "Der er intet at gemme.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Luk uden at gemme",
   "Unsaved changes": "Ikke-gemte ændringer",
   "One or more tabs have unsaved changes.": "En eller flere faner har ikke-gemte ændringer.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Tryk på {shortcut} i hver markeret fane for at gemme den, før du lukker Folio.",
 
   // main.cjs: links
   "Open link?": "Vil du åbne linket?",

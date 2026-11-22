@@ -1,5 +1,8 @@
 // Greek text for electron/i18n.cjs: English → Greek.
 module.exports = {
+  "Save": "Αποθήκευση",
+  "Save as": "Αποθήκευση ως",
+  "Do you want to save your changes before closing Folio?": "Θέλετε να αποθηκεύσετε τις αλλαγές πριν κλείσετε το Folio;",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Αυτό το αρχείο δεν μπορεί να αποθηκευτεί στην αρχική του θέση.",
   "Nothing to save.": "Δεν υπάρχει τίποτα για αποθήκευση.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Κλείσιμο χωρίς αποθήκευση",
   "Unsaved changes": "Μη αποθηκευμένες αλλαγές",
   "One or more tabs have unsaved changes.": "Μία ή περισσότερες καρτέλες έχουν μη αποθηκευμένες αλλαγές.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Πατήστε {shortcut} σε κάθε επισημασμένη καρτέλα για να την αποθηκεύσετε πριν κλείσετε το Folio.",
 
   // main.cjs: links
   "Open link?": "Άνοιγμα σύνδεσης;",

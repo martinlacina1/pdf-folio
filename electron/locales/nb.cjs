@@ -1,5 +1,8 @@
 // Norwegian Bokmål text for electron/i18n.cjs: English → Norwegian Bokmål.
 module.exports = {
+  "Save": "Lagre",
+  "Save as": "Lagre som",
+  "Do you want to save your changes before closing Folio?": "Vil du lagre endringene før du lukker Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Denne filen kan ikke lagres på den opprinnelige plasseringen.",
   "Nothing to save.": "Ingenting å lagre.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Lukk uten å lagre",
   "Unsaved changes": "Ulagrede endringer",
   "One or more tabs have unsaved changes.": "Én eller flere faner har ulagrede endringer.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Trykk {shortcut} i hver merket fane for å lagre den før du lukker Folio.",
 
   // main.cjs: links
   "Open link?": "Vil du åpne koblingen?",

@@ -1,5 +1,6 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Save as…": "Ruaj si…",
   // Tools
   "Select": "Përzgjidh",
   "Highlight": "Thekso",

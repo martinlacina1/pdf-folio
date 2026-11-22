@@ -1,5 +1,6 @@
 // Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Save as…": "Сохранить как…",
   // Tools
   "Select": "Выделить",
   "Highlight": "Выделить цветом",

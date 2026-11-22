@@ -1,5 +1,8 @@
 // Serbian (Latin) text for electron/i18n.cjs: English → Serbian.
 module.exports = {
+  "Save": "Sačuvaj",
+  "Save as": "Sačuvaj kao",
+  "Do you want to save your changes before closing Folio?": "Da li želite da sačuvate promene pre zatvaranja aplikacije Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Ova datoteka ne može da se sačuva na originalnoj lokaciji.",
   "Nothing to save.": "Nema ničega za čuvanje.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Zatvori bez čuvanja",
   "Unsaved changes": "Nesačuvane promene",
   "One or more tabs have unsaved changes.": "Jedna ili više kartica imaju nesačuvane promene.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Pre zatvaranja aplikacije Folio pritisnite {shortcut} u svakoj označenoj kartici da biste je sačuvali.",
 
   // main.cjs: links
   "Open link?": "Otvoriti vezu?",

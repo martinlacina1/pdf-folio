@@ -1,5 +1,6 @@
 // French UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → French. See src/i18n.ts.
 const fr: Record<string, string> = {
+  "Save as…": "Enregistrer sous…",
   // Tools
   "Select": "Sélectionner",
   "Highlight": "Surligner",

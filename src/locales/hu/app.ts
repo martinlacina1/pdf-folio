@@ -1,5 +1,6 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Save as…": "Mentés másként…",
   // Tools
   "Select": "Kijelölés",
   "Highlight": "Kiemelés",

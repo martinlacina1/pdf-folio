@@ -1,5 +1,6 @@
 // Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Save as…": "Spara som…",
   // Tools
   "Select": "Välj",
   "Highlight": "Överstryk",

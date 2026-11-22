@@ -1,5 +1,8 @@
 // Russian text for electron/i18n.cjs: English → Russian.
 module.exports = {
+  "Save": "Сохранить",
+  "Save as": "Сохранить как",
+  "Do you want to save your changes before closing Folio?": "Сохранить изменения перед закрытием Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Этот файл нельзя сохранить в исходном расположении.",
   "Nothing to save.": "Нечего сохранять.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Закрыть без сохранения",
   "Unsaved changes": "Несохраненные изменения",
   "One or more tabs have unsaved changes.": "В одной или нескольких вкладках есть несохраненные изменения.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Перед закрытием Folio нажмите {shortcut} в каждой отмеченной вкладке, чтобы сохранить ее.",
 
   // main.cjs: links
   "Open link?": "Открыть ссылку?",

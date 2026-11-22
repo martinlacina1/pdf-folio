@@ -1,5 +1,6 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Save as…": "다른 이름으로 저장…",
   // Tools
   "Select": "선택",
   "Highlight": "강조 표시",

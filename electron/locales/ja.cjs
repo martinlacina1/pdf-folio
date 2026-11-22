@@ -1,5 +1,8 @@
 // Japanese text for electron/i18n.cjs: English → Japanese.
 module.exports = {
+  "Save": "保存",
+  "Save as": "名前を付けて保存",
+  "Do you want to save your changes before closing Folio?": "Folio を閉じる前に変更を保存しますか？",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "このファイルは元の場所に保存できません。",
   "Nothing to save.": "保存する内容がありません。",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "保存せずに閉じる",
   "Unsaved changes": "未保存の変更",
   "One or more tabs have unsaved changes.": "未保存の変更があるタブがあります。",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Folio を閉じる前に、マークの付いた各タブで {shortcut} を押して保存してください。",
 
   // main.cjs: links
   "Open link?": "リンクを開きますか？",

@@ -1,5 +1,8 @@
 // Simplified Chinese text for electron/i18n.cjs: English → Simplified Chinese.
 module.exports = {
+  "Save": "保存",
+  "Save as": "另存为",
+  "Do you want to save your changes before closing Folio?": "是否在关闭 Folio 之前保存更改？",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "无法将此文件保存到原位置。",
   "Nothing to save.": "没有要保存的内容。",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "关闭但不保存",
   "Unsaved changes": "未保存的更改",
   "One or more tabs have unsaved changes.": "一个或多个标签页有未保存的更改。",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "关闭 Folio 前，请在每个标记的标签页中按 {shortcut} 进行保存。",
 
   // main.cjs: links
   "Open link?": "要打开链接吗？",

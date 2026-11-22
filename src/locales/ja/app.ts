@@ -1,5 +1,6 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Save as…": "名前を付けて保存…",
   // Tools
   "Select": "選択",
   "Highlight": "ハイライト",

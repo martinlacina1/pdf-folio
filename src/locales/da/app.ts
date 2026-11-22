@@ -1,5 +1,6 @@
 // Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Save as…": "Gem som…",
   // Tools
   "Select": "Markér",
   "Highlight": "Fremhæv",

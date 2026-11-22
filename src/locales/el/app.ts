@@ -1,5 +1,6 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Save as…": "Αποθήκευση ως…",
   // Tools
   "Select": "Επιλογή",
   "Highlight": "Επισήμανση",

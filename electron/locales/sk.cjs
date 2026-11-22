@@ -1,5 +1,8 @@
 // Slovak text for electron/i18n.cjs: English → Slovak.
 module.exports = {
+  "Save": "Uložiť",
+  "Save as": "Uložiť ako",
+  "Do you want to save your changes before closing Folio?": "Chcete pred zatvorením aplikácie Folio uložiť zmeny?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Tento súbor nie je možné uložiť na pôvodné miesto.",
   "Nothing to save.": "Nie je čo uložiť.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Zavrieť bez uloženia",
   "Unsaved changes": "Neuložené zmeny",
   "One or more tabs have unsaved changes.": "Niektoré karty obsahujú neuložené zmeny.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Pred zatvorením aplikácie Folio uložte každú označenú kartu klávesovou skratkou {shortcut}.",
 
   // main.cjs: links
   "Open link?": "Otvoriť odkaz?",

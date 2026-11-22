@@ -1,5 +1,8 @@
 // Albanian text for electron/i18n.cjs: English → Albanian.
 module.exports = {
+  "Save": "Ruaj",
+  "Save as": "Ruaj si",
+  "Do you want to save your changes before closing Folio?": "Dëshironi t’i ruani ndryshimet para se të mbyllni Folio-n?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Ky skedar nuk mund të ruhet në vendndodhjen origjinale.",
   "Nothing to save.": "Nuk ka asgjë për t'u ruajtur.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Mbyll pa ruajtur",
   "Unsaved changes": "Ndryshime të paruajtura",
   "One or more tabs have unsaved changes.": "Një ose më shumë skeda kanë ndryshime të paruajtura.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Shtypni {shortcut} në çdo skedë të shënuar për ta ruajtur para se të mbyllni Folio.",
 
   // main.cjs: links
   "Open link?": "Të hapet lidhja?",

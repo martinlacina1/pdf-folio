@@ -1,5 +1,8 @@
 // Romanian text for electron/i18n.cjs: English → Romanian.
 module.exports = {
+  "Save": "Salvare",
+  "Save as": "Salvare ca",
+  "Do you want to save your changes before closing Folio?": "Doriți să salvați modificările înainte de a închide Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Acest fișier nu poate fi salvat în locația originală.",
   "Nothing to save.": "Nu există nimic de salvat.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Închidere fără salvare",
   "Unsaved changes": "Modificări nesalvate",
   "One or more tabs have unsaved changes.": "Una sau mai multe file au modificări nesalvate.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Apăsați {shortcut} în fiecare filă marcată pentru a o salva înainte de a închide Folio.",
 
   // main.cjs: links
   "Open link?": "Deschideți linkul?",

@@ -109,6 +109,55 @@ async function saveOpenedFile(file, data) {
   return true;
 }
 
+/** The identity Folio's page gives a PDF (contentKey in src/recent.ts), to confirm a remembered file is unchanged. */
+function contentKey(data) {
+  const prefix = data.byteLength <= 2 * 1024 * 1024 ? "sha256:" : "sha256-full:";
+  return prefix + crypto.createHash("sha256").update(data).digest("hex") + ":" + data.byteLength;
+}
+
+/**
+ * A document reopened from Recent may save back to the file it came from, but only while that file still holds
+ * exactly this document: never overwrite a file that changed on disk in the meantime.
+ */
+async function verifyRememberedFile(file, id) {
+  if (typeof file !== "string" || typeof id !== "string" || !path.isAbsolute(file) || !/\.pdf$/i.test(file)) return false;
+  try {
+    checkDiskPath(file);
+    const real = await fs.promises.realpath(file);
+    if (contentKey(await readRegular(real)) !== id) return false;
+    allowSaving(file);
+    allowSaving(real);
+    return true;
+  } catch { return false; }
+}
+
+/** Asks where to save a document that has no file yet (opened from a link, a converted Word file…), then writes it. */
+async function saveFileAs(sender, name, data) {
+  if (!(data instanceof Uint8Array) || !data.length) throw new Error(t("Nothing to save."));
+  const owner = BrowserWindow.fromWebContents(sender) ?? win;
+  const options = { title: t("Save as"), defaultPath: path.join(app.getPath("documents"), safePdfName(name, "document.pdf")),
+    filters: [{ name: "PDF", extensions: ["pdf"] }] };
+  const { canceled, filePath } = owner ? await dialog.showSaveDialog(owner, options) : await dialog.showSaveDialog(options);
+  if (canceled || !filePath) return null;
+  const target = /\.pdf$/i.test(filePath) ? filePath : filePath + ".pdf";
+  allowSaving(target);
+  if (fs.existsSync(target)) await saveOpenedFile(target, data);
+  else await fs.promises.writeFile(target, data, { flag: "wx" });
+  try { allowSaving(await fs.promises.realpath(target)); } catch {}
+  return target;
+}
+
+// Closing with unsaved tabs can save them first: the page saves every marked tab and reports whether all succeeded.
+const saveAllRequests = new Map();
+function saveAllTabs(target) {
+  return new Promise((resolve) => {
+    const id = crypto.randomUUID();
+    const timer = setTimeout(() => { saveAllRequests.delete(id); resolve(false); }, 10 * 60 * 1000);
+    saveAllRequests.set(id, (ok) => { clearTimeout(timer); resolve(ok === true); });
+    target.webContents.send("folio:save-all", id);
+  });
+}
+
 async function sendFile(file) {
   const target = win;
   if (!file || !target) return;
@@ -382,16 +431,20 @@ function createWindow() {
 
   // The page blocks unload while annotations are unsaved; ask instead of silently refusing to close.
   win.webContents.on("will-prevent-unload", (e) => {
-    const choice = dialog.showMessageBoxSync(win, {
+    const target = win;
+    const choice = dialog.showMessageBoxSync(target, {
       type: "question",
-      buttons: [t("Close without saving"), t("Cancel")],
-      defaultId: 1,
-      cancelId: 1,
+      buttons: [t("Save"), t("Close without saving"), t("Cancel")],
+      defaultId: 0,
+      cancelId: 2,
+      noLink: true,
       title: t("Unsaved changes"),
       message: t("One or more tabs have unsaved changes."),
-      detail: t("Press {shortcut} in each marked tab to save it before closing Folio.", { shortcut: IS_MAC ? "⌘S" : "Ctrl+S" }),
+      detail: t("Do you want to save your changes before closing Folio?"),
     });
-    if (choice === 0) e.preventDefault();
+    if (choice === 1) e.preventDefault();
+    // Save: the close was blocked; save every marked tab, then close again (no prompt once nothing is unsaved).
+    if (choice === 0) void saveAllTabs(target).then((ok) => { if (ok && !target.isDestroyed()) target.close(); });
   });
 
   win.on("closed", () => { clearTimeout(windowTimer); win = null; rendererReady = false; });
@@ -569,6 +622,9 @@ if (!app.requestSingleInstanceLock()) {
       try { if (allowSaving(file)) allowSaving(fs.realpathSync(file)); } catch {}
     });
     handle("folio:save-file", (_event, file, data) => saveOpenedFile(file, data));
+    handle("folio:save-file-as", (event, name, data) => saveFileAs(event.sender, name, data));
+    handle("folio:verify-file", (_event, file, id) => verifyRememberedFile(file, id));
+    on("folio:save-all-result", (_event, id, ok) => { saveAllRequests.get(id)?.(ok); saveAllRequests.delete(id); });
     // Word documents picked or dropped in Folio (PDFs are read by the page itself).
     handle("folio:open-document", (_event, file) => {
       if (typeof file !== "string" || !WORD_FILE.test(file) || !path.isAbsolute(file)) throw new Error("Not a Word document");

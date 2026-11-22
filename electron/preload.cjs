@@ -38,6 +38,16 @@ contextBridge.exposeInMainWorld("folioDesktop", {
   },
   /** Overwrites a PDF that was opened from disk. */
   saveFile: (filePath, data) => ipcRenderer.invoke("folio:save-file", filePath, data),
+  /** Asks where to save a document that has no file; resolves to the chosen path, or null if cancelled. */
+  saveFileAs: (name, data) => ipcRenderer.invoke("folio:save-file-as", name, data),
+  /** Whether a file remembered in Recent still holds the document with this content key (then Save may overwrite it). */
+  verifyFile: (filePath, id) => ipcRenderer.invoke("folio:verify-file", filePath, id),
+  /** Called when closing Folio should save every tab with unsaved changes first; resolve true if all were saved. */
+  onSaveAll(callback) {
+    const listener = (_e, id) => { void Promise.resolve(callback()).catch(() => false).then((ok) => ipcRenderer.send("folio:save-all-result", id, ok)); };
+    ipcRenderer.on("folio:save-all", listener);
+    return () => ipcRenderer.removeListener("folio:save-all", listener);
+  },
   ready: () => ipcRenderer.invoke("folio:ready"),
   platform: process.platform,
   openDownload: () => ipcRenderer.invoke("folio:open-download"),

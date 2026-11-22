@@ -1,5 +1,8 @@
 // Swedish text for electron/i18n.cjs: English → Swedish.
 module.exports = {
+  "Save": "Spara",
+  "Save as": "Spara som",
+  "Do you want to save your changes before closing Folio?": "Vill du spara ändringarna innan du stänger Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Den här filen kan inte sparas på sin ursprungliga plats.",
   "Nothing to save.": "Inget att spara.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Stäng utan att spara",
   "Unsaved changes": "Osparade ändringar",
   "One or more tabs have unsaved changes.": "En eller flera flikar har osparade ändringar.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Tryck på {shortcut} i varje markerad flik för att spara den innan du stänger Folio.",
 
   // main.cjs: links
   "Open link?": "Vill du öppna länken?",

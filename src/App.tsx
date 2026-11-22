@@ -150,6 +150,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const persistRef = useRef(false);
   const exporting = useRef<PDFDocumentProxy | null>(null);
   const savingCopy = useRef(false);
+  const saveRef = useRef<() => Promise<boolean>>(async () => false);
 
   const [doc, setDoc] = useState<OpenDoc | null>(null);
   const [loading, setLoading] = useState(false);
@@ -190,6 +191,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const [editorDirty, setEditorDirty] = useState(false);
   const [pageDraft, setPageDraft] = useState<{ order: number[]; copy?: Uint8Array } | null>(null);
   const pageOrder = pageDraft?.order.some((n, i) => n !== i + 1) ? pageDraft.order : undefined;
+  // The desktop app can always save: to the document's file, or with Save as… (not password-protected documents).
+  const canSave = !!doc && !!window.folioDesktop?.saveFileAs && !doc.password;
   const unsaved = !!doc?.sourceId || dirty || editorDirty || (!!pageOrder && !pageDraft?.copy);
   const [focus, setFocus] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -446,6 +449,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             lastPage: pageRef.current,
             thumb,
             data: pdfBlob(data),
+            path: next.path,
           });
         })().catch(() => {});
         return true;
@@ -876,21 +880,24 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     } finally { savingCopy.current = false; }
   };
 
-  /** Writes the current document back over the file it was opened from; without one, saves a copy instead. */
-  const save = async () => {
+  /**
+   * Saves the document: back over the file it was opened from, or, when it has none (opened from a link, a converted
+   * Word file, a document from Recent whose file changed), to a file chosen with Save as…. Resolves to whether it was
+   * saved. Password-protected documents and the browser edition save a copy instead.
+   */
+  const save = async (): Promise<boolean> => {
     const desktop = window.folioDesktop;
-    // Without a file to write back to, Save is Save a copy (which finishes a pending text edit itself).
     const opened = docRef.current;
-    if (!opened?.path || !desktop?.saveFile || opened.password) return download();
-    if (contentRef.current && !(await contentRef.current.finish())) return;
+    if (!opened || !desktop?.saveFile || !desktop.saveFileAs || opened.password) { await download(); return false; }
+    if (contentRef.current && !(await contentRef.current.finish())) return false;
     const doc = docRef.current;
-    if (!doc?.path || savingCopy.current) return;
+    if (!doc || savingCopy.current) return false;
     savingCopy.current = true;
     try {
       const copy = await currentBytes();
-      if (!copy || docRef.current !== doc) return;
+      if (!copy || docRef.current !== doc) return false;
       const changes = changesForCopy(doc, copy.annotated, pageOrder);
-      if (!changes.length && !doc.sourceId) { flash(t("No changes to save")); return; }
+      if (doc.path && !changes.length && !doc.sourceId) { flash(t("No changes to save")); return true; }
       const blob = pdfBlob(copy.bytes);
       let historyMessage = "";
       // Keep the version being replaced in version history, so an overwrite can be undone.
@@ -901,20 +908,29 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             { id: await contentKey(copy.bytes), name: doc.name, data: blob }, changes);
         } catch { historyMessage = t("Saved. Couldn’t keep the previous version in version history."); }
       }
-      await desktop.saveFile(doc.path, copy.bytes);
-      if (docRef.current !== doc) return;
+      let path = doc.path;
+      if (path) await desktop.saveFile(path, copy.bytes);
+      else {
+        path = (await desktop.saveFileAs(doc.name, copy.bytes)) ?? undefined;
+        if (!path) return false;
+      }
+      if (docRef.current !== doc) return true;
+      const name = path.split(/[\\/]/).pop() || doc.name;
       setError(null);
-      await openBytes(doc.name, copy.bytes, undefined, beginOpen(), pageOrder ? pageOrder.indexOf(pageRef.current) + 1 : pageRef.current,
-        undefined, doc, pageOrder, doc.path);
-      flash(historyMessage || t("Saved {name}", { name: doc.name }));
+      await openBytes(name, copy.bytes, undefined, beginOpen(), pageOrder ? pageOrder.indexOf(pageRef.current) + 1 : pageRef.current,
+        undefined, doc, pageOrder, path);
+      flash(historyMessage || t("Saved {name}", { name }));
+      return true;
     } catch (error) {
       if (docRef.current === doc) {
         if (dirty) setDirty(true);
         const reason = (error as Error)?.message?.replace(/^Error invoking remote method '[^']+': (Error: )?/, "") ?? "";
         setError(t("Couldn't save “{name}”. {reason}", { name: doc.name, reason: reason && t(reason) }).trim());
       }
+      return false;
     } finally { savingCopy.current = false; }
   };
+  saveRef.current = save;
 
   const print = async () => {
     if (contentRef.current && !(await contentRef.current.finish())) return;
@@ -962,9 +978,14 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             undefined, undefined, undefined, undefined, undefined, source.path);
           if (source.note && docRef.current?.name === source.name) flash(t(source.note));
           break;
-        case "blob":
-          if (!await openBlob(source.name, source.blob, source.path) && source.recentId) void removeRecent(source.recentId);
+        case "blob": {
+          // A file remembered in Recent is only written back to while it still holds exactly this document.
+          const path = source.path && source.recentId
+            ? (await window.folioDesktop?.verifyFile?.(source.path, source.recentId).catch(() => false) ? source.path : undefined)
+            : source.path;
+          if (!await openBlob(source.name, source.blob, path) && source.recentId) void removeRecent(source.recentId);
           break;
+        }
         case "word": {
           const signal = beginOpen();
           setLoading(true); setError(null); setToast(t("Converting {name} to PDF…", { name: source.name }));
@@ -987,7 +1008,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         case "error": setLoading(false); setToast(null); setError(t(source.message)); tabs.failed(tabKey); break;
       }
     };
-    tabs.bind(tabKey, { open: source => { void open(source); }, flush: async () => {
+    tabs.bind(tabKey, { open: source => { void open(source); }, save: () => saveRef.current(), flush: async () => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       markupRef.current?.sync();
       await markupRef.current?.flush();
@@ -1271,7 +1292,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                 onClick={() => contentEditing ? leaveEditMode() : chooseTool("select", true)}>
                 <Icon name={contentEditing ? "check" : "edit"} size={16} /><span>{contentEditing ? t("Exit edit mode") : t("Edit mode")}</span>
               </button>
-              {unsaved && doc.path && !doc.password && <button aria-label={t("Save")} title={keys(t("Save changes to {name} (Ctrl+S)", { name: doc.name }))} onClick={() => void save()}><Icon name="save" size={16} /><span>{t("Save")}</span></button>}
+              {unsaved && canSave && <button aria-label={t("Save")} title={keys(t("Save changes to {name} (Ctrl+S)", { name: doc.name }))} onClick={() => void save()}><Icon name="save" size={16} /><span>{t("Save")}</span></button>}
               {(doc.sourceId || editorDirty) && <button aria-label={t("Save copy")} title={keys(t("Save edited copy (Ctrl+Shift+S)"))} onClick={download}><Icon name="download" size={16} /><span>{t("Save copy")}</span></button>}
             </div>
           )}
@@ -1291,8 +1312,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     { kind: "action", icon: "plus", label: t("New tab"), shortcut: keys("Ctrl T"), onSelect: () => tabs.library() },
                     { kind: "action", icon: "close", label: t("Close document"), shortcut: keys("Ctrl W"), onSelect: () => void tabs.close(tabKey) },
                     { kind: "divider" },
-                    ...(doc.path && !doc.password ? [{ kind: "action", icon: "save", label: t("Save"), shortcut: keys("Ctrl S"), onSelect: () => void save() }] : []),
-                    { kind: "action", icon: "download", label: t("Save a copy"), shortcut: keys(doc.path && !doc.password ? "Ctrl Shift S" : "Ctrl S"), onSelect: download },
+                    ...(canSave ? [{ kind: "action", icon: "save", label: t(doc.path ? "Save" : "Save as…"), shortcut: keys("Ctrl S"), onSelect: () => void save() }] : []),
+                    { kind: "action", icon: "download", label: t("Save a copy"), shortcut: keys(canSave ? "Ctrl Shift S" : "Ctrl S"), onSelect: download },
                     { kind: "action", icon: "history", label: t("Version history"), onSelect: () => { setAiOpen(false); setHistoryOpen(true); } },
                     { kind: "action", icon: "print", label: t("Print"), shortcut: keys("Ctrl P"), onSelect: print },
                     { kind: "action", icon: "info", label: t("Document info"), onSelect: () => setDialog("info") },
@@ -1524,7 +1545,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         )}
       </div>
 
-      {!doc && <Welcome active={active} onPick={pickFile} onOpenUrl={() => openUrlDialog()} onOpenRecent={file => tabs.open([{ kind: "blob", name: file.name, blob: file.data, recentId: file.id }])}
+      {!doc && <Welcome active={active} onPick={pickFile} onOpenUrl={() => openUrlDialog()} onOpenRecent={file => tabs.open([{ kind: "blob", name: file.name, blob: file.data, recentId: file.id, path: file.path }])}
         onSample={() => tabs.open([{ kind: "sample", name: "Folio sample.pdf" }])} loading={loading} />}
 
       {loading && doc && <div className="loading-bar" />}

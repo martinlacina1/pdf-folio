@@ -1,5 +1,6 @@
 // Norwegian Bokmål UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Save as…": "Lagre som…",
   // Tools
   "Select": "Velg",
   "Highlight": "Uthev",

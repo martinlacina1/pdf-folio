@@ -1,5 +1,8 @@
 // Bulgarian text for electron/i18n.cjs: English → Bulgarian.
 module.exports = {
+  "Save": "Запиши",
+  "Save as": "Запиши като",
+  "Do you want to save your changes before closing Folio?": "Искате ли да запишете промените, преди да затворите Folio?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Този файл не може да се запише на първоначалното си място.",
   "Nothing to save.": "Няма нищо за записване.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Затвори без записване",
   "Unsaved changes": "Незаписани промени",
   "One or more tabs have unsaved changes.": "Един или повече раздела съдържат незаписани промени.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Преди да затворите Folio, натиснете {shortcut} във всеки отбелязан раздел, за да го запишете.",
 
   // main.cjs: links
   "Open link?": "Да се отвори ли връзката?",

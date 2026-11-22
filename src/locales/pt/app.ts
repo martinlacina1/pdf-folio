@@ -1,5 +1,6 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Save as…": "Salvar como…",
   // Tools
   "Select": "Selecionar",
   "Highlight": "Realçar",

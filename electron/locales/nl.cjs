@@ -1,5 +1,8 @@
 // Dutch text for electron/i18n.cjs: English → Dutch.
 module.exports = {
+  "Save": "Opslaan",
+  "Save as": "Opslaan als",
+  "Do you want to save your changes before closing Folio?": "Wilt u uw wijzigingen opslaan voordat u Folio sluit?",
   // main.cjs: opening and saving files
   "This file can't be saved in place.": "Dit bestand kan niet op de oorspronkelijke locatie worden opgeslagen.",
   "Nothing to save.": "Er is niets om op te slaan.",
@@ -18,7 +21,6 @@ module.exports = {
   "Close without saving": "Sluiten zonder opslaan",
   "Unsaved changes": "Niet-opgeslagen wijzigingen",
   "One or more tabs have unsaved changes.": "Een of meer tabbladen bevatten niet-opgeslagen wijzigingen.",
-  "Press {shortcut} in each marked tab to save it before closing Folio.": "Druk in elk gemarkeerd tabblad op {shortcut} om het op te slaan voordat u Folio sluit.",
 
   // main.cjs: links
   "Open link?": "Koppeling openen?",
