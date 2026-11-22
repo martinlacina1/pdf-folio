@@ -1,7 +1,7 @@
 # Folio (pdf-folio)
 
-Upravená verze PDF čtečky [Folio](https://github.com/Forward-Future/folio) s prostředím ve 13 jazycích.
-A modified version of the [Folio](https://github.com/Forward-Future/folio) PDF reader, translated into 13 languages.
+Upravená verze PDF čtečky [Folio](https://github.com/Forward-Future/folio) s prostředím ve 27 jazycích.
+A modified version of the [Folio](https://github.com/Forward-Future/folio) PDF reader, translated into 27 languages.
 
 ## Stažení (Windows)
 
@@ -13,10 +13,12 @@ Instalátor není podepsaný certifikátem. Pokud Windows SmartScreen zobrazí v
 
 ### Co je v této verzi navíc
 
-- **Lokalizace do 13 jazyků**: čeština, slovenština, angličtina, němčina, francouzština, španělština, italština,
-  portugalština (Brazílie), ruština, polština, čínština (zjednodušená), japonština a korejština. Jazyk se vybere
-  automaticky podle jazyka Windows (u ostatních jazyků zůstane angličtina).
-  *Folio is available in 13 languages and follows your system language.*
+- **Lokalizace do 27 jazyků**: čeština, slovenština, angličtina, němčina, francouzština, španělština, italština,
+  portugalština (Brazílie), ruština, ukrajinština, polština, nizozemština, rumunština, maďarština, řečtina,
+  švédština, norština, dánština, finština, srbština (latinkou), chorvatština, bulharština, albánština, katalánština,
+  čínština (zjednodušená), japonština a korejština. Jazyk se vybere automaticky podle jazyka Windows
+  (u ostatních jazyků zůstane angličtina).
+  *Folio is available in 27 languages and follows your system language.*
 - **Uložit do původního souboru**: Ctrl+S ukládá změny přímo do otevřeného PDF, Ctrl+Shift+S uloží kopii.
   Předchozí podoba souboru zůstane v historii verzí.
 - **Úpravy textu s diakritikou**: když vložený font v PDF nemá potřebné znaky, řádek se přepíše náhradním
