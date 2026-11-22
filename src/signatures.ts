@@ -99,13 +99,19 @@ export function cleanSignature(source: HTMLCanvasElement, crop: number[], thresh
   context.imageSmoothingQuality = "high";
   context.drawImage(source, ...crop as [number, number, number, number], 0, 0, canvas.width, canvas.height);
   if (!removeBackground) return { url: canvas.toDataURL("image/png"), width: canvas.width, height: canvas.height };
+  // A signature that already has a transparent background is laid on white first: transparent pixels read as black.
+  context.globalCompositeOperation = "destination-over";
+  context.fillStyle = "#fff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.globalCompositeOperation = "source-over";
   const image = context.getImageData(0, 0, canvas.width, canvas.height);
   const data = image.data;
-  const luminance = (offset: number) => 0.2126 * data[offset] + 0.7152 * data[offset + 1] + 0.0722 * data[offset + 2];
+  // Rounded, so pure white paper (254.99… in floating point) lands in the same histogram bin it's compared against.
+  const luminance = (offset: number) => Math.round(0.2126 * data[offset] + 0.7152 * data[offset + 1] + 0.0722 * data[offset + 2]);
 
   // The paper: the brightest quarter of the crop (a signature covers far less), averaged so tinted paper works too.
   const histogram = new Uint32Array(256);
-  for (let offset = 0; offset < data.length; offset += 4) histogram[Math.round(luminance(offset))]++;
+  for (let offset = 0; offset < data.length; offset += 4) histogram[luminance(offset)]++;
   let cutoff = 255;
   for (let seen = 0, pixels = data.length / 4; cutoff > 0 && (seen += histogram[cutoff]) < pixels * 0.25;) cutoff--;
   const paper = [0, 0, 0];
