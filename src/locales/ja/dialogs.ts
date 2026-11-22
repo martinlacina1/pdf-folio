@@ -1,5 +1,15 @@
 // Japanese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Language": "言語",
+  "Manage language, appearance, updates, and Ask AI accounts.": "言語、外観、更新、「AI に質問」のアカウントを管理します。",
+  "The new language is used after Folio restarts.": "新しい言語は Folio の再起動後に使用されます。",
+  "Automatic uses your system language ({language}).": "「自動」ではシステムの言語（{language}）を使用します。",
+  "Automatic (system language)": "自動（システムの言語）",
+  "Restart now": "今すぐ再起動",
+  "Couldn't save the language. Try again.": "言語を保存できませんでした。もう一度お試しください。",
+  "Open releases page": "リリース ページを開く",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}。Forward Future の Folio をベースにしています（MIT ライセンス）。",
+  "Project page": "プロジェクト ページ",
   // Ask AI panel
   "Default model": "既定のモデル",
   "Copy response": "回答をコピー",

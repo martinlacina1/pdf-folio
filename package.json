@@ -1,7 +1,7 @@
 {
   "name": "folio-pdf-reader",
   "private": true,
-  "version": "1.15.1",
+  "version": "1.16.0",
   "type": "module",
   "scripts": {
     "assets": "node scripts/copy-pdfjs-assets.mjs && node scripts/copy-ocr-assets.mjs",
@@ -60,6 +60,7 @@
   "folioDisableUpdates": true,
   "build": {
     "appId": "app.folio.reader",
+    "copyright": "Copyright © 2026 Martin Lacina; based on Folio by Forward Future",
     "productName": "Folio",
     "electronLanguages": [
       "en-US",
@@ -232,7 +233,10 @@
     "type": "git",
     "url": "https://github.com/martinlacina1/pdf-folio.git"
   },
-  "author": "Forward Future",
+  "author": "Martin Lacina",
+  "contributors": [
+    "Forward Future (original Folio)"
+  ],
   "desktopName": "folio-pdf-reader.desktop",
   "overrides": {
     "katex": "$katex"

@@ -271,18 +271,20 @@ kbd {
   background: var(--active);
   color: var(--text);
 }
-/* The sidebar toggle stands out, so it's easy to find; while the sidebar is open it shows the accent color. */
+/* The sidebar toggle stands out, so it's easy to find; while the sidebar is open its colors are inverted (a light
+   button in the dark theme, a dark one in the light theme), so it isn't confused with the accent-colored app icon. */
 .icon-btn.sidebar-toggle {
   color: var(--text);
   box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 .icon-btn.sidebar-toggle.on {
-  color: var(--accent-text);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1.5px var(--accent);
+  color: var(--surface);
+  background: var(--text);
+  box-shadow: none;
 }
 .icon-btn.sidebar-toggle.on:hover {
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--surface);
+  background: color-mix(in srgb, var(--text) 85%, var(--surface));
 }
 
 /* Tool switcher */

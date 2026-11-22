@@ -1,5 +1,15 @@
 // Catalan UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Language": "Idioma",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Gestiona l'idioma, l'aparença, les actualitzacions i els comptes de Preguntar a la IA.",
+  "The new language is used after Folio restarts.": "El nou idioma s'utilitzarà després de reiniciar Folio.",
+  "Automatic uses your system language ({language}).": "Automàtic utilitza l'idioma del sistema ({language}).",
+  "Automatic (system language)": "Automàtic (idioma del sistema)",
+  "Restart now": "Reinicia ara",
+  "Couldn't save the language. Try again.": "No s'ha pogut desar l'idioma. Torna-ho a provar.",
+  "Open releases page": "Obre la pàgina de versions",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Basat en Folio de Forward Future (llicència MIT).",
+  "Project page": "Pàgina del projecte",
   // Ask AI panel
   "Default model": "Model per defecte",
   "Copy response": "Copiar la resposta",

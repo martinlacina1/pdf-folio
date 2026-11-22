@@ -27,6 +27,11 @@ interface FolioDesktop {
   onTabCommand(callback: (command: "new" | "close" | "next" | "previous") => void): () => void;
   openDocument(file: File): Promise<{ name: string; data: Uint8Array; note?: string }>;
   ready(): Promise<boolean>;
+  /** The language chosen in Settings ("auto" or a code) and the one Folio runs in now. */
+  getLanguageSetting?(): Promise<{ setting: string; current: string }>;
+  setLanguageSetting?(value: string): Promise<string>;
+  /** Closes Folio (asking about unsaved changes as usual) and starts it again. */
+  relaunch?(): void;
   /** Null when the user declines to open an address on their computer or local network. */
   fetchPdf(url: string): Promise<{ name: string; data: Uint8Array } | null>;
   getAppInfo(): Promise<{ version: string; mode: "development" | "portable" | "installed" | "appimage" | "package"; location: string; platform: string;

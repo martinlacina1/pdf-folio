@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.16.0
+
+- **pdf-folio** by Martin Lacina, based on Folio 1.15.1. Download new versions from the releases page on GitHub (martinlacina1/pdf-folio); automatic updates are off so the official Folio doesn't replace this version.
+- Folio speaks 27 languages and follows your system language. Choose another one in **Settings → Language**.
+- **Save** (`Ctrl+S`) writes your changes back to the PDF you opened; **Save copy** (`Ctrl+Shift+S`) still exports a copy. The previous version stays in **Version history**. Documents without a file, such as ones opened from a link, use **Save as…**, and documents reopened from your recent files save back to their file as long as it hasn't changed on disk.
+- Closing Folio with unsaved changes now offers **Save**, which saves every marked tab and then closes.
+- Text editing works with letters the PDF's embedded font doesn't include, such as Czech diacritics: the line is rewritten in a full font matched to the original's size, color, weight and width. Typographic spaces and hidden characters copied from the document no longer block an edit.
+- Signatures keep the ink's color and smooth edges. Turn off **Remove background** to use the photo as it is.
+- The toolbar that appears for selected text opens beside the pointer, with a larger **Copy** button nearest to it; **Ask AI** is a smaller icon.
+- The sidebar starts closed and its button stands out, so it's easy to find.
+- Folio registers as a PDF app in Windows (**Open with** and **Default apps**), with its own icon for the app and PDF files.
+
 ## 1.15.1
 
 - After you update Folio, **What's new** shows the changes once. If you skip versions, it includes the releases you missed.

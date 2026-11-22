@@ -1,5 +1,15 @@
 // Bulgarian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Language": "Език",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Управлявайте езика, облика, актуализациите и акаунтите за „Попитай ИИ“.",
+  "The new language is used after Folio restarts.": "Новият език ще се използва след рестартиране на Folio.",
+  "Automatic uses your system language ({language}).": "Автоматично се използва езикът на системата ({language}).",
+  "Automatic (system language)": "Автоматично (език на системата)",
+  "Restart now": "Рестартирай сега",
+  "Couldn't save the language. Try again.": "Езикът не можа да бъде записан. Опитайте отново.",
+  "Open releases page": "Отвори страницата с версии",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Базирано на Folio от Forward Future (лиценз MIT).",
+  "Project page": "Страница на проекта",
   // Ask AI panel
   "Default model": "Модел по подразбиране",
   "Copy response": "Копиране на отговора",

@@ -2,7 +2,9 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Modal } from "./Dialogs";
 import { CLAUDE_CODE_URL, signInChatGPT, USAGE_URL, type AiProvider } from "./ai";
 import { updateSummary } from "./updates";
-import { LOCALE, t } from "./i18n";
+import { LANGUAGE, LANGUAGE_NAMES, LOCALE, t, type Language } from "./i18n";
+
+const PROJECT_URL = "https://github.com/martinlacina1/pdf-folio";
 
 /** One place for every Folio preference. */
 interface Props {
@@ -94,6 +96,27 @@ export function SettingsDialog({ theme, onTheme, night, onNight, wheelPaging, on
   const [signingIn, setSigningIn] = useState(false);
   useEffect(() => { void ai?.status().then(setAiStatus).catch(() => {}); }, [ai]);
 
+  // Language: "auto" follows the system. The choice applies when Folio starts again.
+  const [language, setLanguage] = useState<string>(() => {
+    if (desktop) return "auto";
+    try { return localStorage.getItem("folio:language") ?? "auto"; } catch { return "auto"; }
+  });
+  const [startLanguage, setStartLanguage] = useState<string | null>(null);
+  useEffect(() => {
+    void desktop?.getLanguageSetting?.().then((value) => { setLanguage(value.setting); setStartLanguage(value.setting); }).catch(() => {});
+  }, [desktop]);
+  const languageChanged = desktop ? startLanguage !== null && language !== startLanguage : false;
+  const chooseLanguage = async (value: string) => {
+    setError(null);
+    try {
+      if (desktop?.setLanguageSetting) await desktop.setLanguageSetting(value);
+      else if (value === "auto") localStorage.removeItem("folio:language");
+      else localStorage.setItem("folio:language", value);
+      setLanguage(value);
+      if (!desktop) location.reload();
+    } catch { setError(t("Couldn't save the language. Try again.")); }
+  };
+
   // Signature
   const [savedSignature, setSavedSignature] = useState(() => {
     try { return !!localStorage.getItem("folio:signature"); } catch { return false; }
@@ -102,7 +125,23 @@ export function SettingsDialog({ theme, onTheme, night, onNight, wheelPaging, on
   return (
     <Modal title={t("Settings")} onClose={onClose}>
       <div className="settings">
-        {desktop && <p className="search-hint">{t("Manage updates, appearance, and Ask AI accounts.")}</p>}
+        {desktop && <p className="search-hint">{t("Manage language, appearance, updates, and Ask AI accounts.")}</p>}
+        <Section title={t("Language")}>
+          <Row label={t("Language")} hint={languageChanged
+            ? t("The new language is used after Folio restarts.")
+            : t("Automatic uses your system language ({language}).", { language: LANGUAGE_NAMES[LANGUAGE] })}>
+            <div className="settings-language">
+              <select aria-label={t("Language")} value={language} onChange={(event) => void chooseLanguage(event.target.value)}>
+                <option value="auto">{t("Automatic (system language)")}</option>
+                {(Object.entries(LANGUAGE_NAMES) as [Language, string][])
+                  .sort((a, b) => a[1].localeCompare(b[1], LOCALE))
+                  .map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+              </select>
+              {languageChanged && desktop?.relaunch && <button className="btn primary" onClick={() => desktop.relaunch!()}>{t("Restart now")}</button>}
+            </div>
+          </Row>
+        </Section>
+
         <Section title={t("Appearance")}>
           <Row label={t("Theme")}>
             <Choice label={t("Theme")} value={theme === "dark" ? "dark" : "light"} onChange={onTheme}
@@ -194,12 +233,15 @@ export function SettingsDialog({ theme, onTheme, night, onNight, wheelPaging, on
                   onClick={() => status.state === "ready" ? desktop.installUpdate() : status.state === "available" ? void desktop.openDownload() : desktop.checkForUpdates()}>
                   {status.state === "ready" ? t("Restart and update") : status.state === "available" ? t("Download {version}", { version: status.version ?? "" }) : t("Check for updates")}
                 </button>
-              ) : null}
+              ) : <button className="btn ghost" onClick={() => void desktop.openDownload()}>{t("Open releases page")}</button>}
             </Row>
           </Section>
         )}
 
         <Section title={t("About")}>
+          <Row label={t("Author")} hint={t("{author}. Based on Folio by Forward Future (MIT license).", { author: "Martin Lacina" })}>
+            <a className="btn ghost" href={PROJECT_URL} target="_blank" rel="noreferrer">{t("Project page")}</a>
+          </Row>
           <Row label={t("What's new")} hint={t("Changes in each version of Folio.")}>
             <button className="btn ghost" onClick={onOpenChangelog}>{t("View changelog")}</button>
           </Row>

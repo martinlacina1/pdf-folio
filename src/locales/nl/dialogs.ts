@@ -1,5 +1,15 @@
 // Dutch UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Language": "Taal",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Beheer taal, weergave, updates en accounts voor Vraag AI.",
+  "The new language is used after Folio restarts.": "De nieuwe taal wordt gebruikt nadat Folio opnieuw is gestart.",
+  "Automatic uses your system language ({language}).": "Automatisch gebruikt de systeemtaal ({language}).",
+  "Automatic (system language)": "Automatisch (systeemtaal)",
+  "Restart now": "Nu opnieuw starten",
+  "Couldn't save the language. Try again.": "Kan de taal niet opslaan. Probeer het opnieuw.",
+  "Open releases page": "Releasepagina openen",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Gebaseerd op Folio van Forward Future (MIT-licentie).",
+  "Project page": "Projectpagina",
   // Ask AI panel
   "Default model": "Standaardmodel",
   "Copy response": "Antwoord kopiëren",

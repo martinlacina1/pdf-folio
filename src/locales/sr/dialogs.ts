@@ -1,5 +1,15 @@
 // Serbian (Latin) UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Language": "Jezik",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Upravljajte jezikom, izgledom, ispravkama i nalozima za Pitaj AI.",
+  "The new language is used after Folio restarts.": "Novi jezik će se koristiti nakon ponovnog pokretanja aplikacije Folio.",
+  "Automatic uses your system language ({language}).": "Automatski se koristi jezik sistema ({language}).",
+  "Automatic (system language)": "Automatski (jezik sistema)",
+  "Restart now": "Ponovo pokreni sada",
+  "Couldn't save the language. Try again.": "Čuvanje jezika nije uspelo. Pokušajte ponovo.",
+  "Open releases page": "Otvori stranicu izdanja",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Zasnovano na aplikaciji Folio kompanije Forward Future (MIT licenca).",
+  "Project page": "Stranica projekta",
   // Ask AI panel
   "Default model": "Podrazumevani model",
   "Copy response": "Kopiraj odgovor",

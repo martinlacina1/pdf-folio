@@ -1,5 +1,15 @@
 // Russian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Language": "Язык",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Управление языком, внешним видом, обновлениями и учетными записями для функции «Спросить ИИ».",
+  "The new language is used after Folio restarts.": "Новый язык будет использоваться после перезапуска Folio.",
+  "Automatic uses your system language ({language}).": "Автоматически используется язык системы ({language}).",
+  "Automatic (system language)": "Автоматически (язык системы)",
+  "Restart now": "Перезапустить",
+  "Couldn't save the language. Try again.": "Не удалось сохранить язык. Повторите попытку.",
+  "Open releases page": "Открыть страницу выпусков",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Основано на Folio от Forward Future (лицензия MIT).",
+  "Project page": "Страница проекта",
   // Ask AI panel
   "Default model": "Модель по умолчанию",
   "Copy response": "Копировать ответ",

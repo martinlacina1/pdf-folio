@@ -1,5 +1,15 @@
 // German UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Language": "Sprache",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Verwalten Sie Sprache, Darstellung, Updates und Konten für „KI fragen“.",
+  "The new language is used after Folio restarts.": "Die neue Sprache wird nach einem Neustart von Folio verwendet.",
+  "Automatic uses your system language ({language}).": "Automatisch verwendet die Systemsprache ({language}).",
+  "Automatic (system language)": "Automatisch (Systemsprache)",
+  "Restart now": "Jetzt neu starten",
+  "Couldn't save the language. Try again.": "Die Sprache konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+  "Open releases page": "Release-Seite öffnen",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Basiert auf Folio von Forward Future (MIT-Lizenz).",
+  "Project page": "Projektseite",
   // Ask AI panel
   "Default model": "Standardmodell",
   "Copy response": "Antwort kopieren",

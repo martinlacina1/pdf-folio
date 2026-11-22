@@ -1,5 +1,15 @@
 // Brazilian Portuguese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Language": "Idioma",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Gerencie idioma, aparência, atualizações e contas de Perguntar à IA.",
+  "The new language is used after Folio restarts.": "O novo idioma será usado depois que o Folio for reiniciado.",
+  "Automatic uses your system language ({language}).": "Automático usa o idioma do sistema ({language}).",
+  "Automatic (system language)": "Automático (idioma do sistema)",
+  "Restart now": "Reiniciar agora",
+  "Couldn't save the language. Try again.": "Não foi possível salvar o idioma. Tente novamente.",
+  "Open releases page": "Abrir página de versões",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Baseado no Folio da Forward Future (licença MIT).",
+  "Project page": "Página do projeto",
   // Ask AI panel
   "Default model": "Modelo padrão",
   "Copy response": "Copiar resposta",

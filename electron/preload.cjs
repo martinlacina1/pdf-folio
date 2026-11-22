@@ -49,6 +49,11 @@ contextBridge.exposeInMainWorld("folioDesktop", {
     return () => ipcRenderer.removeListener("folio:save-all", listener);
   },
   ready: () => ipcRenderer.invoke("folio:ready"),
+  /** The language chosen in Settings ("auto" or a code) and the one Folio runs in now. */
+  getLanguageSetting: () => ipcRenderer.invoke("folio:language-setting"),
+  setLanguageSetting: (value) => ipcRenderer.invoke("folio:set-language-setting", value),
+  /** Closes Folio (asking about unsaved changes as usual) and starts it again. */
+  relaunch: () => ipcRenderer.send("folio:relaunch"),
   platform: process.platform,
   openDownload: () => ipcRenderer.invoke("folio:open-download"),
   /** Downloads a PDF from an http(s) link; resolves to { name, data: Uint8Array }, or null if the user said no. */

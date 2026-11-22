@@ -1,5 +1,15 @@
 // Romanian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Language": "Limbă",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Gestionați limba, aspectul, actualizările și conturile pentru Întrebați AI.",
+  "The new language is used after Folio restarts.": "Noua limbă va fi folosită după repornirea Folio.",
+  "Automatic uses your system language ({language}).": "Automat folosește limba sistemului ({language}).",
+  "Automatic (system language)": "Automat (limba sistemului)",
+  "Restart now": "Reporniți acum",
+  "Couldn't save the language. Try again.": "Limba nu a putut fi salvată. Încercați din nou.",
+  "Open releases page": "Deschideți pagina versiunilor",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Bazat pe Folio de Forward Future (licență MIT).",
+  "Project page": "Pagina proiectului",
   // Ask AI panel
   "Default model": "Model implicit",
   "Copy response": "Copiere răspuns",

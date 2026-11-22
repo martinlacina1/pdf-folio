@@ -1,5 +1,15 @@
 // Czech UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Language": "Jazyk",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Spravujte jazyk, vzhled, aktualizace a účty pro Zeptat se AI.",
+  "The new language is used after Folio restarts.": "Nový jazyk se použije po restartu aplikace Folio.",
+  "Automatic uses your system language ({language}).": "Automaticky se použije jazyk systému ({language}).",
+  "Automatic (system language)": "Automaticky (jazyk systému)",
+  "Restart now": "Restartovat nyní",
+  "Couldn't save the language. Try again.": "Jazyk se nepodařilo uložit. Zkuste to znovu.",
+  "Open releases page": "Otevřít stránku vydání",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Vychází z aplikace Folio od Forward Future (licence MIT).",
+  "Project page": "Stránka projektu",
   // Ask AI panel
   "Default model": "Výchozí model",
   "Copy response": "Kopírovat odpověď",

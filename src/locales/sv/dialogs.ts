@@ -1,5 +1,15 @@
 // Swedish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Language": "Språk",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Hantera språk, utseende, uppdateringar och konton för Fråga AI.",
+  "The new language is used after Folio restarts.": "Det nya språket används när Folio har startats om.",
+  "Automatic uses your system language ({language}).": "Automatiskt använder systemets språk ({language}).",
+  "Automatic (system language)": "Automatiskt (systemspråk)",
+  "Restart now": "Starta om nu",
+  "Couldn't save the language. Try again.": "Det gick inte att spara språket. Försök igen.",
+  "Open releases page": "Öppna versionssidan",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Baserad på Folio från Forward Future (MIT-licens).",
+  "Project page": "Projektsida",
   // Ask AI panel
   "Default model": "Standardmodell",
   "Copy response": "Kopiera svar",

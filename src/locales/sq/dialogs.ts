@@ -1,5 +1,15 @@
 // Albanian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Language": "Gjuha",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Menaxhoni gjuhën, pamjen, përditësimet dhe llogaritë e „Pyetni AI-në“.",
+  "The new language is used after Folio restarts.": "Gjuha e re do të përdoret pasi të rinisni Folio-n.",
+  "Automatic uses your system language ({language}).": "Opsioni automatik përdor gjuhën e sistemit ({language}).",
+  "Automatic (system language)": "Automatike (gjuha e sistemit)",
+  "Restart now": "Rinise tani",
+  "Couldn't save the language. Try again.": "Gjuha nuk u ruajt dot. Provoni përsëri.",
+  "Open releases page": "Hap faqen e versioneve",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Bazuar në Folio nga Forward Future (licenca MIT).",
+  "Project page": "Faqja e projektit",
   // Ask AI panel
   "Default model": "Modeli i parazgjedhur",
   "Copy response": "Kopjo përgjigjen",

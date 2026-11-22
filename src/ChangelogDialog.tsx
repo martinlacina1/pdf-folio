@@ -44,7 +44,7 @@ export function ChangelogDialog({ upgradeNotes, onClose }: { upgradeNotes?: Rele
           <span aria-live="polite">{t("Page {page} of {pages}", { page: page + 1, pages })}</span>
           <button className="btn ghost" disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}>{t("Older releases")}</button>
         </nav>
-        <a href="https://github.com/Forward-Future/folio-releases/releases" target="_blank" rel="noreferrer">{t("View releases on GitHub")}</a>
+        <a href="https://github.com/martinlacina1/pdf-folio/releases" target="_blank" rel="noreferrer">{t("View releases on GitHub")}</a>
       </footer>}
     </Modal>
   );

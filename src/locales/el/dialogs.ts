@@ -1,5 +1,15 @@
 // Greek UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Language": "Γλώσσα",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Διαχειριστείτε τη γλώσσα, την εμφάνιση, τις ενημερώσεις και τους λογαριασμούς του «Ρωτήστε το AI».",
+  "The new language is used after Folio restarts.": "Η νέα γλώσσα θα χρησιμοποιηθεί μετά την επανεκκίνηση του Folio.",
+  "Automatic uses your system language ({language}).": "Η αυτόματη επιλογή χρησιμοποιεί τη γλώσσα του συστήματος ({language}).",
+  "Automatic (system language)": "Αυτόματα (γλώσσα συστήματος)",
+  "Restart now": "Επανεκκίνηση τώρα",
+  "Couldn't save the language. Try again.": "Δεν ήταν δυνατή η αποθήκευση της γλώσσας. Δοκιμάστε ξανά.",
+  "Open releases page": "Άνοιγμα σελίδας εκδόσεων",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Βασίζεται στο Folio της Forward Future (άδεια MIT).",
+  "Project page": "Σελίδα έργου",
   // Ask AI panel
   "Default model": "Προεπιλεγμένο μοντέλο",
   "Copy response": "Αντιγραφή απάντησης",

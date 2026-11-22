@@ -1,5 +1,15 @@
 // Hungarian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Language": "Nyelv",
+  "Manage language, appearance, updates, and Ask AI accounts.": "A nyelv, a megjelenés, a frissítések és az AI kérdezése fiókjainak kezelése.",
+  "The new language is used after Folio restarts.": "Az új nyelv a Folio újraindítása után lesz érvényes.",
+  "Automatic uses your system language ({language}).": "Az automatikus beállítás a rendszer nyelvét használja ({language}).",
+  "Automatic (system language)": "Automatikus (rendszernyelv)",
+  "Restart now": "Újraindítás most",
+  "Couldn't save the language. Try again.": "Nem sikerült menteni a nyelvet. Próbálja újra.",
+  "Open releases page": "Kiadások oldalának megnyitása",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. A Forward Future Folio alkalmazásán alapul (MIT-licenc).",
+  "Project page": "Projektoldal",
   // Ask AI panel
   "Default model": "Alapértelmezett modell",
   "Copy response": "Válasz másolása",

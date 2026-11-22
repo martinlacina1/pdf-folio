@@ -11,6 +11,13 @@
 /** UI languages besides English, by their BCP 47 primary language subtag. */
 export const LANGUAGES = ["cs", "sk", "de", "fr", "es", "it", "pt", "ru", "pl", "zh", "ja", "ko",
   "uk", "nl", "ro", "hu", "el", "sv", "sr", "bg", "hr", "da", "fi", "nb", "ca", "sq"] as const;
+/** Each UI language in its own name, for the language picker in Settings. */
+export const LANGUAGE_NAMES: Record<Language, string> = {
+  en: "English", cs: "Čeština", sk: "Slovenčina", de: "Deutsch", fr: "Français", es: "Español", it: "Italiano",
+  pt: "Português (Brasil)", ru: "Русский", pl: "Polski", zh: "中文（简体）", ja: "日本語", ko: "한국어",
+  uk: "Українська", nl: "Nederlands", ro: "Română", hu: "Magyar", el: "Ελληνικά", sv: "Svenska", sr: "Srpski",
+  bg: "Български", hr: "Hrvatski", da: "Dansk", fi: "Suomi", nb: "Norsk bokmål", ca: "Català", sq: "Shqip",
+};
 /** Other primary subtags that use one of the dictionaries above (Norwegian "no"/Nynorsk read Bokmål). */
 const ALIASES: Record<string, string> = { no: "nb", nn: "nb" };
 export type Language = "en" | (typeof LANGUAGES)[number];

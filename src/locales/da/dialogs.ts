@@ -1,5 +1,15 @@
 // Danish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Language": "Sprog",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Administrer sprog, udseende, opdateringer og konti til Spørg AI.",
+  "The new language is used after Folio restarts.": "Det nye sprog bruges, når Folio er genstartet.",
+  "Automatic uses your system language ({language}).": "Automatisk bruger systemets sprog ({language}).",
+  "Automatic (system language)": "Automatisk (systemsprog)",
+  "Restart now": "Genstart nu",
+  "Couldn't save the language. Try again.": "Sproget kunne ikke gemmes. Prøv igen.",
+  "Open releases page": "Åbn udgivelsessiden",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Baseret på Folio fra Forward Future (MIT-licens).",
+  "Project page": "Projektside",
   // Ask AI panel
   "Default model": "Standardmodel",
   "Copy response": "Kopiér svar",

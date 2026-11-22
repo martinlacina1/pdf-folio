@@ -11,7 +11,7 @@ const { captureWebpage } = require("./webpage.cjs");
 const { guardSession, resolveDestination } = require("./network.cjs");
 const { safePdfName } = require("./filenames.cjs");
 const { csp } = require("./csp.cjs");
-const { t, uiLanguage } = require("./i18n.cjs");
+const { t, uiLanguage, languageSetting, setLanguageSetting } = require("./i18n.cjs");
 const { WORD_FILE, openWord } = require("./convert.cjs");
 const { MAX_DOCUMENT_BYTES, checkDiskPath, readRegular } = require("./document-files.cjs");
 
@@ -45,7 +45,7 @@ const TITLEBAR = {
 
 const IS_MAC = process.platform === "darwin";
 const IS_LINUX = process.platform === "linux";
-const RELEASES_PAGE = "https://github.com/Forward-Future/folio-releases/releases/latest";
+const RELEASES_PAGE = "https://github.com/martinlacina1/pdf-folio/releases/latest";
 
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
@@ -146,6 +146,9 @@ async function saveFileAs(sender, name, data) {
   try { allowSaving(await fs.promises.realpath(target)); } catch {}
   return target;
 }
+
+// Settings → Language → Restart now: start again once the window has really closed (the close prompt may cancel).
+let relaunchAfterClose = false;
 
 // Closing with unsaved tabs can save them first: the page saves every marked tab and reports whether all succeeded.
 const saveAllRequests = new Map();
@@ -443,11 +446,18 @@ function createWindow() {
       detail: t("Do you want to save your changes before closing Folio?"),
     });
     if (choice === 1) e.preventDefault();
+    if (choice === 2) relaunchAfterClose = false;
     // Save: the close was blocked; save every marked tab, then close again (no prompt once nothing is unsaved).
-    if (choice === 0) void saveAllTabs(target).then((ok) => { if (ok && !target.isDestroyed()) target.close(); });
+    if (choice === 0) void saveAllTabs(target).then((ok) => {
+      if (ok && !target.isDestroyed()) target.close();
+      else relaunchAfterClose = false;
+    });
   });
 
-  win.on("closed", () => { clearTimeout(windowTimer); win = null; rendererReady = false; });
+  win.on("closed", () => {
+    clearTimeout(windowTimer); win = null; rendererReady = false;
+    if (relaunchAfterClose) { relaunchAfterClose = false; app.relaunch(); app.quit(); }
+  });
 }
 
 const MAX_URL_PDF_BYTES = MAX_DOCUMENT_BYTES;
@@ -624,6 +634,9 @@ if (!app.requestSingleInstanceLock()) {
     handle("folio:save-file", (_event, file, data) => saveOpenedFile(file, data));
     handle("folio:save-file-as", (event, name, data) => saveFileAs(event.sender, name, data));
     handle("folio:verify-file", (_event, file, id) => verifyRememberedFile(file, id));
+    handle("folio:language-setting", () => ({ setting: languageSetting(), current: uiLanguage() }));
+    handle("folio:set-language-setting", (_event, value) => setLanguageSetting(value));
+    on("folio:relaunch", () => { if (!win) return; relaunchAfterClose = true; win.close(); });
     on("folio:save-all-result", (_event, id, ok) => { saveAllRequests.get(id)?.(ok); saveAllRequests.delete(id); });
     // Word documents picked or dropped in Folio (PDFs are read by the page itself).
     handle("folio:open-document", (_event, file) => {

@@ -1,5 +1,15 @@
 // Korean UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Language": "언어",
+  "Manage language, appearance, updates, and Ask AI accounts.": "언어, 모양, 업데이트 및 AI에게 묻기 계정을 관리합니다.",
+  "The new language is used after Folio restarts.": "새 언어는 Folio를 다시 시작한 후에 적용됩니다.",
+  "Automatic uses your system language ({language}).": "자동은 시스템 언어({language})를 사용합니다.",
+  "Automatic (system language)": "자동(시스템 언어)",
+  "Restart now": "지금 다시 시작",
+  "Couldn't save the language. Try again.": "언어를 저장하지 못했습니다. 다시 시도하세요.",
+  "Open releases page": "릴리스 페이지 열기",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Forward Future의 Folio를 기반으로 합니다(MIT 라이선스).",
+  "Project page": "프로젝트 페이지",
   // Ask AI panel
   "Default model": "기본 모델",
   "Copy response": "응답 복사",

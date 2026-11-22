@@ -1,5 +1,15 @@
 // Simplified Chinese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Language": "语言",
+  "Manage language, appearance, updates, and Ask AI accounts.": "管理语言、外观、更新和“询问 AI”账户。",
+  "The new language is used after Folio restarts.": "重新启动 Folio 后将使用新语言。",
+  "Automatic uses your system language ({language}).": "“自动”使用系统语言（{language}）。",
+  "Automatic (system language)": "自动（系统语言）",
+  "Restart now": "立即重新启动",
+  "Couldn't save the language. Try again.": "无法保存语言设置。请重试。",
+  "Open releases page": "打开发布页面",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}。基于 Forward Future 的 Folio（MIT 许可证）。",
+  "Project page": "项目页面",
   // Ask AI panel
   "Default model": "默认模型",
   "Copy response": "复制回答",

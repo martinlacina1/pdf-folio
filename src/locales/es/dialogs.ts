@@ -1,5 +1,15 @@
 // Spanish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Language": "Idioma",
+  "Manage language, appearance, updates, and Ask AI accounts.": "Gestiona el idioma, la apariencia, las actualizaciones y las cuentas de Preguntar a la IA.",
+  "The new language is used after Folio restarts.": "El nuevo idioma se usará después de reiniciar Folio.",
+  "Automatic uses your system language ({language}).": "Automático usa el idioma del sistema ({language}).",
+  "Automatic (system language)": "Automático (idioma del sistema)",
+  "Restart now": "Reiniciar ahora",
+  "Couldn't save the language. Try again.": "No se pudo guardar el idioma. Inténtalo de nuevo.",
+  "Open releases page": "Abrir la página de versiones",
+  "{author}. Based on Folio by Forward Future (MIT license).": "{author}. Basado en Folio de Forward Future (licencia MIT).",
+  "Project page": "Página del proyecto",
   // Ask AI panel
   "Default model": "Modelo predeterminado",
   "Copy response": "Copiar respuesta",
