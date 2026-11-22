@@ -1,0 +1,129 @@
+// Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
+const sv: Record<string, string> = {
+  // Tools
+  "Select": "Välj",
+  "Highlight": "Överstryk",
+  "Draw": "Rita",
+  "Text": "Text",
+  "Tools": "Verktyg",
+  "Automatically highlight selected text": "Överstryk markerad text automatiskt",
+  "Sign": "Signera",
+  "Add a signature": "Lägg till en signatur",
+  "Edit mode": "Redigeringsläge",
+  "Exit edit mode": "Avsluta redigering",
+  "Edit existing text and images": "Redigera befintlig text och bilder",
+  "Save": "Spara",
+  "Save changes to {name} (Ctrl+S)": "Spara ändringar i {name} (Ctrl+S)",
+  "Save copy": "Spara kopia",
+  "Save edited copy (Ctrl+Shift+S)": "Spara redigerad kopia (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Gul",
+  "Green": "Grön",
+  "Blue": "Blå",
+  "Pink": "Rosa",
+  "Red": "Röd",
+  "Black": "Svart",
+  "Purple": "Lila",
+
+  // Top bar and More menu
+  "Back to library": "Tillbaka till biblioteket",
+  "Toggle sidebar (Ctrl+\\)": "Visa/dölj sidofältet (Ctrl+\\)",
+  "Unsaved changes": "Osparade ändringar",
+  "Ask AI": "Fråga AI",
+  "Search (Ctrl+F)": "Sök (Ctrl+F)",
+  "New tab": "Ny flik",
+  "Close document": "Stäng dokument",
+  "Save a copy": "Spara en kopia",
+  "Version history": "Versionshistorik",
+  "Print": "Skriv ut",
+  "Document info": "Dokumentinformation",
+  "PDF dark mode": "Mörkt läge för PDF",
+  "Focus mode": "Fokusläge",
+  "Settings": "Inställningar",
+  "Keyboard shortcuts": "Kortkommandon",
+  "About Folio": "Om Folio",
+
+  // Annotation options
+  "Annotation options": "Alternativ för kommentarer",
+  "Drawing tool": "Ritverktyg",
+  "Pen": "Penna",
+  "Rectangle": "Rektangel",
+  "Oval": "Oval",
+  "Arrow": "Pil",
+  "Color": "Färg",
+  "Undo (Ctrl+Z)": "Ångra (Ctrl+Z)",
+  "Done": "Klar",
+
+  // Navigation
+  "Navigation": "Navigering",
+  "Previous page": "Föregående sida",
+  "Next page": "Nästa sida",
+  "Page number": "Sidnummer",
+  "of {n}": "av {n}",
+  "Zoom out (Ctrl −)": "Zooma ut (Ctrl −)",
+  "Zoom in (Ctrl +)": "Zooma in (Ctrl +)",
+  "Rotate (R)": "Rotera (R)",
+  "Exit focus mode": "Avsluta fokusläge",
+  "to exit focus mode": "för att avsluta fokusläge",
+
+  // Opening
+  "Incorrect password. Try again.": "Fel lösenord. Försök igen.",
+  "Couldn't open “{name}”. {reason}": "Det gick inte att öppna ”{name}”. {reason}",
+  "The file may be damaged.": "Filen kan vara skadad.",
+  "“{name}” isn't a PDF.": "”{name}” är inte en PDF.",
+  "Opening {host}…": "Öppnar {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Det gick inte att ladda ned från {host}. Webbplatsen kanske inte tillåter det.",
+  "Couldn't open that link. {reason}": "Det gick inte att öppna länken. {reason}",
+  "Couldn't open the sample document.": "Det gick inte att öppna exempeldokumentet.",
+  "Converting {name} to PDF…": "Konverterar {name} till PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "Det gick inte att konvertera ”{name}” till PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Släpp en PDF-fil eller en länk till en PDF.",
+  "Drop a PDF or link to open": "Släpp en PDF eller länk för att öppna",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Kommentarer stöds inte för det här dokumentet",
+  "Couldn't add the shape": "Det gick inte att lägga till formen",
+  "Couldn't highlight that selection": "Det gick inte att överstryka markeringen",
+  "Highlight removed": "Överstrykning borttagen",
+  "Markdown copied": "Markdown kopierad",
+  "Copy failed": "Det gick inte att kopiera",
+  "Couldn't export notes": "Det gick inte att exportera anteckningarna",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (ny ordning).pdf",
+  "{name} (edited).pdf": "{name} (redigerad).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Kopian har exporterats. Det gick inte att spara dess versionshistorik på den här enheten.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Kopian har exporterats. Historik finns för okrypterade PDF-filer på upp till 50 MB.",
+  "Downloading reordered copy": "Laddar ned kopia med ny sidordning",
+  "Saved a copy with your highlights and notes": "En kopia med dina överstrykningar och anteckningar har sparats",
+  "Download started": "Nedladdningen har startat",
+  "Couldn't save a copy of this document.": "Det gick inte att spara en kopia av dokumentet.",
+  "No changes to save": "Inga ändringar att spara",
+  "Saved. Couldn’t keep the previous version in version history.": "Sparat. Det gick inte att behålla den tidigare versionen i versionshistoriken.",
+  "Saved {name}": "{name} har sparats",
+  "Couldn't save “{name}”. {reason}": "Det gick inte att spara ”{name}”. {reason}",
+  "Couldn't print this document.": "Det gick inte att skriva ut dokumentet.",
+  "Couldn't print — saved a copy instead": "Det gick inte att skriva ut – en kopia sparades i stället",
+  "Editing requires an unsigned, unencrypted PDF.": "Redigering kräver en osignerad, okrypterad PDF.",
+  "The document changed. Try again.": "Dokumentet har ändrats. Försök igen.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Mörkt läge för PDF ändrades, men inställningen kunde inte sparas.",
+  "Page scrolling changed, but couldn't save the preference.": "Sidrullningen ändrades, men inställningen kunde inte sparas.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Signaturen har lagts till. Ångra med Ctrl+Z; exportera med Spara kopia.",
+  "Signature field detected on page {page}": "Signaturfält hittades på sidan {page}",
+  "Possible signature area on page {page}": "Möjligt signaturområde på sidan {page}",
+  "Review signature": "Granska signatur",
+  "Dismiss signature suggestion": "Stäng signaturförslaget",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} är klart",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Starta om för att uppdatera. Installation vid stängning följer din inställning för automatiska uppdateringar.",
+  "Restart": "Starta om",
+  "Later": "Senare",
+};
+export default sv;

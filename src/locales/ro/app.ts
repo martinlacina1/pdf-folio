@@ -1,0 +1,129 @@
+// Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
+const ro: Record<string, string> = {
+  // Tools
+  "Select": "Selectare",
+  "Highlight": "Evidențiere",
+  "Draw": "Desenare",
+  "Text": "Text",
+  "Tools": "Instrumente",
+  "Automatically highlight selected text": "Evidențiază automat textul selectat",
+  "Sign": "Semnare",
+  "Add a signature": "Adăugați o semnătură",
+  "Edit mode": "Mod editare",
+  "Exit edit mode": "Ieșire din modul editare",
+  "Edit existing text and images": "Editați textul și imaginile existente",
+  "Save": "Salvare",
+  "Save changes to {name} (Ctrl+S)": "Salvați modificările în {name} (Ctrl+S)",
+  "Save copy": "Salvare copie",
+  "Save edited copy (Ctrl+Shift+S)": "Salvați copia editată (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Galben",
+  "Green": "Verde",
+  "Blue": "Albastru",
+  "Pink": "Roz",
+  "Red": "Roșu",
+  "Black": "Negru",
+  "Purple": "Violet",
+
+  // Top bar and More menu
+  "Back to library": "Înapoi la bibliotecă",
+  "Toggle sidebar (Ctrl+\\)": "Afișare/ascundere bară laterală (Ctrl+\\)",
+  "Unsaved changes": "Modificări nesalvate",
+  "Ask AI": "Întrebați AI",
+  "Search (Ctrl+F)": "Căutare (Ctrl+F)",
+  "New tab": "Filă nouă",
+  "Close document": "Închidere document",
+  "Save a copy": "Salvare copie",
+  "Version history": "Istoric versiuni",
+  "Print": "Imprimare",
+  "Document info": "Informații document",
+  "PDF dark mode": "Mod întunecat PDF",
+  "Focus mode": "Mod concentrare",
+  "Settings": "Setări",
+  "Keyboard shortcuts": "Comenzi rapide de la tastatură",
+  "About Folio": "Despre Folio",
+
+  // Annotation options
+  "Annotation options": "Opțiuni adnotări",
+  "Drawing tool": "Instrument de desenare",
+  "Pen": "Stilou",
+  "Rectangle": "Dreptunghi",
+  "Oval": "Oval",
+  "Arrow": "Săgeată",
+  "Color": "Culoare",
+  "Undo (Ctrl+Z)": "Anulare (Ctrl+Z)",
+  "Done": "Gata",
+
+  // Navigation
+  "Navigation": "Navigare",
+  "Previous page": "Pagina anterioară",
+  "Next page": "Pagina următoare",
+  "Page number": "Număr pagină",
+  "of {n}": "din {n}",
+  "Zoom out (Ctrl −)": "Micșorare (Ctrl −)",
+  "Zoom in (Ctrl +)": "Mărire (Ctrl +)",
+  "Rotate (R)": "Rotire (R)",
+  "Exit focus mode": "Ieșire din modul concentrare",
+  "to exit focus mode": "pentru a ieși din modul concentrare",
+
+  // Opening
+  "Incorrect password. Try again.": "Parolă incorectă. Încercați din nou.",
+  "Couldn't open “{name}”. {reason}": "Nu s-a putut deschide „{name}”. {reason}",
+  "The file may be damaged.": "Este posibil ca fișierul să fie deteriorat.",
+  "“{name}” isn't a PDF.": "„{name}” nu este un PDF.",
+  "Opening {host}…": "Se deschide {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Nu s-a putut descărca de pe {host}. Este posibil ca site-ul să nu permită acest lucru.",
+  "Couldn't open that link. {reason}": "Nu s-a putut deschide linkul. {reason}",
+  "Couldn't open the sample document.": "Nu s-a putut deschide documentul exemplu.",
+  "Converting {name} to PDF…": "Se convertește {name} în PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "Nu s-a putut converti „{name}” în PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Plasați aici un fișier PDF sau un link către un PDF.",
+  "Drop a PDF or link to open": "Plasați aici un PDF sau un link pentru a-l deschide",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Acest document nu acceptă adnotări",
+  "Couldn't add the shape": "Nu s-a putut adăuga forma",
+  "Couldn't highlight that selection": "Nu s-a putut evidenția selecția",
+  "Highlight removed": "Evidențiere eliminată",
+  "Markdown copied": "Markdown copiat",
+  "Copy failed": "Copierea nu a reușit",
+  "Couldn't export notes": "Nu s-au putut exporta notele",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (reordonat).pdf",
+  "{name} (edited).pdf": "{name} (editat).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Copie exportată. Istoricul versiunilor nu s-a putut salva pe acest dispozitiv.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Copie exportată. Istoricul este disponibil pentru PDF-uri necriptate de până la 50 MB.",
+  "Downloading reordered copy": "Se descarcă copia reordonată",
+  "Saved a copy with your highlights and notes": "S-a salvat o copie cu evidențierile și notele dvs.",
+  "Download started": "Descărcarea a început",
+  "Couldn't save a copy of this document.": "Nu s-a putut salva o copie a acestui document.",
+  "No changes to save": "Nicio modificare de salvat",
+  "Saved. Couldn’t keep the previous version in version history.": "Salvat. Versiunea anterioară nu s-a putut păstra în istoricul versiunilor.",
+  "Saved {name}": "S-a salvat {name}",
+  "Couldn't save “{name}”. {reason}": "Nu s-a putut salva „{name}”. {reason}",
+  "Couldn't print this document.": "Nu s-a putut imprima acest document.",
+  "Couldn't print — saved a copy instead": "Imprimarea nu a reușit – s-a salvat în schimb o copie",
+  "Editing requires an unsigned, unencrypted PDF.": "Editarea necesită un PDF nesemnat și necriptat.",
+  "The document changed. Try again.": "Documentul s-a modificat. Încercați din nou.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Modul întunecat PDF s-a schimbat, dar preferința nu s-a putut salva.",
+  "Page scrolling changed, but couldn't save the preference.": "Derularea paginilor s-a schimbat, dar preferința nu s-a putut salva.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Semnătură adăugată. Ctrl+Z pentru anulare; Salvare copie pentru export.",
+  "Signature field detected on page {page}": "Câmp de semnătură detectat pe pagina {page}",
+  "Possible signature area on page {page}": "Posibilă zonă de semnătură pe pagina {page}",
+  "Review signature": "Verificare semnătură",
+  "Dismiss signature suggestion": "Respingeți sugestia de semnătură",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} este gata",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Reporniți pentru a actualiza. Instalarea la închidere respectă setarea de actualizare automată.",
+  "Restart": "Repornire",
+  "Later": "Mai târziu",
+};
+export default ro;

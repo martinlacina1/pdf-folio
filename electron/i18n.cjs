@@ -5,7 +5,9 @@
 const { app } = require("electron");
 
 // Keep in sync with LANGUAGES in src/i18n.ts.
-const LANGUAGES = ["cs", "sk", "de", "fr", "es", "it", "pt", "ru", "pl", "zh", "ja", "ko"];
+const LANGUAGES = ["cs", "sk", "de", "fr", "es", "it", "pt", "ru", "pl", "zh", "ja", "ko",
+  "uk", "nl", "ro", "hu", "el", "sv", "sr", "bg", "hr", "da", "fi", "nb", "ca", "sq"];
+const ALIASES = { no: "nb", nn: "nb" };
 const dictionaries = Object.fromEntries(LANGUAGES.map((code) => {
   try { return [code, require(`./locales/${code}.cjs`)]; } catch { return [code, {}]; }
 }));
@@ -13,7 +15,8 @@ let language;
 
 /** The supported language for a BCP 47 tag ("de-AT" → "de"), or "en". */
 function languageFor(tag) {
-  const primary = String(tag ?? "").toLowerCase().split(/[-_]/)[0];
+  const subtag = String(tag ?? "").toLowerCase().split(/[-_]/)[0];
+  const primary = ALIASES[subtag] ?? subtag;
   return LANGUAGES.includes(primary) ? primary : "en";
 }
 

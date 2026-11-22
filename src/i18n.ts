@@ -9,7 +9,10 @@
 // `npm run test:locales` checks that every language has every string with the same placeholders.
 
 /** UI languages besides English, by their BCP 47 primary language subtag. */
-export const LANGUAGES = ["cs", "sk", "de", "fr", "es", "it", "pt", "ru", "pl", "zh", "ja", "ko"] as const;
+export const LANGUAGES = ["cs", "sk", "de", "fr", "es", "it", "pt", "ru", "pl", "zh", "ja", "ko",
+  "uk", "nl", "ro", "hu", "el", "sv", "sr", "bg", "hr", "da", "fi", "nb", "ca", "sq"] as const;
+/** Other primary subtags that use one of the dictionaries above (Norwegian "no"/Nynorsk read Bokmål). */
+const ALIASES: Record<string, string> = { no: "nb", nn: "nb" };
 export type Language = "en" | (typeof LANGUAGES)[number];
 
 const files = import.meta.glob<Record<string, string>>("./locales/*/*.ts", { eager: true, import: "default" });
@@ -25,7 +28,8 @@ function parentDesktopLanguage() {
 
 /** The supported UI language for a BCP 47 tag such as "de-AT" or "zh-Hans-CN"; English when unsupported. */
 export function languageFor(tag: string | null | undefined): Language {
-  const primary = (tag ?? "").toLowerCase().split(/[-_]/)[0];
+  const subtag = (tag ?? "").toLowerCase().split(/[-_]/)[0];
+  const primary = ALIASES[subtag] ?? subtag;
   return (LANGUAGES as readonly string[]).includes(primary) ? (primary as Language) : "en";
 }
 
@@ -43,7 +47,8 @@ function detect(): Language {
 
 export const LANGUAGE: Language = detect();
 const dictionary = LANGUAGE === "en" ? {} : dictionaries[LANGUAGE] ?? {};
-const LOCALES: Partial<Record<Language, string>> = { cs: "cs-CZ", sk: "sk-SK", zh: "zh-CN", pt: "pt-BR" };
+// Serbian is translated in Latin script, so dates and numbers use it too.
+const LOCALES: Partial<Record<Language, string>> = { cs: "cs-CZ", sk: "sk-SK", zh: "zh-CN", pt: "pt-BR", sr: "sr-Latn" };
 /** The BCP 47 tag for dates and numbers in the UI language (undefined: the system's own). */
 export const LOCALE = LANGUAGE === "en" ? undefined : LOCALES[LANGUAGE] ?? LANGUAGE;
 const pluralRules = new Intl.PluralRules(LANGUAGE === "en" ? "en" : LOCALE);

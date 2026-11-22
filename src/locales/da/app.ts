@@ -1,0 +1,129 @@
+// Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
+const da: Record<string, string> = {
+  // Tools
+  "Select": "Markér",
+  "Highlight": "Fremhæv",
+  "Draw": "Tegn",
+  "Text": "Tekst",
+  "Tools": "Værktøjer",
+  "Automatically highlight selected text": "Fremhæv markeret tekst automatisk",
+  "Sign": "Underskriv",
+  "Add a signature": "Tilføj en underskrift",
+  "Edit mode": "Redigeringstilstand",
+  "Exit edit mode": "Afslut redigering",
+  "Edit existing text and images": "Rediger eksisterende tekst og billeder",
+  "Save": "Gem",
+  "Save changes to {name} (Ctrl+S)": "Gem ændringer i {name} (Ctrl+S)",
+  "Save copy": "Gem kopi",
+  "Save edited copy (Ctrl+Shift+S)": "Gem redigeret kopi (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Gul",
+  "Green": "Grøn",
+  "Blue": "Blå",
+  "Pink": "Lyserød",
+  "Red": "Rød",
+  "Black": "Sort",
+  "Purple": "Lilla",
+
+  // Top bar and More menu
+  "Back to library": "Tilbage til biblioteket",
+  "Toggle sidebar (Ctrl+\\)": "Vis/skjul sidepanel (Ctrl+\\)",
+  "Unsaved changes": "Ikke-gemte ændringer",
+  "Ask AI": "Spørg AI",
+  "Search (Ctrl+F)": "Søg (Ctrl+F)",
+  "New tab": "Ny fane",
+  "Close document": "Luk dokument",
+  "Save a copy": "Gem en kopi",
+  "Version history": "Versionshistorik",
+  "Print": "Udskriv",
+  "Document info": "Dokumentoplysninger",
+  "PDF dark mode": "Mørk tilstand for PDF",
+  "Focus mode": "Fokustilstand",
+  "Settings": "Indstillinger",
+  "Keyboard shortcuts": "Tastaturgenveje",
+  "About Folio": "Om Folio",
+
+  // Annotation options
+  "Annotation options": "Indstillinger for anmærkninger",
+  "Drawing tool": "Tegneværktøj",
+  "Pen": "Pen",
+  "Rectangle": "Rektangel",
+  "Oval": "Oval",
+  "Arrow": "Pil",
+  "Color": "Farve",
+  "Undo (Ctrl+Z)": "Fortryd (Ctrl+Z)",
+  "Done": "Færdig",
+
+  // Navigation
+  "Navigation": "Navigation",
+  "Previous page": "Forrige side",
+  "Next page": "Næste side",
+  "Page number": "Sidenummer",
+  "of {n}": "af {n}",
+  "Zoom out (Ctrl −)": "Zoom ud (Ctrl −)",
+  "Zoom in (Ctrl +)": "Zoom ind (Ctrl +)",
+  "Rotate (R)": "Rotér (R)",
+  "Exit focus mode": "Afslut fokustilstand",
+  "to exit focus mode": "for at afslutte fokustilstand",
+
+  // Opening
+  "Incorrect password. Try again.": "Forkert adgangskode. Prøv igen.",
+  "Couldn't open “{name}”. {reason}": "»{name}« kunne ikke åbnes. {reason}",
+  "The file may be damaged.": "Filen er muligvis beskadiget.",
+  "“{name}” isn't a PDF.": "»{name}« er ikke en PDF.",
+  "Opening {host}…": "Åbner {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Der kunne ikke downloades fra {host}. Webstedet tillader det muligvis ikke.",
+  "Couldn't open that link. {reason}": "Linket kunne ikke åbnes. {reason}",
+  "Couldn't open the sample document.": "Eksempeldokumentet kunne ikke åbnes.",
+  "Converting {name} to PDF…": "Konverterer {name} til PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "»{name}« kunne ikke konverteres til PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Slip en PDF-fil eller et link til en PDF her.",
+  "Drop a PDF or link to open": "Slip en PDF eller et link for at åbne",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Anmærkninger understøttes ikke for dette dokument",
+  "Couldn't add the shape": "Figuren kunne ikke tilføjes",
+  "Couldn't highlight that selection": "Markeringen kunne ikke fremhæves",
+  "Highlight removed": "Fremhævning fjernet",
+  "Markdown copied": "Markdown kopieret",
+  "Copy failed": "Kopiering mislykkedes",
+  "Couldn't export notes": "Noterne kunne ikke eksporteres",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (ny rækkefølge).pdf",
+  "{name} (edited).pdf": "{name} (redigeret).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Kopien er eksporteret. Versionshistorikken kunne ikke gemmes på denne enhed.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Kopien er eksporteret. Historik er tilgængelig for ikke-krypterede PDF'er på op til 50 MB.",
+  "Downloading reordered copy": "Downloader kopi med ny siderækkefølge",
+  "Saved a copy with your highlights and notes": "En kopi med dine fremhævninger og noter er gemt",
+  "Download started": "Download startet",
+  "Couldn't save a copy of this document.": "Der kunne ikke gemmes en kopi af dokumentet.",
+  "No changes to save": "Ingen ændringer at gemme",
+  "Saved. Couldn’t keep the previous version in version history.": "Gemt. Den forrige version kunne ikke bevares i versionshistorikken.",
+  "Saved {name}": "{name} er gemt",
+  "Couldn't save “{name}”. {reason}": "»{name}« kunne ikke gemmes. {reason}",
+  "Couldn't print this document.": "Dokumentet kunne ikke udskrives.",
+  "Couldn't print — saved a copy instead": "Kunne ikke udskrive — der er gemt en kopi i stedet",
+  "Editing requires an unsigned, unencrypted PDF.": "Redigering kræver en PDF, der hverken er underskrevet eller krypteret.",
+  "The document changed. Try again.": "Dokumentet er ændret. Prøv igen.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Mørk tilstand for PDF er ændret, men indstillingen kunne ikke gemmes.",
+  "Page scrolling changed, but couldn't save the preference.": "Siderulning er ændret, men indstillingen kunne ikke gemmes.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Underskrift tilføjet. Ctrl+Z fortryder; eksportér med Gem kopi.",
+  "Signature field detected on page {page}": "Underskriftsfelt fundet på side {page}",
+  "Possible signature area on page {page}": "Muligt sted til underskrift på side {page}",
+  "Review signature": "Gennemse underskrift",
+  "Dismiss signature suggestion": "Afvis forslag til underskrift",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} er klar",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Genstart for at opdatere. Installation ved lukning følger din indstilling for automatisk opdatering.",
+  "Restart": "Genstart",
+  "Later": "Senere",
+};
+export default da;

@@ -1,0 +1,129 @@
+// Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
+const sr: Record<string, string> = {
+  // Tools
+  "Select": "Izaberi",
+  "Highlight": "Istakni",
+  "Draw": "Crtaj",
+  "Text": "Tekst",
+  "Tools": "Alatke",
+  "Automatically highlight selected text": "Automatski istakni izabrani tekst",
+  "Sign": "Potpiši",
+  "Add a signature": "Dodaj potpis",
+  "Edit mode": "Režim uređivanja",
+  "Exit edit mode": "Izađi iz režima uređivanja",
+  "Edit existing text and images": "Uredi postojeći tekst i slike",
+  "Save": "Sačuvaj",
+  "Save changes to {name} (Ctrl+S)": "Sačuvaj promene u {name} (Ctrl+S)",
+  "Save copy": "Sačuvaj kopiju",
+  "Save edited copy (Ctrl+Shift+S)": "Sačuvaj uređenu kopiju (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Žuta",
+  "Green": "Zelena",
+  "Blue": "Plava",
+  "Pink": "Roze",
+  "Red": "Crvena",
+  "Black": "Crna",
+  "Purple": "Ljubičasta",
+
+  // Top bar and More menu
+  "Back to library": "Nazad u biblioteku",
+  "Toggle sidebar (Ctrl+\\)": "Prikaži/sakrij bočnu traku (Ctrl+\\)",
+  "Unsaved changes": "Nesačuvane promene",
+  "Ask AI": "Pitaj AI",
+  "Search (Ctrl+F)": "Pretraga (Ctrl+F)",
+  "New tab": "Nova kartica",
+  "Close document": "Zatvori dokument",
+  "Save a copy": "Sačuvaj kopiju",
+  "Version history": "Istorija verzija",
+  "Print": "Štampaj",
+  "Document info": "Informacije o dokumentu",
+  "PDF dark mode": "Tamni režim za PDF",
+  "Focus mode": "Režim fokusa",
+  "Settings": "Podešavanja",
+  "Keyboard shortcuts": "Tasterske prečice",
+  "About Folio": "O aplikaciji Folio",
+
+  // Annotation options
+  "Annotation options": "Opcije napomena",
+  "Drawing tool": "Alatka za crtanje",
+  "Pen": "Olovka",
+  "Rectangle": "Pravougaonik",
+  "Oval": "Elipsa",
+  "Arrow": "Strelica",
+  "Color": "Boja",
+  "Undo (Ctrl+Z)": "Opozovi (Ctrl+Z)",
+  "Done": "Gotovo",
+
+  // Navigation
+  "Navigation": "Navigacija",
+  "Previous page": "Prethodna stranica",
+  "Next page": "Sledeća stranica",
+  "Page number": "Broj stranice",
+  "of {n}": "od {n}",
+  "Zoom out (Ctrl −)": "Umanji (Ctrl −)",
+  "Zoom in (Ctrl +)": "Uvećaj (Ctrl +)",
+  "Rotate (R)": "Rotiraj (R)",
+  "Exit focus mode": "Izađi iz režima fokusa",
+  "to exit focus mode": "za izlaz iz režima fokusa",
+
+  // Opening
+  "Incorrect password. Try again.": "Netačna lozinka. Pokušajte ponovo.",
+  "Couldn't open “{name}”. {reason}": "Nije moguće otvoriti „{name}“. {reason}",
+  "The file may be damaged.": "Datoteka je možda oštećena.",
+  "“{name}” isn't a PDF.": "„{name}“ nije PDF.",
+  "Opening {host}…": "Otvaranje: {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Preuzimanje sa {host} nije uspelo. Sajt to možda ne dozvoljava.",
+  "Couldn't open that link. {reason}": "Nije moguće otvoriti vezu. {reason}",
+  "Couldn't open the sample document.": "Nije moguće otvoriti primer dokumenta.",
+  "Converting {name} to PDF…": "Konvertovanje {name} u PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "Nije moguće konvertovati „{name}“ u PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Prevucite PDF datoteku ili vezu do PDF-a.",
+  "Drop a PDF or link to open": "Prevucite PDF ili vezu da biste ih otvorili",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Ovaj dokument ne podržava napomene",
+  "Couldn't add the shape": "Nije moguće dodati oblik",
+  "Couldn't highlight that selection": "Nije moguće istaći izabrani tekst",
+  "Highlight removed": "Isticanje je uklonjeno",
+  "Markdown copied": "Markdown je kopiran",
+  "Copy failed": "Kopiranje nije uspelo",
+  "Couldn't export notes": "Nije moguće izvesti beleške",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (promenjen redosled).pdf",
+  "{name} (edited).pdf": "{name} (uređeno).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Kopija je izvezena. Istoriju verzija nije moguće sačuvati na ovom uređaju.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Kopija je izvezena. Istorija je dostupna za nešifrovane PDF datoteke do 50 MB.",
+  "Downloading reordered copy": "Preuzimanje kopije sa promenjenim redosledom",
+  "Saved a copy with your highlights and notes": "Kopija sa isticanjima i beleškama je sačuvana",
+  "Download started": "Preuzimanje je počelo",
+  "Couldn't save a copy of this document.": "Nije moguće sačuvati kopiju ovog dokumenta.",
+  "No changes to save": "Nema promena za čuvanje",
+  "Saved. Couldn’t keep the previous version in version history.": "Sačuvano. Prethodnu verziju nije moguće zadržati u istoriji verzija.",
+  "Saved {name}": "Sačuvano: {name}",
+  "Couldn't save “{name}”. {reason}": "Nije moguće sačuvati „{name}“. {reason}",
+  "Couldn't print this document.": "Nije moguće odštampati ovaj dokument.",
+  "Couldn't print — saved a copy instead": "Štampanje nije uspelo – umesto toga je sačuvana kopija",
+  "Editing requires an unsigned, unencrypted PDF.": "Za uređivanje je potreban nepotpisan i nešifrovan PDF.",
+  "The document changed. Try again.": "Dokument je promenjen. Pokušajte ponovo.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Tamni režim za PDF je promenjen, ali podešavanje nije moguće sačuvati.",
+  "Page scrolling changed, but couldn't save the preference.": "Pomeranje stranica je promenjeno, ali podešavanje nije moguće sačuvati.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Potpis je dodat. Ctrl+Z ga opoziva; izvezite pomoću opcije Sačuvaj kopiju.",
+  "Signature field detected on page {page}": "Na stranici {page} je pronađeno polje za potpis",
+  "Possible signature area on page {page}": "Moguće mesto za potpis na stranici {page}",
+  "Review signature": "Pregledaj potpis",
+  "Dismiss signature suggestion": "Odbaci predlog potpisa",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} je spreman",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Ponovo pokrenite da biste ažurirali. Instalacija pri zatvaranju prati podešavanje automatskog ažuriranja.",
+  "Restart": "Ponovo pokreni",
+  "Later": "Kasnije",
+};
+export default sr;

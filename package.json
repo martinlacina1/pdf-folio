@@ -74,7 +74,20 @@
       "pl",
       "zh-CN",
       "ja",
-      "ko"
+      "ko",
+      "uk",
+      "nl",
+      "ro",
+      "hu",
+      "el",
+      "sv",
+      "sr",
+      "bg",
+      "hr",
+      "da",
+      "fi",
+      "nb",
+      "ca"
     ],
     "directories": {
       "output": "release",

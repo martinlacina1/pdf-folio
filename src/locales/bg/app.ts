@@ -1,0 +1,129 @@
+// Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
+const bg: Record<string, string> = {
+  // Tools
+  "Select": "Избор",
+  "Highlight": "Осветяване",
+  "Draw": "Рисуване",
+  "Text": "Текст",
+  "Tools": "Инструменти",
+  "Automatically highlight selected text": "Автоматично осветяване на избрания текст",
+  "Sign": "Подписване",
+  "Add a signature": "Добавяне на подпис",
+  "Edit mode": "Режим на редактиране",
+  "Exit edit mode": "Изход от редактирането",
+  "Edit existing text and images": "Редактиране на съществуващ текст и изображения",
+  "Save": "Запиши",
+  "Save changes to {name} (Ctrl+S)": "Записване на промените в {name} (Ctrl+S)",
+  "Save copy": "Запиши копие",
+  "Save edited copy (Ctrl+Shift+S)": "Записване на редактирано копие (Ctrl+Shift+S)",
+
+  // Colors
+  "Yellow": "Жълт",
+  "Green": "Зелен",
+  "Blue": "Син",
+  "Pink": "Розов",
+  "Red": "Червен",
+  "Black": "Черен",
+  "Purple": "Лилав",
+
+  // Top bar and More menu
+  "Back to library": "Обратно към библиотеката",
+  "Toggle sidebar (Ctrl+\\)": "Показване/скриване на страничния панел (Ctrl+\\)",
+  "Unsaved changes": "Незаписани промени",
+  "Ask AI": "Попитай ИИ",
+  "Search (Ctrl+F)": "Търсене (Ctrl+F)",
+  "New tab": "Нов раздел",
+  "Close document": "Затваряне на документа",
+  "Save a copy": "Записване на копие",
+  "Version history": "Хронология на версиите",
+  "Print": "Печат",
+  "Document info": "Информация за документа",
+  "PDF dark mode": "Тъмен режим за PDF",
+  "Focus mode": "Режим на фокусиране",
+  "Settings": "Настройки",
+  "Keyboard shortcuts": "Клавишни комбинации",
+  "About Folio": "За Folio",
+
+  // Annotation options
+  "Annotation options": "Опции за анотации",
+  "Drawing tool": "Инструмент за рисуване",
+  "Pen": "Писалка",
+  "Rectangle": "Правоъгълник",
+  "Oval": "Овал",
+  "Arrow": "Стрелка",
+  "Color": "Цвят",
+  "Undo (Ctrl+Z)": "Отмяна (Ctrl+Z)",
+  "Done": "Готово",
+
+  // Navigation
+  "Navigation": "Навигация",
+  "Previous page": "Предишна страница",
+  "Next page": "Следваща страница",
+  "Page number": "Номер на страница",
+  "of {n}": "от {n}",
+  "Zoom out (Ctrl −)": "Намаляване (Ctrl −)",
+  "Zoom in (Ctrl +)": "Увеличаване (Ctrl +)",
+  "Rotate (R)": "Завъртане (R)",
+  "Exit focus mode": "Изход от режима на фокусиране",
+  "to exit focus mode": "за изход от режима на фокусиране",
+
+  // Opening
+  "Incorrect password. Try again.": "Грешна парола. Опитайте отново.",
+  "Couldn't open “{name}”. {reason}": "„{name}“ не може да се отвори. {reason}",
+  "The file may be damaged.": "Файлът може да е повреден.",
+  "“{name}” isn't a PDF.": "„{name}“ не е PDF файл.",
+  "Opening {host}…": "Отваряне на {host}…",
+  "Couldn't download from {host}. The site may not allow it.": "Изтеглянето от {host} не успя. Възможно е сайтът да не го позволява.",
+  "Couldn't open that link. {reason}": "Връзката не може да се отвори. {reason}",
+  "Couldn't open the sample document.": "Примерният документ не може да се отвори.",
+  "Converting {name} to PDF…": "Преобразуване на {name} в PDF…",
+  "Couldn't convert “{name}” to PDF. {reason}": "„{name}“ не може да се преобразува в PDF. {reason}",
+  "Drop a PDF file or a link to a PDF.": "Пуснете тук PDF файл или връзка към PDF.",
+  "Drop a PDF or link to open": "Пуснете тук PDF или връзка, за да ги отворите",
+
+  // Markup
+  "Annotations aren’t supported for this document": "Този документ не поддържа анотации",
+  "Couldn't add the shape": "Фигурата не може да се добави",
+  "Couldn't highlight that selection": "Избраният текст не може да се освети",
+  "Highlight removed": "Осветяването е премахнато",
+  "Markdown copied": "Markdown е копиран",
+  "Copy failed": "Копирането не успя",
+  "Couldn't export notes": "Бележките не могат да се експортират",
+
+  // Saving and printing
+  "{name} (reordered).pdf": "{name} (пренареден).pdf",
+  "{name} (edited).pdf": "{name} (редактиран).pdf",
+  "Copy exported. Couldn’t save its version history on this device.": "Копието е експортирано. Хронологията на версиите му не може да се запише на това устройство.",
+  "Copy exported. History is available for unencrypted PDFs up to 50 MB.": "Копието е експортирано. Хронологията е налична за нешифровани PDF файлове до 50 MB.",
+  "Downloading reordered copy": "Изтегляне на копие с пренаредени страници",
+  "Saved a copy with your highlights and notes": "Записано е копие с осветяванията и бележките ви",
+  "Download started": "Изтеглянето започна",
+  "Couldn't save a copy of this document.": "Копие на документа не може да се запише.",
+  "No changes to save": "Няма промени за записване",
+  "Saved. Couldn’t keep the previous version in version history.": "Записано. Предишната версия не може да се запази в хронологията на версиите.",
+  "Saved {name}": "Записано: {name}",
+  "Couldn't save “{name}”. {reason}": "„{name}“ не може да се запише. {reason}",
+  "Couldn't print this document.": "Документът не може да се отпечата.",
+  "Couldn't print — saved a copy instead": "Печатът не успя – вместо това е записано копие",
+  "Editing requires an unsigned, unencrypted PDF.": "За редактиране е необходим неподписан и нешифрован PDF.",
+  "The document changed. Try again.": "Документът е променен. Опитайте отново.",
+
+  // Preferences
+  "PDF dark mode changed, but couldn't save the preference.": "Тъмният режим за PDF е променен, но настройката не може да се запише.",
+  "Page scrolling changed, but couldn't save the preference.": "Превъртането на страниците е променено, но настройката не може да се запише.",
+
+  // Signatures
+  "Signature added. Ctrl+Z to undo; Save copy to export.": "Подписът е добавен. Ctrl+Z – отмяна; „Запиши копие“ – експортиране.",
+  "Signature field detected on page {page}": "На страница {page} е открито поле за подпис",
+  "Possible signature area on page {page}": "На страница {page} може да има място за подпис",
+  "Review signature": "Преглед на подписа",
+  "Dismiss signature suggestion": "Затваряне на предложението за подпис",
+
+  // Updates
+  "Folio {version} is ready": "Folio {version} е готов",
+  "Restart to update. Installation on close follows your auto-update setting.":
+    "Рестартирайте, за да актуализирате. Инсталирането при затваряне следва настройката за автоматични актуализации.",
+  "Restart": "Рестартирай",
+  "Later": "По-късно",
+};
+export default bg;
