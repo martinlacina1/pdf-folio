@@ -155,19 +155,52 @@ function save(m: WrappedPdfiumModule, doc: number) {
 /** Text extraction collapses runs of spaces, so compare written and read-back text with whitespace normalized. */
 const sameText = (a: string | undefined, b: string) => (a ?? "").replace(/\s+/g, " ").trim() === b.replace(/\s+/g, " ").trim();
 
+const glyphShape = (m: WrappedPdfiumModule, font: number, code: number, widthPtr: number) => {
+  const width = m.FPDFFont_GetGlyphWidth(font, code, 12, widthPtr) ? m.pdfium.HEAPF32[widthPtr / 4] : 0;
+  const glyph = m.FPDFFont_GetGlyphPath(font, code, 12);
+  const segments = glyph ? m.FPDFGlyphPath_CountGlyphSegments(glyph) : 0;
+  const points: string[] = [];
+  for (let i = 0; glyph && i < Math.min(segments, 8); i++) {
+    const segment = m.FPDFGlyphPath_GetGlyphPathSegment(glyph, i);
+    if (segment && m.FPDFPathSegment_GetPoint(segment, widthPtr, widthPtr + 4)) {
+      points.push(`${m.pdfium.HEAPF32[widthPtr / 4].toFixed(3)},${m.pdfium.HEAPF32[widthPtr / 4 + 1].toFixed(3)}`);
+    }
+  }
+  return { width, segments, key: `${segments}|${width.toFixed(3)}|${points.join(" ")}` };
+};
+
 /**
- * Whether `font` can really draw every character of `text`. Embedded subset fonts often map a missing letter to
- * nothing, or to a zero-width placeholder box (.notdef), while text extraction still reads the letter back, so
- * each character needs its own outline and a width. Spaces only need a width.
+ * Whether `font` can really draw every character of `text`. A missing character can come back as nothing, as a
+ * zero-width shape (common in embedded subset fonts) or as the font's .notdef box with a normal width (common in full
+ * TrueType fonts), while text extraction still reads the character back. So each visible character needs its own
+ * outline, a width, and a shape different from .notdef (the shape of a private-use code no font defines); spaces
+ * need a width and no outline.
  */
 function fontCovers(m: WrappedPdfiumModule, font: number, text: string) {
-  return buffer(m, 4, widthPtr => [...new Set(text)].every(ch => {
-    const code = ch.codePointAt(0)!;
-    const width = m.FPDFFont_GetGlyphWidth(font, code, 12, widthPtr) ? m.pdfium.HEAPF32[widthPtr / 4] : 0;
-    if (/\s/.test(ch)) return width > 0;
-    const glyph = m.FPDFFont_GetGlyphPath(font, code, 12);
-    return !!glyph && m.FPDFGlyphPath_CountGlyphSegments(glyph) > 0 && width > 0;
-  }));
+  return buffer(m, 8, ptr => {
+    const notdef = glyphShape(m, font, 0x10fffd, ptr);
+    return [...new Set(text)].every(ch => {
+      const shape = glyphShape(m, font, ch.codePointAt(0)!, ptr);
+      if (/\s/u.test(ch)) return shape.width > 0 && shape.segments === 0;
+      return shape.segments > 0 && shape.width > 0 && !(notdef.segments > 0 && shape.key === notdef.key);
+    });
+  });
+}
+
+// Typographic spaces (no-break, thin, hair…), invisible format characters and special hyphens often come along from
+// the document's own text, where the user can't see them. A font that lacks them shouldn't block the edit.
+const SPACE_LIKE = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/gu;
+const INVISIBLE = /[\u00ad\u180e\u200b-\u200f\u2060-\u2064\ufeff]/gu;
+const HYPHEN_LIKE = /[\u2010\u2011]/gu;
+
+/**
+ * Adapts the text to what `font` can draw: drops invisible format characters (soft hyphens, zero-width spaces —
+ * some fonts would draw them visibly), and turns typographic spaces and special hyphens the font lacks into a plain
+ * space or hyphen.
+ */
+function adaptToFont(m: WrappedPdfiumModule, font: number, text: string) {
+  const keep = (ch: string, plain: string) => (fontCovers(m, font, ch) ? ch : plain);
+  return text.replace(INVISIBLE, "").replace(SPACE_LIKE, ch => keep(ch, " ")).replace(HYPHEN_LIKE, ch => keep(ch, "-"));
 }
 
 /**
@@ -195,6 +228,7 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
   const font = m.FPDFText_LoadFont(doc, fontPtr, data.length, 2 /* FPDF_FONT_TRUETYPE */, true);
   if (!font) throw new Error("Couldn't load a replacement font.");
   try {
+    text = adaptToFont(m, font, text);
     if (!fontCovers(m, font, text)) throw new Error("This font can't display all of those characters.");
     buffer(m, 32, ptr => {
       if (!m.FPDFPageObj_GetMatrix(obj, ptr) || !m.FPDFTextObj_GetFontSize(obj, ptr + 24)) {
@@ -215,8 +249,9 @@ function rewriteInFallbackFont(m: WrappedPdfiumModule, doc: number, page: number
         // Match the original run's width: lay out its old text in the fallback font and compare.
         const oldWidth = target.box[2] - target.box[0];
         const [a, b] = m.pdfium.HEAPF32.subarray(ptr / 4, ptr / 4 + 2);
-        if (target.label.trim() && oldWidth > 0 && b === 0 && a > 0 && fontCovers(m, font, target.label)) {
-          setText(target.label);
+        const oldText = adaptToFont(m, font, target.label);
+        if (oldText.trim() && oldWidth > 0 && b === 0 && a > 0 && fontCovers(m, font, oldText)) {
+          setText(oldText);
           if (m.FPDFPageObj_SetMatrix(replacement, ptr)) {
             const widthNow = buffer(m, 16, box => m.FPDFPageObj_GetBounds(replacement, box, box + 4, box + 8, box + 12)
               ? m.pdfium.HEAPF32[box / 4 + 2] - m.pdfium.HEAPF32[box / 4] : 0);
@@ -261,9 +296,12 @@ function replaceText(m: WrappedPdfiumModule, doc: number, page: number, target: 
     m.FPDFPageObj_Destroy(fragment);
   }
   if (!text) return;
-  // Keep the document's own font when it can draw every character; otherwise write the line in a full fallback font.
+  // Keep the document's own font when it can draw every character; otherwise write the line in a full fallback font
+  // (which adapts the user's original text to its own character set).
+  const typed = text;
+  text = adaptToFont(m, m.FPDFTextObj_GetFont(obj), text);
   if (!fontCovers(m, m.FPDFTextObj_GetFont(obj), text)) {
-    rewriteInFallbackFont(m, doc, page, target, obj, text, fonts, keepAlive);
+    rewriteInFallbackFont(m, doc, page, target, obj, typed, fonts, keepAlive);
     return;
   }
   const size = (text.length + 1) * 2;
@@ -273,7 +311,7 @@ function replaceText(m: WrappedPdfiumModule, doc: number, page: number, target: 
   });
   // Some fonts still can't encode a character they seem to have (no code for it in the PDF's encoding): check what
   // was written and fall back if it differs.
-  if (!written || !sameText(objectText(m, page).get(obj), text)) rewriteInFallbackFont(m, doc, page, target, obj, text, fonts, keepAlive);
+  if (!written || !sameText(objectText(m, page).get(obj), text)) rewriteInFallbackFont(m, doc, page, target, obj, typed, fonts, keepAlive);
 }
 
 self.onmessage = async ({ data }: MessageEvent<EditorRequest>) => {
