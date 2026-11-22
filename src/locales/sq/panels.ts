@@ -166,6 +166,8 @@ const sq: Record<string, string> = {
   "Choose another photo": "Zgjidh një foto tjetër",
   "Your signature preview": "Pamja paraprake e nënshkrimit tuaj",
   "Background removed": "Sfondi u hoq",
+  "Remove background": "Hiq sfondin",
+  "Original background": "Sfondi origjinal",
   "Remember this signature": "Mbaje mend këtë nënshkrim",
   "Only on this device. Forget it in Settings.": "Vetëm në këtë pajisje. Mund ta harroni te Cilësimet.",
   "Processed on this device. Never uploaded.": "Përpunohet në këtë pajisje. Nuk ngarkohet kurrë.",

@@ -166,6 +166,8 @@ const ko: Record<string, string> = {
   "Choose another photo": "다른 사진 선택",
   "Your signature preview": "서명 미리 보기",
   "Background removed": "배경 제거됨",
+  "Remove background": "배경 제거",
+  "Original background": "원래 배경",
   "Remember this signature": "이 서명 저장",
   "Only on this device. Forget it in Settings.": "이 기기에만 저장됩니다. 설정에서 삭제할 수 있습니다.",
   "Processed on this device. Never uploaded.": "이 기기에서 처리되며 업로드되지 않습니다.",

@@ -166,6 +166,8 @@ const zh: Record<string, string> = {
   "Choose another photo": "选择其他照片",
   "Your signature preview": "签名预览",
   "Background removed": "已去除背景",
+  "Remove background": "移除背景",
+  "Original background": "原始背景",
   "Remember this signature": "记住此签名",
   "Only on this device. Forget it in Settings.": "仅保存在此设备上。可在“设置”中删除。",
   "Processed on this device. Never uploaded.": "在此设备上处理，绝不上传。",

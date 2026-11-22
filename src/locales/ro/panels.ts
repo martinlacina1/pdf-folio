@@ -166,6 +166,8 @@ const ro: Record<string, string> = {
   "Choose another photo": "Alegeți altă fotografie",
   "Your signature preview": "Previzualizarea semnăturii",
   "Background removed": "Fundal eliminat",
+  "Remove background": "Eliminați fundalul",
+  "Original background": "Fundal original",
   "Remember this signature": "Memorare această semnătură",
   "Only on this device. Forget it in Settings.": "Doar pe acest dispozitiv. O puteți uita din Setări.",
   "Processed on this device. Never uploaded.": "Procesată pe acest dispozitiv. Nu se încarcă niciodată.",

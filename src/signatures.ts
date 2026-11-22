@@ -84,20 +84,54 @@ export async function placeSignature(viewer: PDFViewer, pdf: PDFDocumentProxy, p
   }
 }
 
-export function cleanSignature(source: HTMLCanvasElement, crop: number[], threshold: number): SignatureImage {
+/**
+ * Turns the cropped photo into a signature image. With `removeBackground`, the paper becomes transparent while the
+ * ink keeps its own color and smooth edges: each pixel's opacity grows gradually with how much darker it is than the
+ * paper, and the paper's share is taken out of its color (a blue pen stays blue). `threshold` (70–245) is the ink
+ * sensitivity: higher keeps fainter strokes. Without `removeBackground`, the crop is used as it is.
+ */
+export function cleanSignature(source: HTMLCanvasElement, crop: number[], threshold: number, removeBackground = true): SignatureImage {
   const canvas = document.createElement("canvas");
-  const factor = Math.min(1, 1200 / crop[2], 600 / crop[3]);
+  const factor = Math.min(1, 2000 / crop[2], 1000 / crop[3]);
   canvas.width = Math.max(1, Math.round(crop[2] * factor));
   canvas.height = Math.max(1, Math.round(crop[3] * factor));
   const context = canvas.getContext("2d", { willReadFrequently: true })!;
+  context.imageSmoothingQuality = "high";
   context.drawImage(source, ...crop as [number, number, number, number], 0, 0, canvas.width, canvas.height);
+  if (!removeBackground) return { url: canvas.toDataURL("image/png"), width: canvas.width, height: canvas.height };
   const image = context.getImageData(0, 0, canvas.width, canvas.height);
+  const data = image.data;
+  const luminance = (offset: number) => 0.2126 * data[offset] + 0.7152 * data[offset + 1] + 0.0722 * data[offset + 2];
+
+  // The paper: the brightest quarter of the crop (a signature covers far less), averaged so tinted paper works too.
+  const histogram = new Uint32Array(256);
+  for (let offset = 0; offset < data.length; offset += 4) histogram[Math.round(luminance(offset))]++;
+  let cutoff = 255;
+  for (let seen = 0, pixels = data.length / 4; cutoff > 0 && (seen += histogram[cutoff]) < pixels * 0.25;) cutoff--;
+  const paper = [0, 0, 0];
+  let paperPixels = 0;
+  for (let offset = 0; offset < data.length; offset += 4) {
+    if (luminance(offset) < cutoff) continue;
+    paper[0] += data[offset]; paper[1] += data[offset + 1]; paper[2] += data[offset + 2]; paperPixels++;
+  }
+  for (let channel = 0; channel < 3; channel++) paper[channel] /= Math.max(1, paperPixels);
+  const paperLuminance = Math.max(1, 0.2126 * paper[0] + 0.7152 * paper[1] + 0.0722 * paper[2]);
+
+  // Opacity eases in between `start` and `end` darkness (relative to the paper), so stroke edges stay smooth.
+  const sensitivity = Math.min(1, Math.max(0, (threshold - 70) / 175));
+  const start = 0.3 - 0.24 * sensitivity, end = start + 0.4;
   let left = canvas.width, right = -1, top = canvas.height, bottom = -1;
-  for (let offset = 0; offset < image.data.length; offset += 4) {
-    const brightness = Math.min(image.data[offset], image.data[offset + 1], image.data[offset + 2]);
-    const opacity = image.data[offset + 3] / 255 * Math.min(255, Math.max(0, (threshold - brightness) * 4));
-    image.data[offset] = image.data[offset + 1] = image.data[offset + 2] = 25;
-    image.data[offset + 3] = opacity;
+  for (let offset = 0; offset < data.length; offset += 4) {
+    const darkness = 1 - luminance(offset) / paperLuminance;
+    const ramp = Math.min(1, Math.max(0, (darkness - start) / (end - start)));
+    const coverage = ramp * ramp * (3 - 2 * ramp);
+    // Remove the paper's share of the color: pixel = ink * coverage + paper * (1 - coverage).
+    const share = Math.max(coverage, 0.35);
+    for (let channel = 0; channel < 3; channel++) {
+      data[offset + channel] = Math.min(255, Math.max(0, paper[channel] - (paper[channel] - data[offset + channel]) / share));
+    }
+    const opacity = data[offset + 3] * coverage;
+    data[offset + 3] = opacity;
     if (opacity > 40) {
       const pixelX = offset / 4 % canvas.width, pixelY = Math.floor(offset / 4 / canvas.width);
       left = Math.min(left, pixelX); right = Math.max(right, pixelX); top = Math.min(top, pixelY); bottom = Math.max(bottom, pixelY);

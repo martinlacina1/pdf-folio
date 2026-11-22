@@ -166,6 +166,8 @@ const ja: Record<string, string> = {
   "Choose another photo": "別の写真を選択",
   "Your signature preview": "署名のプレビュー",
   "Background removed": "背景を削除しました",
+  "Remove background": "背景を削除",
+  "Original background": "元の背景",
   "Remember this signature": "この署名を記憶",
   "Only on this device. Forget it in Settings.": "このデバイスにのみ保存されます。[設定] で削除できます。",
   "Processed on this device. Never uploaded.": "このデバイス上で処理され、アップロードされることはありません。",

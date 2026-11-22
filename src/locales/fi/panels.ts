@@ -166,6 +166,8 @@ const fi: Record<string, string> = {
   "Choose another photo": "Valitse toinen valokuva",
   "Your signature preview": "Allekirjoituksesi esikatselu",
   "Background removed": "Tausta poistettu",
+  "Remove background": "Poista tausta",
+  "Original background": "Alkuperäinen tausta",
   "Remember this signature": "Muista tämä allekirjoitus",
   "Only on this device. Forget it in Settings.": "Vain tällä laitteella. Voit unohtaa sen asetuksissa.",
   "Processed on this device. Never uploaded.": "Käsitellään tällä laitteella. Ei koskaan lähetetä verkkoon.",

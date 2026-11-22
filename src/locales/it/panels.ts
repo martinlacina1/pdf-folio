@@ -166,6 +166,8 @@ const it: Record<string, string> = {
   "Choose another photo": "Scegli un'altra foto",
   "Your signature preview": "Anteprima della tua firma",
   "Background removed": "Sfondo rimosso",
+  "Remove background": "Rimuovi sfondo",
+  "Original background": "Sfondo originale",
   "Remember this signature": "Memorizza questa firma",
   "Only on this device. Forget it in Settings.": "Solo su questo dispositivo. Puoi dimenticarla in Impostazioni.",
   "Processed on this device. Never uploaded.": "Elaborata su questo dispositivo. Mai caricata online.",

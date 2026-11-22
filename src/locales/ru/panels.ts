@@ -166,6 +166,8 @@ const ru: Record<string, string> = {
   "Choose another photo": "Выбрать другое фото",
   "Your signature preview": "Предварительный просмотр подписи",
   "Background removed": "Фон удален",
+  "Remove background": "Удалить фон",
+  "Original background": "Исходный фон",
   "Remember this signature": "Запомнить эту подпись",
   "Only on this device. Forget it in Settings.": "Только на этом устройстве. Удалить ее можно в параметрах.",
   "Processed on this device. Never uploaded.": "Обрабатывается на этом устройстве. Никуда не отправляется.",

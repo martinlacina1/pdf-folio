@@ -166,6 +166,8 @@ const nb: Record<string, string> = {
   "Choose another photo": "Velg et annet bilde",
   "Your signature preview": "Forhåndsvisning av signaturen din",
   "Background removed": "Bakgrunnen er fjernet",
+  "Remove background": "Fjern bakgrunn",
+  "Original background": "Opprinnelig bakgrunn",
   "Remember this signature": "Husk denne signaturen",
   "Only on this device. Forget it in Settings.": "Bare på denne enheten. Glem den i Innstillinger.",
   "Processed on this device. Never uploaded.": "Behandles på denne enheten. Lastes aldri opp.",

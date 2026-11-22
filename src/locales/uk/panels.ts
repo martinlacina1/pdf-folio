@@ -166,6 +166,8 @@ const uk: Record<string, string> = {
   "Choose another photo": "Вибрати інше фото",
   "Your signature preview": "Попередній перегляд вашого підпису",
   "Background removed": "Фон видалено",
+  "Remove background": "Видалити фон",
+  "Original background": "Початковий фон",
   "Remember this signature": "Запам’ятати цей підпис",
   "Only on this device. Forget it in Settings.": "Лише на цьому пристрої. Забути його можна в настройках.",
   "Processed on this device. Never uploaded.": "Обробляється на цьому пристрої. Нікуди не передається.",

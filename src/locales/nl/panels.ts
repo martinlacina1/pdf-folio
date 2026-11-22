@@ -166,6 +166,8 @@ const nl: Record<string, string> = {
   "Choose another photo": "Andere foto kiezen",
   "Your signature preview": "Voorbeeld van uw handtekening",
   "Background removed": "Achtergrond verwijderd",
+  "Remove background": "Achtergrond verwijderen",
+  "Original background": "Oorspronkelijke achtergrond",
   "Remember this signature": "Deze handtekening onthouden",
   "Only on this device. Forget it in Settings.": "Alleen op dit apparaat. Vergeet deze via Instellingen.",
   "Processed on this device. Never uploaded.": "Verwerkt op dit apparaat. Nooit geüpload.",

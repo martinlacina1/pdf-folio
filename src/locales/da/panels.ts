@@ -166,6 +166,8 @@ const da: Record<string, string> = {
   "Choose another photo": "Vælg et andet foto",
   "Your signature preview": "Eksempel på din underskrift",
   "Background removed": "Baggrund fjernet",
+  "Remove background": "Fjern baggrund",
+  "Original background": "Oprindelig baggrund",
   "Remember this signature": "Husk denne underskrift",
   "Only on this device. Forget it in Settings.": "Kun på denne enhed. Glem den under Indstillinger.",
   "Processed on this device. Never uploaded.": "Behandles på denne enhed. Uploades aldrig.",

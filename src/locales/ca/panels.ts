@@ -166,6 +166,8 @@ const ca: Record<string, string> = {
   "Choose another photo": "Triar una altra foto",
   "Your signature preview": "Previsualització de la signatura",
   "Background removed": "S'ha eliminat el fons",
+  "Remove background": "Elimina el fons",
+  "Original background": "Fons original",
   "Remember this signature": "Recordar aquesta signatura",
   "Only on this device. Forget it in Settings.": "Només en aquest dispositiu. Pots oblidar-la a Configuració.",
   "Processed on this device. Never uploaded.": "Es processa en aquest dispositiu. No es puja mai.",

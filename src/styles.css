@@ -1393,6 +1393,8 @@ kbd {
 .annotationEditorLayer.inkEditing { touch-action: none; }
 .signature-range { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--text-2); font-size: 11px; }
 .signature-range input { min-width: 0; width: 52%; accent-color: var(--accent); }
+.signature-toggle { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 12px; cursor: pointer; }
+.signature-toggle input { accent-color: var(--accent); margin: 0; }
 .signature-use { width: 100%; }
 .signature-image { display: grid; gap: 12px; background: white; border: 1px solid var(--line-strong); border-radius: 12px; padding: 24px 16px 12px; text-align: center; }
 .signature-image img { max-width: 100%; max-height: 90px; margin: auto; }

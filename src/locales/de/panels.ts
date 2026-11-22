@@ -166,6 +166,8 @@ const de: Record<string, string> = {
   "Choose another photo": "Anderes Foto wählen",
   "Your signature preview": "Vorschau Ihrer Unterschrift",
   "Background removed": "Hintergrund entfernt",
+  "Remove background": "Hintergrund entfernen",
+  "Original background": "Originalhintergrund",
   "Remember this signature": "Diese Unterschrift speichern",
   "Only on this device. Forget it in Settings.": "Nur auf diesem Gerät. In den Einstellungen können Sie sie entfernen.",
   "Processed on this device. Never uploaded.": "Auf diesem Gerät verarbeitet. Wird nie hochgeladen.",

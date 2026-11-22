@@ -166,6 +166,8 @@ const sr: Record<string, string> = {
   "Choose another photo": "Izaberi drugu fotografiju",
   "Your signature preview": "Pregled vašeg potpisa",
   "Background removed": "Pozadina je uklonjena",
+  "Remove background": "Ukloni pozadinu",
+  "Original background": "Originalna pozadina",
   "Remember this signature": "Zapamti ovaj potpis",
   "Only on this device. Forget it in Settings.": "Samo na ovom uređaju. Možete ga zaboraviti u Podešavanjima.",
   "Processed on this device. Never uploaded.": "Obrađuje se na ovom uređaju. Nikada se ne otprema.",

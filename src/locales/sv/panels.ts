@@ -166,6 +166,8 @@ const sv: Record<string, string> = {
   "Choose another photo": "Välj ett annat foto",
   "Your signature preview": "Förhandsvisning av din signatur",
   "Background removed": "Bakgrunden borttagen",
+  "Remove background": "Ta bort bakgrund",
+  "Original background": "Ursprunglig bakgrund",
   "Remember this signature": "Kom ihåg den här signaturen",
   "Only on this device. Forget it in Settings.": "Endast på den här enheten. Glöm den i Inställningar.",
   "Processed on this device. Never uploaded.": "Bearbetas på den här enheten. Laddas aldrig upp.",

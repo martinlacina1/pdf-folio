@@ -166,6 +166,8 @@ const pl: Record<string, string> = {
   "Choose another photo": "Wybierz inne zdjęcie",
   "Your signature preview": "Podgląd podpisu",
   "Background removed": "Usunięto tło",
+  "Remove background": "Usuń tło",
+  "Original background": "Oryginalne tło",
   "Remember this signature": "Zapamiętaj ten podpis",
   "Only on this device. Forget it in Settings.": "Tylko na tym urządzeniu. Możesz go usunąć w Ustawieniach.",
   "Processed on this device. Never uploaded.": "Przetwarzane na tym urządzeniu. Nigdy nie jest przesyłane.",

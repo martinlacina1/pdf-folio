@@ -166,6 +166,8 @@ const hu: Record<string, string> = {
   "Choose another photo": "Másik fénykép választása",
   "Your signature preview": "Aláírás előnézete",
   "Background removed": "Háttér eltávolítva",
+  "Remove background": "Háttér eltávolítása",
+  "Original background": "Eredeti háttér",
   "Remember this signature": "Aláírás megjegyzése",
   "Only on this device. Forget it in Settings.": "Csak ezen az eszközön. A Beállításokban elfelejtheti.",
   "Processed on this device. Never uploaded.": "Ezen az eszközön feldolgozva. Soha nem kerül feltöltésre.",

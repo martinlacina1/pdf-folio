@@ -166,6 +166,8 @@ const el: Record<string, string> = {
   "Choose another photo": "Επιλογή άλλης φωτογραφίας",
   "Your signature preview": "Προεπισκόπηση της υπογραφής σας",
   "Background removed": "Το φόντο αφαιρέθηκε",
+  "Remove background": "Αφαίρεση φόντου",
+  "Original background": "Αρχικό φόντο",
   "Remember this signature": "Απομνημόνευση αυτής της υπογραφής",
   "Only on this device. Forget it in Settings.": "Μόνο σε αυτήν τη συσκευή. Μπορείτε να τη διαγράψετε από τις Ρυθμίσεις.",
   "Processed on this device. Never uploaded.": "Η επεξεργασία γίνεται σε αυτήν τη συσκευή. Δεν αποστέλλεται ποτέ.",

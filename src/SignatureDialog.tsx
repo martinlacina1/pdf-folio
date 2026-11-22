@@ -17,6 +17,7 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
   const [crop, setCrop] = useState<number[] | null>(null);
   const [threshold, setThreshold] = useState(180);
+  const [removeBackground, setRemoveBackground] = useState(true);
   const [camera, setCamera] = useState(false);
   const [cameraReady, setCameraReady] = useState(false);
   const [cameraStarting, setCameraStarting] = useState(false);
@@ -78,11 +79,11 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
   useEffect(() => {
     if (!source || !crop) return;
     const timer = setTimeout(() => {
-      try { setSignature(cleanSignature(source, crop, threshold)); setError(""); }
+      try { setSignature(cleanSignature(source, crop, threshold, removeBackground)); setError(""); }
       catch (reason) { setSignature(null); setError((reason as Error).message); }
     }, 80);
     return () => clearTimeout(timer);
-  }, [source, crop, threshold]);
+  }, [source, crop, threshold, removeBackground]);
 
   const stopCamera = () => {
     captureGeneration.current++;
@@ -192,14 +193,15 @@ export function SignatureDialog({ pdf, pageNumber, targets, onApprove, onClose }
             <div className="signature-photo"><canvas ref={cropCanvas} aria-label={t("Crop signature photo")} onPointerDown={event => { if (event.button !== 0) return; dragStart.current = cropPoint(event); event.currentTarget.setPointerCapture(event.pointerId); }}
               onPointerMove={event => { if (!dragStart.current) return; const point = cropPoint(event); setCrop([Math.min(point[0], dragStart.current[0]), Math.min(point[1], dragStart.current[1]), Math.max(1, Math.abs(point[0] - dragStart.current[0])), Math.max(1, Math.abs(point[1] - dragStart.current[1]))]); }}
               onPointerUp={() => { dragStart.current = null; }} onPointerCancel={() => { dragStart.current = null; }} /></div>
-            <label className="signature-range">{t("Ink sensitivity")} <input aria-label={t("Ink sensitivity")} type="range" min="70" max="245" value={threshold} onChange={event => setThreshold(+event.target.value)} /></label>
+            <label className="signature-toggle"><input type="checkbox" checked={removeBackground} onChange={event => setRemoveBackground(event.target.checked)} /> {t("Remove background")}</label>
+            {removeBackground && <label className="signature-range">{t("Ink sensitivity")} <input aria-label={t("Ink sensitivity")} type="range" min="70" max="245" value={threshold} onChange={event => setThreshold(+event.target.value)} /></label>}
             <button className="btn primary signature-use" disabled={!signature} onClick={() => {
-              try { setSignature(cleanSignature(source, crop!, threshold)); setSource(null); setError(""); }
+              try { setSignature(cleanSignature(source, crop!, threshold, removeBackground)); setSource(null); setError(""); }
               catch (reason) { setError((reason as Error).message); }
             }}>{t("Use this signature")} <Icon name="chevronRight" size={15} /></button>
             <button className="btn ghost" onClick={() => { setSource(null); setSignature(null); setError(""); }}>{t("Choose another photo")}</button>
           </div>}
-          {signature && !camera && <div className="signature-image"><img src={signature.url} alt={t("Your signature preview")} /><span><Icon name="check" size={13} /> {t("Background removed")}</span></div>}
+          {signature && !camera && <div className="signature-image"><img src={signature.url} alt={t("Your signature preview")} /><span>{removeBackground ? <><Icon name="check" size={13} /> {t("Background removed")}</> : t("Original background")}</span></div>}
           {ready && <label className="signature-remember"><input type="checkbox" checked={remember} onChange={event => setRemember(event.target.checked)} /><span>{t("Remember this signature")}<small>{t("Only on this device. Forget it in Settings.")}</small></span></label>}
           <div className="signature-privacy"><Icon name="lock" size={14} /><span>{t("Processed on this device. Never uploaded.")}</span></div>
           <details className="signature-details"><summary>{t("About signatures and saved copies")}</summary><p>{keys(t("This adds a visual signature, not a digital certificate. Changes can affect existing digital signatures. Remembered signatures are stored unencrypted on this computer. Use Ctrl+Z to undo; Save copy exports the signed PDF."))}</p></details>

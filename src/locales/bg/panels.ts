@@ -166,6 +166,8 @@ const bg: Record<string, string> = {
   "Choose another photo": "Избор на друга снимка",
   "Your signature preview": "Визуализация на подписа ви",
   "Background removed": "Фонът е премахнат",
+  "Remove background": "Премахване на фона",
+  "Original background": "Оригинален фон",
   "Remember this signature": "Запомняне на този подпис",
   "Only on this device. Forget it in Settings.": "Само на това устройство. Можете да го забравите в Настройки.",
   "Processed on this device. Never uploaded.": "Обработва се на това устройство. Никога не се качва.",

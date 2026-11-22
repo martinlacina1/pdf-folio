@@ -166,6 +166,8 @@ const cs: Record<string, string> = {
   "Choose another photo": "Vybrat jinou fotku",
   "Your signature preview": "Náhled vašeho podpisu",
   "Background removed": "Pozadí odstraněno",
+  "Remove background": "Odebrat pozadí",
+  "Original background": "Původní pozadí",
   "Remember this signature": "Zapamatovat si tento podpis",
   "Only on this device. Forget it in Settings.": "Jen v tomto zařízení. Zapomenout ho můžete v Nastavení.",
   "Processed on this device. Never uploaded.": "Zpracováno v tomto zařízení. Nikam se nenahrává.",
