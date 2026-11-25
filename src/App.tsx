@@ -1373,6 +1373,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         <div className="topbar-right">
           {doc && (
             <>
+              {/* Brings back the hidden page and zoom controls, without covering the page. */}
+              {pillHidden && !focus && <IconButton icon="controls" label={t("Show the controls")} onClick={() => hidePill(false)} />}
               <IconButton icon="sparkle" label={t("Ask AI")} active={aiOpen} onClick={() => { setHistoryOpen(false); setAiOpen(!aiOpen); }} />
               <IconButton icon="search" label={keys(t("Search (Ctrl+F)"))} active={searchOpen} onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))} />
             </>
@@ -1531,11 +1533,6 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             </div>
           )}
 
-          {doc && pillHidden && (
-            <button className="pill-restore" onClick={() => hidePill(false)} title={t("Show the controls")} aria-label={t("Show the controls")}>
-              <Icon name="chevronUp" size={15} /><span>{t("Show the controls")}</span>
-            </button>
-          )}
           {doc && !pillHidden && (
             <div ref={pillRef} className={pillAt ? "pill moved" : "pill"} role="toolbar" aria-label={t("Navigation")}
               style={pillAt ? { left: `${pillAt.x * 100}%`, top: `${pillAt.y * 100}%` } : undefined}>
