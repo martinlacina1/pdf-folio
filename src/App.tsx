@@ -574,9 +574,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         linkRef.current!.setDocument(pdf, null);
         prev?.pdf.loadingTask.destroy();
 
-        // Markup is saved automatically; only documents Folio can't store count as having unsaved changes.
+        // Folio keeps markup for itself as it goes, but a file on disk doesn't have it until it's saved: those
+        // changes count as unsaved (Save shows, closing asks). So do changes Folio can't keep at all.
         (pdf.annotationStorage as { onSetModified: unknown }).onSetModified = () => {
-          if (docRef.current === next && !persistRef.current) setDirty(true);
+          if (docRef.current === next && (!persistRef.current || !!next.path)) setDirty(true);
         };
         (pdf.annotationStorage as { onResetModified: unknown }).onResetModified = () => {
           if (docRef.current === next) setDirty(false);
