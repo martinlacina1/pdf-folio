@@ -185,6 +185,24 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     setPillHidden(hidden);
     try { localStorage.setItem("folio:pill-hidden", hidden ? "1" : "0"); } catch {}
   };
+  // A remembered spot can fall partly outside a smaller window: move the bar back in whenever it shows or the stage
+  // changes size, so it never ends up cut off.
+  useLayoutEffect(() => {
+    const pill = pillRef.current, stage = pill?.parentElement;
+    if (!pill || !stage || pillHidden || !pillAt) return;
+    const fit = () => {
+      const area = stage.getBoundingClientRect(), box = pill.getBoundingClientRect();
+      if (!area.width || !area.height) return;
+      const halfW = box.width / 2 + 8, halfH = box.height / 2 + 8;
+      const x = Math.min(Math.max(pillAt.x * area.width, halfW), Math.max(halfW, area.width - halfW)) / area.width;
+      const y = Math.min(Math.max(pillAt.y * area.height, halfH), Math.max(halfH, area.height - halfH)) / area.height;
+      if (Math.abs(x - pillAt.x) > 1e-4 || Math.abs(y - pillAt.y) > 1e-4) setPillAt({ x, y });
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, [pillAt, pillHidden, doc]);
   const dragPill = (event: React.PointerEvent<HTMLElement>) => {
     const pill = pillRef.current, stage = pill?.parentElement;
     if (!pill || !stage || event.button !== 0) return;

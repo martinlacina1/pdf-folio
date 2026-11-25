@@ -676,6 +676,7 @@ kbd {
   animation: rise 0.35s var(--ease);
 }
 .pill.moved {
+  width: max-content; /* near an edge it would otherwise shrink to the space left */
   bottom: auto;
   transform: translate(-50%, -50%);
   animation: none;
