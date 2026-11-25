@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.17.0
+
+- **Hand** in the toolbar moves the page by dragging, for large documents such as maps. Hold `Space` to use it from any tool, or drag with the middle mouse button.
+- **Full screen** (`F`) sits beside the zoom controls and hides them; press `Esc` or right-click the page to leave it. Pages are centered, and a page that fits the window no longer leaves a wide band below it.
+- The page and zoom controls can be moved by their grip (double-click puts them back) or hidden; bring them back with the button in the top bar or from **More**.
+- **Draw** has a new two-row bar: pen, line, rectangle, oval or arrow; line thickness (3 pt by default); any color from the color picker; open, filled or double arrows with an adjustable head; and solid or see-through fill for rectangles and ovals. Hold `Ctrl` for a square, a circle or lines at 45°.
+- **Text** boxes have a text size and any color.
+- Choose **Select** and click a drawing, text box or signature to select it. The bar then shows its style, and changing thickness, color, text size, arrow head or fill changes the selected object. The toolbar under it is translated and deletes with a cross.
+- **Undo** appears in the top bar whenever there's something to take back.
+- Drawings, text and highlights that aren't in the PDF file yet count as unsaved: the title shows a dot, **Save** appears, and closing asks whether to save. Folio still keeps them for you until you save.
+- Fixed: pages could look distorted at high zoom with PDF dark mode off.
+
 ## 1.16.0
 
 - **pdf-folio** by Martin Lacina, based on Folio 1.15.1. Download new versions from the releases page on GitHub (martinlacina1/pdf-folio); automatic updates are off so the official Folio doesn't replace this version.
