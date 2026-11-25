@@ -14,6 +14,7 @@ const SAVED_TYPES: Record<string, Mark["type"]> = { highlight: "highlight", ink:
 /* Minimal views of pdf.js internals used here (they're not part of its typed public API). */
 interface Editor {
   id: string;
+  uid?: number;
   pageIndex: number;
   div?: HTMLElement | null;
   deleted?: boolean;
@@ -429,6 +430,33 @@ export class MarkupController {
   }
 
   /** The highlight under a screen point (pdf.js highlights don't take clicks while reading), with its screen box. */
+  /**
+   * The drawing, text box or stamp (signature) under a point, for selecting it with the Select tool: the pdf.js
+   * editor mode it belongs to and its uid. The topmost (last added) one wins.
+   */
+  objectAt(clientX: number, clientY: number): { mode: number; uid: number } | null {
+    const modes: Record<string, number> = { ink: AnnotationEditorType.INK, freetext: AnnotationEditorType.FREETEXT,
+      stamp: AnnotationEditorType.STAMP, signature: AnnotationEditorType.SIGNATURE };
+    let found: { mode: number; uid: number } | null = null;
+    for (const editor of this.#liveEditors()) {
+      const mode = modes[editor.constructor._type ?? ""];
+      if (mode === undefined || editor.uid === undefined || editor.isEmpty()) continue;
+      const view = this.#viewer.getPageView(editor.pageIndex) as unknown as
+        { div?: HTMLElement; viewport?: { convertToViewportPoint(x: number, y: number): number[] } } | undefined;
+      const surface = view?.div?.querySelector(".canvasWrapper") ?? view?.div;
+      if (!surface || !view?.viewport) continue;
+      const box = surface.getBoundingClientRect();
+      const [x1, y1, x2, y2] = editor.getPDFRect();
+      const corners = [view.viewport.convertToViewportPoint(x1, y1), view.viewport.convertToViewportPoint(x2, y2)];
+      const xs = corners.map((c) => box.left + c[0]), ys = corners.map((c) => box.top + c[1]);
+      // A few pixels of slack, so thin lines are easy to hit.
+      if (clientX >= Math.min(...xs) - 4 && clientX <= Math.max(...xs) + 4 && clientY >= Math.min(...ys) - 4 && clientY <= Math.max(...ys) + 4) {
+        found = { mode, uid: editor.uid };
+      }
+    }
+    return found;
+  }
+
   markAt(clientX: number, clientY: number): { id: string; rect: { left: number; top: number; right: number; bottom: number } } | null {
     for (const editor of this.#liveEditors()) {
       if (editor.constructor._type !== "highlight" || !editor.__folioMark) continue;

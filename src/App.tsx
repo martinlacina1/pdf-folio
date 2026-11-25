@@ -694,7 +694,21 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     if (v.pdfDocument) v.pagesRotation = (v.pagesRotation + 90) % 360;
   };
 
+  // An object picked with the Select tool: pdf.js edits it in its own mode until the reader clicks elsewhere.
+  const pickedRef = useRef(false);
+  const chooseToolRef = useRef<(next: Tool) => void>(() => {});
+  const pickObject = (object: { mode: number; uid: number }) => {
+    const v = viewerRef.current;
+    if (!v?.pdfDocument) return;
+    try {
+      v.annotationEditorMode = { mode: object.mode, editId: object.uid } as unknown as { mode: number };
+      pickedRef.current = true;
+    } catch { /* annotations unsupported in this document */ }
+  };
+  const pickObjectRef = useRef(pickObject);
+  pickObjectRef.current = pickObject;
   const chooseTool = async (next: Tool, editContent = false) => {
+    pickedRef.current = false;
     if (contentRef.current && !(await contentRef.current.finish())) return false;
     const v = viewerRef.current!;
     if (!v.pdfDocument) return false;
@@ -712,6 +726,22 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     } catch { flash(t("Annotations aren’t supported for this document")); return false; }
   };
   const leaveEditMode = () => chooseTool("select");
+  chooseToolRef.current = (next) => void chooseTool(next);
+  // Clicking away from a picked object goes back to Select, instead of drawing or adding a text box there.
+  useEffect(() => {
+    const stage = container?.parentElement;
+    if (!stage) return;
+    const away = (e: PointerEvent) => {
+      if (!pickedRef.current || e.button !== 0) return;
+      const target = e.target as Element;
+      if (!target.closest?.(".pdfViewer") || target.closest(".inkEditor, .freeTextEditor, .stampEditor, .signatureEditor, .editToolbar, .resizers")) return;
+      e.preventDefault();
+      e.stopPropagation();
+      chooseToolRef.current("select");
+    };
+    stage.addEventListener("pointerdown", away, true);
+    return () => stage.removeEventListener("pointerdown", away, true);
+  }, [container]);
   const startSigning = async () => { if (await chooseTool("select")) setSigning(true); };
 
   useEffect(() => {
@@ -784,7 +814,12 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       if (current && !current.isCollapsed) return;
       if ((e.target as HTMLElement).closest("a, .annotationCommentButton, .folio-content-layer")) return;
       const hit = markupRef.current?.markAt(e.clientX, e.clientY);
-      if (!hit) return setHighlightMenu(null);
+      if (!hit) {
+        // Drawings, text boxes and signatures can be selected too: to move, resize, restyle or delete them.
+        const object = markupRef.current?.objectAt(e.clientX, e.clientY);
+        if (object) pickObjectRef.current(object);
+        return setHighlightMenu(null);
+      }
       const stage = container.parentElement!.getBoundingClientRect();
       setHighlightMenu({ id: hit.id, rect: { left: hit.rect.left - stage.left, right: hit.rect.right - stage.left,
         top: hit.rect.top - stage.top, bottom: hit.rect.bottom - stage.top } });
