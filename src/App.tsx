@@ -1668,7 +1668,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
               </div>
               </div>
               </div>
-              <button className="pill-done" onClick={() => chooseTool("select")}>{t("Done")}</button>
+              <button className="pill-done" onClick={() => chooseTool("select")} aria-label={t("Done")} title={t("Done")}>
+                <Icon name="close" size={14} />
+              </button>
             </div>
           )}
 

@@ -840,7 +840,17 @@ kbd {
 .pill-rows { display: flex; flex-direction: column; gap: 6px; }
 .pill-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
 .pill-row + .pill-row { border-top: 1px solid var(--line); padding-top: 6px; }
-.color-pill .pill-done { align-self: center; }
+.pill-row:first-child:not(:last-child) { justify-content: flex-start; }
+/* Done: a small cross that leaves drawing, beside both rows. */
+.color-pill .pill-done {
+  align-self: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
 .draw-tool {
   border: 0;
   border-radius: 6px;

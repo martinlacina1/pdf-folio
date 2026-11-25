@@ -6,13 +6,17 @@ export function trackTitlebar(header: HTMLElement) {
   area.className = "window-drag-area";
   area.setAttribute("aria-hidden", "true");
   host.body.append(area);
-  const controls = header.querySelectorAll<HTMLElement>(".brand, .icon-btn, .segmented");
+  // Buttons come and go (Undo, the controls toggle), so look them up again on every change.
+  const controls = () => header.querySelectorAll<HTMLElement>(".brand, .icon-btn, .segmented");
+  let frame = 0;
   const update = () => {
+    cancelAnimationFrame(frame);
     const style = getComputedStyle(header);
     const left = parseFloat(style.paddingLeft);
     area.style.insetInline = left + "px " + style.paddingRight;
     area.style.height = header.clientHeight + "px";
-    area.replaceChildren(...Array.from(controls, button => {
+    area.replaceChildren(...Array.from(controls(), button => {
+      observer.observe(button);
       const { left: x, width } = button.getBoundingClientRect();
       const hole = host.createElement("span");
       hole.style.left = x - left + "px";
@@ -22,7 +26,9 @@ export function trackTitlebar(header: HTMLElement) {
   };
   const observer = new ResizeObserver(update);
   observer.observe(header);
-  controls.forEach(button => observer.observe(button));
+  // A button added or removed moves the others without resizing them; measure once layout has settled.
+  const changes = new MutationObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); });
+  changes.observe(header, { childList: true, subtree: true });
   update();
-  return () => { observer.disconnect(); area.remove(); };
+  return () => { cancelAnimationFrame(frame); observer.disconnect(); changes.disconnect(); area.remove(); };
 }
