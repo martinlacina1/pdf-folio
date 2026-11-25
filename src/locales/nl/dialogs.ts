@@ -1,5 +1,7 @@
 // Dutch UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Move the page by dragging (hand)": "Pagina verplaatsen door te slepen (hand)",
+  "Space@@key": "Spatiebalk",
   "Language": "Taal",
   "Manage language, appearance, updates, and Ask AI accounts.": "Beheer taal, weergave, updates en accounts voor Vraag AI.",
   "The new language is used after Folio restarts.": "De nieuwe taal wordt gebruikt nadat Folio opnieuw is gestart.",

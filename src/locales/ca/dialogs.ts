@@ -1,5 +1,7 @@
 // Catalan UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Move the page by dragging (hand)": "Moure la pàgina arrossegant (mà)",
+  "Space@@key": "Espai",
   "Language": "Idioma",
   "Manage language, appearance, updates, and Ask AI accounts.": "Gestiona l'idioma, l'aparença, les actualitzacions i els comptes de Preguntar a la IA.",
   "The new language is used after Folio restarts.": "El nou idioma s'utilitzarà després de reiniciar Folio.",

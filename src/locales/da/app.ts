@@ -1,5 +1,15 @@
 // Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Flyt bjælken (dobbeltklik for at sætte den tilbage)",
+  "Hide the controls": "Skjul bjælken",
+  "Show the controls": "Vis bjælken",
+  "Full screen": "Fuld skærm",
+  "Full screen (F)": "Fuld skærm (F)",
+  "Exit full screen": "Afslut fuld skærm",
+  "Exit full screen (Esc)": "Afslut fuld skærm (Esc)",
+  "to exit full screen": "for at afslutte fuld skærm",
+  "Hand": "Hånd",
+  "Hand: drag to move the page (hold Space)": "Hånd: træk for at flytte siden (eller hold mellemrumstasten nede)",
   "Save as…": "Gem som…",
   // Tools
   "Select": "Markér",

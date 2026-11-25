@@ -1,5 +1,15 @@
 // Italian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Sposta la barra (doppio clic per riportarla al suo posto)",
+  "Hide the controls": "Nascondi la barra",
+  "Show the controls": "Mostra la barra",
+  "Full screen": "Schermo intero",
+  "Full screen (F)": "Schermo intero (F)",
+  "Exit full screen": "Esci da schermo intero",
+  "Exit full screen (Esc)": "Esci da schermo intero (Esc)",
+  "to exit full screen": "per uscire da schermo intero",
+  "Hand": "Mano",
+  "Hand: drag to move the page (hold Space)": "Mano: trascina per spostare la pagina (o tieni premuto Spazio)",
   "Save as…": "Salva con nome…",
   // Tools
   "Select": "Seleziona",

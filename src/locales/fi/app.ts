@@ -1,5 +1,15 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Siirrä palkkia (kaksoisnapsautus palauttaa sen paikalleen)",
+  "Hide the controls": "Piilota palkki",
+  "Show the controls": "Näytä palkki",
+  "Full screen": "Koko näyttö",
+  "Full screen (F)": "Koko näyttö (F)",
+  "Exit full screen": "Poistu koko näytöstä",
+  "Exit full screen (Esc)": "Poistu koko näytöstä (Esc)",
+  "to exit full screen": "poistuu koko näytöstä",
+  "Hand": "Käsi",
+  "Hand: drag to move the page (hold Space)": "Käsi: siirrä sivua vetämällä (tai pidä välilyöntiä painettuna)",
   "Save as…": "Tallenna nimellä…",
   // Tools
   "Select": "Valitse",

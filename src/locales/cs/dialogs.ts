@@ -1,5 +1,7 @@
 // Czech UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Move the page by dragging (hand)": "Posun stránky tažením (ručička)",
+  "Space@@key": "Mezerník",
   "Language": "Jazyk",
   "Manage language, appearance, updates, and Ask AI accounts.": "Spravujte jazyk, vzhled, aktualizace a účty pro Zeptat se AI.",
   "The new language is used after Folio restarts.": "Nový jazyk se použije po restartu aplikace Folio.",

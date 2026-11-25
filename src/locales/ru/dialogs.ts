@@ -1,5 +1,7 @@
 // Russian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Move the page by dragging (hand)": "Перемещение страницы перетаскиванием (рука)",
+  "Space@@key": "Пробел",
   "Language": "Язык",
   "Manage language, appearance, updates, and Ask AI accounts.": "Управление языком, внешним видом, обновлениями и учетными записями для функции «Спросить ИИ».",
   "The new language is used after Folio restarts.": "Новый язык будет использоваться после перезапуска Folio.",

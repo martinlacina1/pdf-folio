@@ -85,7 +85,11 @@ export function paintImageOverlay(host: Element, source: HTMLCanvasElement, page
 
 /** Keeps the image overlays of the main viewer's pages up to date as they render. */
 export function trackPageImages(eventBus: EventBus) {
-  eventBus.on("pagerendered", ({ source }: { source: { canvas?: HTMLCanvasElement | null; pdfPage?: PageLike; viewport?: { rotation: number } } }) => {
+  eventBus.on("pagerendered", ({ source, isDetailView }: { isDetailView?: boolean;
+    source: { canvas?: HTMLCanvasElement | null; pdfPage?: PageLike; viewport?: { rotation: number } } }) => {
+    // At high zoom pdf.js adds a sharper canvas for just the visible area; the overlay covers the whole page,
+    // so it's only copied from the full-page rendering.
+    if (isDetailView) return;
     const canvas = source.canvas;
     const host = canvas?.parentElement;
     if (!canvas || !host) return;

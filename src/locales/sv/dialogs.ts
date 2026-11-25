@@ -1,5 +1,7 @@
 // Swedish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Move the page by dragging (hand)": "Flytta sidan genom att dra (hand)",
+  "Space@@key": "Blanksteg",
   "Language": "Språk",
   "Manage language, appearance, updates, and Ask AI accounts.": "Hantera språk, utseende, uppdateringar och konton för Fråga AI.",
   "The new language is used after Folio restarts.": "Det nya språket används när Folio har startats om.",

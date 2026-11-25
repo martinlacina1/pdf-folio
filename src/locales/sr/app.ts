@@ -1,5 +1,15 @@
 // Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Pomeri traku (dvostruki klik je vraća na mesto)",
+  "Hide the controls": "Sakrij traku",
+  "Show the controls": "Prikaži traku",
+  "Full screen": "Ceo ekran",
+  "Full screen (F)": "Ceo ekran (F)",
+  "Exit full screen": "Izađi iz celog ekrana",
+  "Exit full screen (Esc)": "Izađi iz celog ekrana (Esc)",
+  "to exit full screen": "za izlaz iz celog ekrana",
+  "Hand": "Ruka",
+  "Hand: drag to move the page (hold Space)": "Ruka: prevucite da biste pomerili stranicu (ili držite razmaknicu)",
   "Save as…": "Sačuvaj kao…",
   // Tools
   "Select": "Izaberi",

@@ -1,5 +1,7 @@
 // Romanian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Move the page by dragging (hand)": "Mutarea paginii prin tragere (mână)",
+  "Space@@key": "Spațiu",
   "Language": "Limbă",
   "Manage language, appearance, updates, and Ask AI accounts.": "Gestionați limba, aspectul, actualizările și conturile pentru Întrebați AI.",
   "The new language is used after Folio restarts.": "Noua limbă va fi folosită după repornirea Folio.",

@@ -1,5 +1,7 @@
 // Danish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Move the page by dragging (hand)": "Flyt siden ved at trække (hånd)",
+  "Space@@key": "Mellemrum",
   "Language": "Sprog",
   "Manage language, appearance, updates, and Ask AI accounts.": "Administrer sprog, udseende, opdateringer og konti til Spørg AI.",
   "The new language is used after Folio restarts.": "Det nye sprog bruges, når Folio er genstartet.",

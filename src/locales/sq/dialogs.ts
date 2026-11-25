@@ -1,5 +1,7 @@
 // Albanian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Move the page by dragging (hand)": "Lëvizja e faqes me tërheqje (dora)",
+  "Space@@key": "Hapësira",
   "Language": "Gjuha",
   "Manage language, appearance, updates, and Ask AI accounts.": "Menaxhoni gjuhën, pamjen, përditësimet dhe llogaritë e „Pyetni AI-në“.",
   "The new language is used after Folio restarts.": "Gjuha e re do të përdoret pasi të rinisni Folio-n.",

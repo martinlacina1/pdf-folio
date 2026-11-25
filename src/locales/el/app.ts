@@ -1,5 +1,15 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Μετακίνηση γραμμής (διπλό κλικ για επαναφορά)",
+  "Hide the controls": "Απόκρυψη γραμμής",
+  "Show the controls": "Εμφάνιση γραμμής",
+  "Full screen": "Πλήρης οθόνη",
+  "Full screen (F)": "Πλήρης οθόνη (F)",
+  "Exit full screen": "Έξοδος από πλήρη οθόνη",
+  "Exit full screen (Esc)": "Έξοδος από πλήρη οθόνη (Esc)",
+  "to exit full screen": "για έξοδο από πλήρη οθόνη",
+  "Hand": "Χέρι",
+  "Hand: drag to move the page (hold Space)": "Χέρι: σύρετε για να μετακινήσετε τη σελίδα (ή κρατήστε πατημένο το Space)",
   "Save as…": "Αποθήκευση ως…",
   // Tools
   "Select": "Επιλογή",

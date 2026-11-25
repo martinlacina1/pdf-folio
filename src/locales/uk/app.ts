@@ -1,5 +1,15 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Перемістити панель (подвійне клацання поверне її на місце)",
+  "Hide the controls": "Сховати панель",
+  "Show the controls": "Показати панель",
+  "Full screen": "На весь екран",
+  "Full screen (F)": "На весь екран (F)",
+  "Exit full screen": "Вийти з повноекранного режиму",
+  "Exit full screen (Esc)": "Вийти з повноекранного режиму (Esc)",
+  "to exit full screen": "— вихід із повноекранного режиму",
+  "Hand": "Рука",
+  "Hand: drag to move the page (hold Space)": "Рука: перетягуйте сторінку (або утримуйте пробіл)",
   "Save as…": "Зберегти як…",
   // Tools
   "Select": "Вибрати",

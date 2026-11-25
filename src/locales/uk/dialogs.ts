@@ -1,5 +1,7 @@
 // Ukrainian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Move the page by dragging (hand)": "Переміщення сторінки перетягуванням (рука)",
+  "Space@@key": "Пробіл",
   "Language": "Мова",
   "Manage language, appearance, updates, and Ask AI accounts.": "Керуйте мовою, оформленням, оновленнями й обліковими записами для функції «Запитати ШІ».",
   "The new language is used after Folio restarts.": "Нова мова застосується після перезапуску Folio.",

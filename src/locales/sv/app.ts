@@ -1,5 +1,15 @@
 // Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Flytta fältet (dubbelklicka för att återställa)",
+  "Hide the controls": "Dölj fältet",
+  "Show the controls": "Visa fältet",
+  "Full screen": "Helskärm",
+  "Full screen (F)": "Helskärm (F)",
+  "Exit full screen": "Avsluta helskärm",
+  "Exit full screen (Esc)": "Avsluta helskärm (Esc)",
+  "to exit full screen": "för att avsluta helskärm",
+  "Hand": "Hand",
+  "Hand: drag to move the page (hold Space)": "Hand: dra för att flytta sidan (eller håll ned blanksteg)",
   "Save as…": "Spara som…",
   // Tools
   "Select": "Välj",

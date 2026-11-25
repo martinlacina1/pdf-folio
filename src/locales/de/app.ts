@@ -1,5 +1,15 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Leiste verschieben (Doppelklick setzt sie zurück)",
+  "Hide the controls": "Leiste ausblenden",
+  "Show the controls": "Leiste einblenden",
+  "Full screen": "Vollbild",
+  "Full screen (F)": "Vollbild (F)",
+  "Exit full screen": "Vollbild beenden",
+  "Exit full screen (Esc)": "Vollbild beenden (Esc)",
+  "to exit full screen": "beendet das Vollbild",
+  "Hand": "Hand",
+  "Hand: drag to move the page (hold Space)": "Hand: Seite durch Ziehen verschieben (oder Leertaste halten)",
   "Save as…": "Speichern unter…",
   // Tools
   "Select": "Auswählen",

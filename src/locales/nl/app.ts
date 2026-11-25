@@ -1,5 +1,15 @@
 // Dutch UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Balk verplaatsen (dubbelklik om terug te zetten)",
+  "Hide the controls": "Balk verbergen",
+  "Show the controls": "Balk weergeven",
+  "Full screen": "Volledig scherm",
+  "Full screen (F)": "Volledig scherm (F)",
+  "Exit full screen": "Volledig scherm afsluiten",
+  "Exit full screen (Esc)": "Volledig scherm afsluiten (Esc)",
+  "to exit full screen": "om volledig scherm af te sluiten",
+  "Hand": "Hand",
+  "Hand: drag to move the page (hold Space)": "Hand: sleep om de pagina te verplaatsen (of houd de spatiebalk ingedrukt)",
   "Save as…": "Opslaan als…",
   // Tools
   "Select": "Selecteren",

@@ -1,5 +1,15 @@
 // Simplified Chinese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "移动工具栏（双击可复位）",
+  "Hide the controls": "隐藏工具栏",
+  "Show the controls": "显示工具栏",
+  "Full screen": "全屏",
+  "Full screen (F)": "全屏 (F)",
+  "Exit full screen": "退出全屏",
+  "Exit full screen (Esc)": "退出全屏 (Esc)",
+  "to exit full screen": "退出全屏",
+  "Hand": "抓手",
+  "Hand: drag to move the page (hold Space)": "抓手：拖动以移动页面（或按住空格键）",
   "Save as…": "另存为…",
   // Tools
   "Select": "选择",

@@ -1,6 +1,6 @@
 // Folio desktop shell: one window, PDFs (and Word documents, converted) opened from Explorer / "Open with",
 // files served over app://.
-const { app, BrowserWindow, protocol, net, ipcMain, dialog, shell, screen, session } = require("electron");
+const { app, BrowserWindow, Menu, protocol, net, ipcMain, dialog, shell, screen, session } = require("electron");
 const crypto = require("node:crypto");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -401,6 +401,8 @@ function createWindow() {
   win.on("resize", scheduleWindowSave);
   win.on("move", scheduleWindowSave);
   win.on("close", saveWindow);
+  win.on("enter-full-screen", () => win?.webContents.send("folio:full-screen", true));
+  win.on("leave-full-screen", () => win?.webContents.send("folio:full-screen", false));
   // Native menu accelerators (especially Cmd+W on macOS) run before a DOM keydown.
   win.webContents.on("before-input-event", (event, input) => {
     if (input.type !== "keyDown" || input.alt) return;
@@ -637,6 +639,14 @@ if (!app.requestSingleInstanceLock()) {
     handle("folio:language-setting", () => ({ setting: languageSetting(), current: uiLanguage() }));
     handle("folio:set-language-setting", (_event, value) => setLanguageSetting(value));
     on("folio:relaunch", () => { if (!win) return; relaunchAfterClose = true; win.close(); });
+    // A native right-click menu with the page's (translated) labels; resolves to the chosen index, or null.
+    handle("folio:context-menu", (event, labels) => new Promise((resolve) => {
+      const owner = BrowserWindow.fromWebContents(event.sender);
+      if (!owner || !Array.isArray(labels)) return resolve(null);
+      const menu = Menu.buildFromTemplate(labels.slice(0, 20).map((label, index) => ({ label: String(label), click: () => resolve(index) })));
+      menu.popup({ window: owner, callback: () => setTimeout(() => resolve(null), 0) });
+    }));
+    on("folio:set-full-screen", (_event, on) => { if (win && win.isFullScreen() !== !!on) win.setFullScreen(!!on); });
     on("folio:save-all-result", (_event, id, ok) => { saveAllRequests.get(id)?.(ok); saveAllRequests.delete(id); });
     // Word documents picked or dropped in Folio (PDFs are read by the page itself).
     handle("folio:open-document", (_event, file) => {

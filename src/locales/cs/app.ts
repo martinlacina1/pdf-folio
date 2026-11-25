@@ -1,5 +1,15 @@
 // Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Přesunout lištu (dvojklikem ji vrátíte na místo)",
+  "Hide the controls": "Skrýt lištu",
+  "Show the controls": "Zobrazit lištu",
+  "Full screen": "Na celou obrazovku",
+  "Full screen (F)": "Na celou obrazovku (F)",
+  "Exit full screen": "Ukončit celou obrazovku",
+  "Exit full screen (Esc)": "Ukončit celou obrazovku (Esc)",
+  "to exit full screen": "ukončí celou obrazovku",
+  "Hand": "Ručička",
+  "Hand: drag to move the page (hold Space)": "Ručička: přetažením posunete stránku (nebo podržte mezerník)",
   "Save as…": "Uložit jako…",
   // Tools
   "Select": "Vybrat",

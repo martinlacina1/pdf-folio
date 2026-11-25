@@ -423,7 +423,7 @@ try {
       item.once("done", (_done, state) => resolve(state));
     }));
   }, copy);
-  await page.keyboard.press("ControlOrMeta+s");
+  await page.keyboard.press("ControlOrMeta+Shift+s"); // Save copy: the copy downloads (Ctrl+S saves to the original file)
   assert.equal(await app.evaluate(() => globalThis.folioCopySaved), "completed");
   assert.equal(readFileSync(copy, "latin1").match(/\/Subtype\s*\/Highlight\b/g)?.length, 4);
   const savedInk = await page.evaluate(async bytes => {
@@ -500,7 +500,7 @@ try {
   await page.getByRole("button", { name: "More" }).click();
   assert.equal(await darkMode.getAttribute("aria-checked"), "true");
   await page.getByRole("menuitem", { name: /Settings/ }).click();
-  await page.getByRole("dialog", { name: "Settings" }).getByText(/Manage updates, appearance, and Ask AI accounts/).waitFor();
+  await page.getByRole("dialog", { name: "Settings" }).getByText(/Manage language, appearance, updates, and Ask AI accounts/).waitFor();
   const darkModeSwitch = page.getByRole("switch", { name: "PDF dark mode" });
   assert.equal(await darkModeSwitch.getAttribute("aria-checked"), "true");
   await darkModeSwitch.click();
@@ -527,7 +527,7 @@ try {
   await newer.click();
   assert.deepEqual(await summaries.allTextContents(), firstPage);
   assert.equal(await whatsNew.getByRole("link", { name: "View releases on GitHub" }).getAttribute("href"),
-    "https://github.com/Forward-Future/folio-releases/releases");
+    "https://github.com/martinlacina1/pdf-folio/releases");
   await page.keyboard.press("Escape");
   await page.getByRole("dialog", { name: "Settings" }).waitFor();
   await page.keyboard.press("Escape");

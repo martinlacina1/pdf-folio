@@ -1,5 +1,7 @@
 // Greek UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Move the page by dragging (hand)": "Μετακίνηση σελίδας με σύρσιμο (χέρι)",
+  "Space@@key": "Space",
   "Language": "Γλώσσα",
   "Manage language, appearance, updates, and Ask AI accounts.": "Διαχειριστείτε τη γλώσσα, την εμφάνιση, τις ενημερώσεις και τους λογαριασμούς του «Ρωτήστε το AI».",
   "The new language is used after Folio restarts.": "Η νέα γλώσσα θα χρησιμοποιηθεί μετά την επανεκκίνηση του Folio.",

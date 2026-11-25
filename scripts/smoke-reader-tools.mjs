@@ -252,7 +252,7 @@ async function checkContentEditing(app, page, folder, shots) {
   await item("Original").click();
   await input.fill("");
   await captureDownload(app, path.join(folder, "removed-text.pdf"));
-  await page.keyboard.press("ControlOrMeta+s");
+  await page.keyboard.press("ControlOrMeta+Shift+s"); // Save copy: the copy downloads (Ctrl+S saves to the original file)
   assert.equal(await app.evaluate(() => globalThis.folioReordered), "completed");
   await page.window.waitForFunction(() => document.title.startsWith("Objects (edited) (edited).pdf"));
   const removed = page.locator('.page[data-page-number="1"] .textLayer');
@@ -412,7 +412,7 @@ export async function checkReaderTools(app, page, folder, shots) {
   await page.getByLabel("Move page 1 to").fill("2");
   await page.getByRole("button", { name: "Move", exact: true }).click();
   await captureDownload(app, path.join(folder, "reordered-form.pdf"));
-  await page.keyboard.press("ControlOrMeta+s");
+  await page.keyboard.press("ControlOrMeta+Shift+s"); // Save copy: the copy downloads (Ctrl+S saves to the original file)
   await openCopy.click();
   assert.equal(await app.evaluate(() => globalThis.folioReordered), "completed");
   await page.window.waitForFunction(() => document.title.startsWith("Form (reordered).pdf"));

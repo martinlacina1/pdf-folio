@@ -1,5 +1,15 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "막대 이동 (두 번 클릭하면 원래 위치로)",
+  "Hide the controls": "막대 숨기기",
+  "Show the controls": "막대 표시",
+  "Full screen": "전체 화면",
+  "Full screen (F)": "전체 화면 (F)",
+  "Exit full screen": "전체 화면 종료",
+  "Exit full screen (Esc)": "전체 화면 종료 (Esc)",
+  "to exit full screen": "전체 화면 종료",
+  "Hand": "손 도구",
+  "Hand: drag to move the page (hold Space)": "손 도구: 드래그하여 페이지 이동 (또는 스페이스바 누르기)",
   "Save as…": "다른 이름으로 저장…",
   // Tools
   "Select": "선택",

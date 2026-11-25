@@ -1,5 +1,15 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Mutați bara (dublu clic o readuce la loc)",
+  "Hide the controls": "Ascundeți bara",
+  "Show the controls": "Afișați bara",
+  "Full screen": "Ecran complet",
+  "Full screen (F)": "Ecran complet (F)",
+  "Exit full screen": "Ieșire din ecran complet",
+  "Exit full screen (Esc)": "Ieșire din ecran complet (Esc)",
+  "to exit full screen": "pentru a ieși din ecran complet",
+  "Hand": "Mână",
+  "Hand: drag to move the page (hold Space)": "Mână: trageți pentru a muta pagina (sau țineți apăsat Spațiu)",
   "Save as…": "Salvare ca…",
   // Tools
   "Select": "Selectare",

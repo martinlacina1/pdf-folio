@@ -1,5 +1,7 @@
 // Finnish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Move the page by dragging (hand)": "Sivun siirtäminen vetämällä (käsi)",
+  "Space@@key": "Välilyönti",
   "Language": "Kieli",
   "Manage language, appearance, updates, and Ask AI accounts.": "Hallitse kieltä, ulkoasua, päivityksiä ja Kysy tekoälyltä -tilejä.",
   "The new language is used after Folio restarts.": "Uusi kieli otetaan käyttöön, kun Folio käynnistetään uudelleen.",

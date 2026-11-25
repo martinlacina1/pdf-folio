@@ -1,5 +1,7 @@
 // German UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Move the page by dragging (hand)": "Seite durch Ziehen verschieben (Hand)",
+  "Space@@key": "Leertaste",
   "Language": "Sprache",
   "Manage language, appearance, updates, and Ask AI accounts.": "Verwalten Sie Sprache, Darstellung, Updates und Konten für „KI fragen“.",
   "The new language is used after Folio restarts.": "Die neue Sprache wird nach einem Neustart von Folio verwendet.",

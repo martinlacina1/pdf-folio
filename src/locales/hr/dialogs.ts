@@ -1,5 +1,7 @@
 // Croatian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Move the page by dragging (hand)": "Pomicanje stranice povlačenjem (ruka)",
+  "Space@@key": "Razmaknica",
   "Language": "Jezik",
   "Manage language, appearance, updates, and Ask AI accounts.": "Upravljajte jezikom, izgledom, ažuriranjima i računima za Pitaj AI.",
   "The new language is used after Folio restarts.": "Novi jezik koristit će se nakon ponovnog pokretanja aplikacije Folio.",

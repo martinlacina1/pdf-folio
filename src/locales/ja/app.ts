@@ -1,5 +1,15 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "バーを移動（ダブルクリックで元の位置に戻す）",
+  "Hide the controls": "バーを隠す",
+  "Show the controls": "バーを表示",
+  "Full screen": "全画面表示",
+  "Full screen (F)": "全画面表示 (F)",
+  "Exit full screen": "全画面表示を終了",
+  "Exit full screen (Esc)": "全画面表示を終了 (Esc)",
+  "to exit full screen": "で全画面表示を終了",
+  "Hand": "手のひら",
+  "Hand: drag to move the page (hold Space)": "手のひら：ドラッグしてページを移動（またはスペースキーを押したまま）",
   "Save as…": "名前を付けて保存…",
   // Tools
   "Select": "選択",

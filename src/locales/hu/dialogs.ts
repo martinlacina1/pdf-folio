@@ -1,5 +1,7 @@
 // Hungarian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Move the page by dragging (hand)": "Az oldal mozgatása húzással (kéz)",
+  "Space@@key": "Szóköz",
   "Language": "Nyelv",
   "Manage language, appearance, updates, and Ask AI accounts.": "A nyelv, a megjelenés, a frissítések és az AI kérdezése fiókjainak kezelése.",
   "The new language is used after Folio restarts.": "Az új nyelv a Folio újraindítása után lesz érvényes.",

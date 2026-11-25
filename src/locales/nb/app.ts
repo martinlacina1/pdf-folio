@@ -1,5 +1,15 @@
 // Norwegian Bokmål UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Flytt linjen (dobbeltklikk for å sette den tilbake)",
+  "Hide the controls": "Skjul linjen",
+  "Show the controls": "Vis linjen",
+  "Full screen": "Fullskjerm",
+  "Full screen (F)": "Fullskjerm (F)",
+  "Exit full screen": "Avslutt fullskjerm",
+  "Exit full screen (Esc)": "Avslutt fullskjerm (Esc)",
+  "to exit full screen": "for å avslutte fullskjerm",
+  "Hand": "Hånd",
+  "Hand: drag to move the page (hold Space)": "Hånd: dra for å flytte siden (eller hold inne mellomromstasten)",
   "Save as…": "Lagre som…",
   // Tools
   "Select": "Velg",

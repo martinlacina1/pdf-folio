@@ -563,8 +563,27 @@ kbd {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
 }
+/* The same small margin above and below the pages as beside them. It's a border of the scrolling box, which
+   pdf.js leaves out of the height it fits "Fit page" into, so a fitted page fits without scrolling.
+   Pages shorter than the window sit in its middle; "safe" keeps taller ones scrollable from their top. */
+.viewer-container {
+  border-block: 12px solid var(--stage);
+}
 .viewer-container .pdfViewer {
-  padding: 28px 0 120px;
+  box-sizing: border-box;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+}
+/* Pages are 22px apart (--page-margin); nothing extra goes above the first or below the last. */
+.viewer-container .pdfViewer > .page:first-child,
+.viewer-container .pdfViewer > .spread:first-child > .page {
+  margin-top: 0;
+}
+.viewer-container .pdfViewer > .page:last-child,
+.viewer-container .pdfViewer > .spread:last-child > .page {
+  margin-bottom: 0;
 }
 .pdfViewer .page {
   box-shadow: var(--page-shadow);
@@ -655,6 +674,49 @@ kbd {
   padding: 5px;
   border-radius: 14px;
   animation: rise 0.35s var(--ease);
+}
+.pill.moved {
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  animation: none;
+}
+.pill-grip {
+  width: 16px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  margin-right: -2px;
+  color: var(--text-3);
+  cursor: grab;
+  touch-action: none;
+}
+.pill-grip:active {
+  cursor: grabbing;
+}
+/* Brings back hidden controls: small and quiet in the corner until pointed at. */
+.pill-restore {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--text-2);
+  box-shadow: var(--shadow-md);
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+.pill-restore:hover,
+.pill-restore:focus-visible {
+  opacity: 1;
+}
+.app[data-focus] .pill-restore {
+  display: none;
 }
 @keyframes rise {
   from {
@@ -936,12 +998,7 @@ kbd {
   pointer-events: none;
 }
 .app[data-focus] .pill {
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.app[data-focus] .pill:hover,
-.app[data-focus] .pill:focus-within {
-  opacity: 1;
+  display: none; /* full screen keeps only the page: Esc, the wheel, and the right-click menu control it */
 }
 /* Always on screen in focus mode, but quiet until pointed at. */
 .exit-focus {

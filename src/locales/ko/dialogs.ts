@@ -1,5 +1,7 @@
 // Korean UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Move the page by dragging (hand)": "드래그하여 페이지 이동 (손 도구)",
+  "Space@@key": "스페이스바",
   "Language": "언어",
   "Manage language, appearance, updates, and Ask AI accounts.": "언어, 모양, 업데이트 및 AI에게 묻기 계정을 관리합니다.",
   "The new language is used after Folio restarts.": "새 언어는 Folio를 다시 시작한 후에 적용됩니다.",

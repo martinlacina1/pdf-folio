@@ -1,5 +1,15 @@
 // Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Переместить панель (двойной щелчок вернёт её на место)",
+  "Hide the controls": "Скрыть панель",
+  "Show the controls": "Показать панель",
+  "Full screen": "Во весь экран",
+  "Full screen (F)": "Во весь экран (F)",
+  "Exit full screen": "Выйти из полноэкранного режима",
+  "Exit full screen (Esc)": "Выйти из полноэкранного режима (Esc)",
+  "to exit full screen": "— выход из полноэкранного режима",
+  "Hand": "Рука",
+  "Hand: drag to move the page (hold Space)": "Рука: перетаскивайте страницу (или удерживайте пробел)",
   "Save as…": "Сохранить как…",
   // Tools
   "Select": "Выделить",

@@ -54,6 +54,16 @@ contextBridge.exposeInMainWorld("folioDesktop", {
   setLanguageSetting: (value) => ipcRenderer.invoke("folio:set-language-setting", value),
   /** Closes Folio (asking about unsaved changes as usual) and starts it again. */
   relaunch: () => ipcRenderer.send("folio:relaunch"),
+  /** Shows a native right-click menu with these labels; resolves to the chosen index, or null when dismissed. */
+  contextMenu: (labels) => ipcRenderer.invoke("folio:context-menu", labels),
+  /** Puts the Folio window into full screen or back. */
+  setFullScreen: (on) => ipcRenderer.send("folio:set-full-screen", !!on),
+  /** Called with the window's new state whenever it enters or leaves full screen (also from the system, like F11). */
+  onFullScreenChange(callback) {
+    const listener = (_e, on) => callback(!!on);
+    ipcRenderer.on("folio:full-screen", listener);
+    return () => ipcRenderer.removeListener("folio:full-screen", listener);
+  },
   platform: process.platform,
   openDownload: () => ipcRenderer.invoke("folio:open-download"),
   /** Downloads a PDF from an http(s) link; resolves to { name, data: Uint8Array }, or null if the user said no. */

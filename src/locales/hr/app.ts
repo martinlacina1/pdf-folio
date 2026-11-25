@@ -1,5 +1,15 @@
 // Croatian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Pomakni traku (dvostruki klik vraća je na mjesto)",
+  "Hide the controls": "Sakrij traku",
+  "Show the controls": "Prikaži traku",
+  "Full screen": "Cijeli zaslon",
+  "Full screen (F)": "Cijeli zaslon (F)",
+  "Exit full screen": "Izađi iz cijelog zaslona",
+  "Exit full screen (Esc)": "Izađi iz cijelog zaslona (Esc)",
+  "to exit full screen": "za izlaz iz cijelog zaslona",
+  "Hand": "Ruka",
+  "Hand: drag to move the page (hold Space)": "Ruka: povucite za pomicanje stranice (ili držite razmaknicu)",
   "Save as…": "Spremi kao…",
   // Tools
   "Select": "Odaberi",

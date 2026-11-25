@@ -25,9 +25,8 @@ import { HighlightMenu, NoteBox, SelectionPopover, useTextSelection, type Select
 import { NotesPanel } from "./NotesPanel";
 import { notesJson, notesMarkdown } from "./noteExport";
 import { copyText } from "./clipboard";
-import { imageRegions, trackPageImages } from "./nightImages";
+import { trackPageImages } from "./nightImages";
 import { recognizeScannedPages } from "./pageOcr";
-import { ImageMenu, ImageViewer, type ImageTarget } from "./ImageViewer";
 import { MoreMenu, type MoreItem } from "./MoreMenu";
 import { keys } from "./platform";
 import { t } from "./i18n";
@@ -44,13 +43,15 @@ import { ChangelogDialog } from "./ChangelogDialog";
 import type { Release } from "./releaseNotes";
 import { detectSignatureTargets, placeSignature, type SignatureTarget } from "./signatures";
 import { keepDrawingPointer } from "./drawing";
+import { enableHandTool } from "./handTool";
 import { drawShapes, type Shape } from "./shapes";
 import { enableWheelPaging } from "./wheelPaging";
 
-type Tool = "select" | "highlight" | "ink" | "freetext";
+type Tool = "select" | "hand" | "highlight" | "ink" | "freetext";
 
 const TOOL_MODES: Record<Tool, number> = {
   select: AnnotationEditorType.NONE,
+  hand: AnnotationEditorType.NONE,
   highlight: AnnotationEditorType.HIGHLIGHT,
   ink: AnnotationEditorType.INK,
   freetext: AnnotationEditorType.FREETEXT,
@@ -58,6 +59,7 @@ const TOOL_MODES: Record<Tool, number> = {
 
 const TOOLS: { id: Tool; icon: IconName; label: string; key: string }[] = [
   { id: "select", icon: "cursor", label: "Select", key: "V" },
+  { id: "hand", icon: "hand", label: "Hand", key: "Space" },
   { id: "highlight", icon: "highlight", label: "Highlight", key: "H" },
   { id: "ink", icon: "pen", label: "Draw", key: "D" },
   { id: "freetext", icon: "text", label: "Text", key: "T" },
@@ -163,6 +165,48 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const wheelPagingRef = useRef(wheelPaging);
   wheelPagingRef.current = wheelPaging;
   const [rotation, setRotation] = useState(0);
+  // The page and zoom controls: where the reader dragged them (their center, as a share of the stage), and whether hidden.
+  const [pillAt, setPillAt] = useState<{ x: number; y: number } | null>(() => {
+    try {
+      const at = JSON.parse(localStorage.getItem("folio:pill-position") || "null");
+      return at && Number.isFinite(at.x) && Number.isFinite(at.y) ? at : null;
+    } catch { return null; }
+  });
+  const [pillHidden, setPillHidden] = useState(() => localStorage.getItem("folio:pill-hidden") === "1");
+  const pillRef = useRef<HTMLDivElement>(null);
+  const placePill = (at: { x: number; y: number } | null) => {
+    setPillAt(at);
+    try { if (at) localStorage.setItem("folio:pill-position", JSON.stringify(at)); else localStorage.removeItem("folio:pill-position"); } catch {}
+  };
+  const hidePill = (hidden: boolean) => {
+    setPillHidden(hidden);
+    try { localStorage.setItem("folio:pill-hidden", hidden ? "1" : "0"); } catch {}
+  };
+  const dragPill = (event: React.PointerEvent<HTMLElement>) => {
+    const pill = pillRef.current, stage = pill?.parentElement;
+    if (!pill || !stage || event.button !== 0) return;
+    event.preventDefault();
+    const handle = event.currentTarget;
+    handle.setPointerCapture(event.pointerId);
+    const box = pill.getBoundingClientRect();
+    const grab = { x: event.clientX - (box.left + box.width / 2), y: event.clientY - (box.top + box.height / 2) };
+    const move = (e: PointerEvent) => {
+      const area = stage.getBoundingClientRect();
+      // Keep the whole bar inside the stage.
+      const halfW = box.width / 2 + 8, halfH = box.height / 2 + 8;
+      const x = Math.min(Math.max(e.clientX - grab.x - area.left, halfW), area.width - halfW);
+      const y = Math.min(Math.max(e.clientY - grab.y - area.top, halfH), area.height - halfH);
+      placePill({ x: x / area.width, y: y / area.height });
+    };
+    const stop = () => {
+      handle.removeEventListener("pointermove", move);
+      handle.removeEventListener("pointerup", stop);
+      handle.removeEventListener("pointercancel", stop);
+    };
+    handle.addEventListener("pointermove", move);
+    handle.addEventListener("pointerup", stop);
+    handle.addEventListener("pointercancel", stop);
+  };
   const [sidebar, setSidebar] = useState(() => localStorage.getItem("folio:sidebar") === "1" && window.innerWidth > 760);
   const [searchOpen, setSearchOpen] = useState(false);
   const [find, setFind] = useState<FindResult>({ current: 0, total: 0, state: null });
@@ -215,17 +259,15 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [pinned, setPinned] = useState<SelectionInfo | null>(null);
   const [highlightMenu, setHighlightMenu] = useState<{ id: string; rect: { left: number; top: number; right: number; bottom: number } } | null>(null);
-  const [imageMenu, setImageMenu] = useState<{ target: ImageTarget; x: number; y: number } | null>(null);
-  const [imageView, setImageView] = useState<ImageTarget | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [aiContext, setAiContext] = useState<AiContext | null>(null);
 
   useLayoutEffect(() => {
-    if (active && window.folioDesktop && !focus && !dialog && !signing && !pending && !imageView) {
+    if (active && window.folioDesktop && !focus && !dialog && !signing && !pending) {
       return trackTitlebar(headerRef.current!);
     }
-  }, [active, doc, focus, dialog, signing, pending, imageView]);
+  }, [active, doc, focus, dialog, signing, pending]);
 
   useEffect(() => {
     setSigning(false); setSignatureTargets([]); setSignatureDismissed(false);
@@ -319,7 +361,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       // One-click highlights pass through highlight mode; the reader stays in Select.
       if (markupRef.current?.quickHighlighting) return;
       const entry = Object.entries(TOOL_MODES).find(([, m]) => m === mode);
-      const next = entry ? (entry[0] as Tool) : "select";
+      // The hand and Select share pdf.js's "no editor" mode.
+      const next = mode === AnnotationEditorType.NONE && toolRef.current === "hand" ? "hand" : entry ? (entry[0] as Tool) : "select";
       setTool(next);
       // Apply the remembered colour once the editor layer for this mode is live.
       const param = COLOR_PARAM[next];
@@ -637,6 +680,17 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const highlightColor = colors.highlight ?? HIGHLIGHTS[0].hex;
   const toolRef = useRef(tool);
   toolRef.current = tool;
+  const editingRef = useRef(contentEditing);
+  editingRef.current = contentEditing;
+  const handRef = useRef<ReturnType<typeof enableHandTool> | null>(null);
+  useEffect(() => {
+    if (!container) return;
+    const hand = enableHandTool(container, () => toolRef.current === "hand",
+      () => !!docRef.current && toolRef.current === "select" && !editingRef.current);
+    handRef.current = hand;
+    return () => { hand.stop(); handRef.current = null; };
+  }, [container]);
+  useEffect(() => handRef.current?.refresh(), [tool, contentEditing, container]);
 
   const quickHighlight = async (hex: string, note = "") => {
     const info = selection;
@@ -690,50 +744,6 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   }, [container]);
   useEffect(() => setHighlightMenu(null), [doc, scale, tool]);
 
-  // Clicking an image offers "View larger" and, when it has a web address, "Open in browser".
-  useEffect(() => {
-    if (!container) return;
-    const onClick = (e: MouseEvent) => {
-      setImageMenu(null);
-      if ((e.target as Element).closest(".folio-content-layer")) return;
-      if (toolRef.current !== "select" || e.button !== 0) return;
-      const current = document.getSelection();
-      if (current && !current.isCollapsed) return;
-      if (markupRef.current?.markAt(e.clientX, e.clientY)) return; // highlights take precedence
-      const pageEl = (e.target as HTMLElement).closest<HTMLElement>(".page");
-      const pageNumber = Number(pageEl?.dataset.pageNumber);
-      const view = pageNumber ? (viewerRef.current?.getPageView(pageNumber - 1) as unknown as
-        { pdfPage?: { imageCoordinates?: ArrayLike<number> | null }; viewport?: { rotation: number } } | undefined) : undefined;
-      const surface = pageEl?.querySelector(".canvasWrapper");
-      if (!view?.pdfPage || !view.viewport || !surface) return;
-      const box = surface.getBoundingClientRect();
-      const x = (e.clientX - box.left) / box.width;
-      const y = (e.clientY - box.top) / box.height;
-      const hits = imageRegions(view.pdfPage, view.viewport.rotation).filter((r) => {
-        const w = (r.right - r.left) * box.width;
-        const h = (r.bottom - r.top) * box.height;
-        // Skip tiny icons and full-page images (scanned pages), where a menu would just get in the way.
-        return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom && w >= 40 && h >= 40 && (r.right - r.left) * (r.bottom - r.top) < 0.85;
-      });
-      if (!hits.length) return;
-      const region = hits.reduce((a, b) => ((a.right - a.left) * (a.bottom - a.top) <= (b.right - b.left) * (b.bottom - b.top) ? a : b));
-      const link = document.elementsFromPoint(e.clientX, e.clientY)
-        .find((el): el is HTMLAnchorElement => el instanceof HTMLAnchorElement && /^https?:/i.test(el.href) && !!el.closest(".annotationLayer"));
-      e.preventDefault();
-      e.stopPropagation();
-      setHighlightMenu(null);
-      const stage = container.parentElement!.getBoundingClientRect();
-      setImageMenu({ target: { pageNumber, region, rotation: view.viewport.rotation, href: link?.href ?? null }, x: e.clientX - stage.left, y: e.clientY - stage.top });
-    };
-    const onScroll = () => setImageMenu(null);
-    container.addEventListener("click", onClick, true);
-    container.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      container.removeEventListener("click", onClick, true);
-      container.removeEventListener("scroll", onScroll);
-    };
-  }, [container]);
-  useEffect(() => { setImageMenu(null); setImageView(null); }, [doc]);
   const menuMark = highlightMenu ? markup.marks.find((m) => m.id === highlightMenu.id) : undefined;
 
   const removeHighlight = (id: string) => {
@@ -1038,22 +1048,44 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     setTheme(next);
   };
 
+  const toggleFocusRef = useRef<() => Promise<void> | void>(() => {});
   const toggleFocus = async () => {
     const next = !focus;
     if (next && contentEditing) leaveEditMode();
     setFocus(next);
+    // Document tabs are iframes, where the browser's fullscreen request doesn't reach the desktop window.
+    if (window.folioDesktop?.setFullScreen) return window.folioDesktop.setFullScreen(next);
     try {
       if (next && !document.fullscreenElement) await document.documentElement.requestFullscreen();
       if (!next && document.fullscreenElement) await document.exitFullscreen();
     } catch {
-      /* fullscreen can be refused; focus mode still hides the chrome */
+      /* fullscreen can be refused; full-screen mode still hides the chrome */
     }
   };
+  toggleFocusRef.current = toggleFocus;
 
   useEffect(() => {
+    // Leaving full screen another way (F11, the system) leaves the full-screen view too.
+    const stopDesktop = window.folioDesktop?.onFullScreenChange?.((on) => { if (!on) setFocus(false); });
+    if (stopDesktop) return stopDesktop;
     const onFs = () => !document.fullscreenElement && setFocus(false);
     document.addEventListener("fullscreenchange", onFs);
     return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
+
+  // In full screen the controls are hidden; right-click offers the way out (besides Esc and F).
+  const focusRef = useRef(focus);
+  focusRef.current = focus;
+  useEffect(() => {
+    const onMenu = (event: MouseEvent) => {
+      if (!focusRef.current || (event.target as Element).closest?.("input, textarea, [contenteditable]")) return;
+      event.preventDefault();
+      const ask = window.folioDesktop?.contextMenu;
+      if (ask) void ask([t("Exit full screen")]).then((choice) => { if (choice === 0 && focusRef.current) void toggleFocusRef.current(); });
+      else void toggleFocusRef.current();
+    };
+    window.addEventListener("contextmenu", onMenu);
+    return () => window.removeEventListener("contextmenu", onMenu);
   }, []);
 
   useEffect(() => localStorage.setItem("folio:sidebar", sidebar ? "1" : "0"), [sidebar]);
@@ -1150,8 +1182,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
         rotate();
       } else {
         const match = TOOLS.find((item) => item.key.toLowerCase() === e.key.toLowerCase());
-        if (match && !dialog && !pending && !imageView) {
-          if (focus && match.id !== "select") void toggleFocus();
+        if (match && !dialog && !pending) {
+          if (focus && match.id !== "select" && match.id !== "hand") void toggleFocus();
           chooseTool(match.id);
         }
         else if (e.key === "Home") goTo(1);
@@ -1280,7 +1312,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                   aria-label={t(item.label)}
                   aria-pressed={!contentEditing && tool === item.id}
                   onClick={() => chooseTool(item.id)}
-                  title={`${item.id === "highlight" ? t("Automatically highlight selected text") : t(item.label)} (${item.key})`}
+                  title={item.id === "hand" ? t("Hand: drag to move the page (hold Space)")
+                    : `${item.id === "highlight" ? t("Automatically highlight selected text") : t(item.label)} (${item.key})`}
                 >
                   <Icon name={item.icon} size={16} />
                   <span>{t(item.label)}</span>
@@ -1319,7 +1352,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     { kind: "action", icon: "info", label: t("Document info"), onSelect: () => setDialog("info") },
                     { kind: "divider" },
                     { kind: "toggle", icon: "moon", label: t("PDF dark mode"), checked: night, onSelect: () => setNightTo(!night) },
-                    { kind: "action", icon: "expand", label: t("Focus mode"), shortcut: "F", onSelect: toggleFocus },
+                    { kind: "action", icon: "expand", label: t("Full screen"), shortcut: "F", onSelect: toggleFocus },
                   ] as MoreItem[])
                 : []),
               { kind: "action", icon: "settings", label: t("Settings"), shortcut: keys("Ctrl ,"), onSelect: () => setDialog("settings") },
@@ -1422,8 +1455,18 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             </div>
           )}
 
-          {doc && (
-            <div className="pill" role="toolbar" aria-label={t("Navigation")}>
+          {doc && pillHidden && (
+            <button className="pill-restore" onClick={() => hidePill(false)} title={t("Show the controls")} aria-label={t("Show the controls")}>
+              <Icon name="chevronUp" size={16} />
+            </button>
+          )}
+          {doc && !pillHidden && (
+            <div ref={pillRef} className={pillAt ? "pill moved" : "pill"} role="toolbar" aria-label={t("Navigation")}
+              style={pillAt ? { left: `${pillAt.x * 100}%`, top: `${pillAt.y * 100}%` } : undefined}>
+              <span className="pill-grip" onPointerDown={dragPill} onDoubleClick={() => placePill(null)}
+                title={t("Move the controls (double-click to put them back)")} aria-hidden="true">
+                <Icon name="grip" size={14} />
+              </span>
               <button className="pill-btn" onClick={() => goTo(page - 1)} disabled={page <= 1} title={t("Previous page")}>
                 <Icon name="chevronUp" size={17} />
               </button>
@@ -1458,9 +1501,17 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
               <button className="pill-btn" onClick={() => zoom(1)} title={keys(t("Zoom in (Ctrl +)"))}>
                 <Icon name="plus" size={17} />
               </button>
+              <button className="pill-btn" onClick={toggleFocus} aria-pressed={focus}
+                title={focus ? t("Exit full screen (Esc)") : t("Full screen (F)")}>
+                <Icon name={focus ? "shrink" : "expand"} size={16} />
+              </button>
               <span className="divider wide-only" />
               <button className="pill-btn wide-only" onClick={rotate} title={t("Rotate (R)")}>
                 <Icon name="rotate" size={17} />
+              </button>
+              <span className="divider" />
+              <button className="pill-btn" onClick={() => hidePill(true)} title={t("Hide the controls")} aria-label={t("Hide the controls")}>
+                <Icon name="chevronDown" size={17} />
               </button>
             </div>
           )}
@@ -1476,16 +1527,6 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
               onAsk={() => { setPinned(null); askAbout(selection.text, selection.page); }}
               onPin={() => setPinned(selection)}
               onDismiss={dismissSelection}
-            />
-          )}
-          {imageMenu && (
-            <ImageMenu
-              x={imageMenu.x}
-              y={imageMenu.y}
-              stageWidth={stageWidth}
-              href={imageMenu.target.href}
-              onView={() => { setImageView(imageMenu.target); setImageMenu(null); }}
-              onOpen={() => { window.open(imageMenu.target.href!, "_blank", "noopener"); setImageMenu(null); }}
             />
           )}
           {highlightMenu && menuMark && !noteBox && (
@@ -1518,8 +1559,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           )}
 
           {focus && (
-            <button className="exit-focus" onClick={toggleFocus} title={t("Exit focus mode")}>
-              <kbd>Esc</kbd> {t("to exit focus mode")}
+            <button className="exit-focus" onClick={toggleFocus} title={t("Exit full screen")}>
+              <kbd>Esc</kbd> {t("to exit full screen")}
             </button>
           )}
         </main>
@@ -1580,7 +1621,6 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       {/* Closing goes back to Settings, where the changelog is opened from. */}
       {dialog === "changelog" && <ChangelogDialog onClose={() => setDialog("settings")} />}
       {dialog === "upgrade" && <ChangelogDialog upgradeNotes={upgradeNotes} onClose={() => setDialog(null)} />}
-      {doc && imageView && <ImageViewer pdf={doc.pdf} target={imageView} onClose={() => setImageView(null)} />}
       {dialog === "url" && <OpenUrlDialog key={linkDraft} initial={linkDraft} onClose={() => setDialog(null)} onSubmit={(url) => { setDialog(null); tabs.open([{ kind: "url", name: new URL(url).hostname, url }]); }} />}
       {doc && signing && <SignatureDialog key={doc.id + ":" + page} pdf={doc.pdf} pageNumber={page} targets={signatureTargets}
         onClose={() => setSigning(false)} onApprove={async (signature, rect) => {

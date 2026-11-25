@@ -1,5 +1,7 @@
 // Italian UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Move the page by dragging (hand)": "Sposta la pagina trascinando (mano)",
+  "Space@@key": "Spazio",
   "Language": "Lingua",
   "Manage language, appearance, updates, and Ask AI accounts.": "Gestisci lingua, aspetto, aggiornamenti e account di Chiedi all'IA.",
   "The new language is used after Folio restarts.": "La nuova lingua verrà usata dopo il riavvio di Folio.",

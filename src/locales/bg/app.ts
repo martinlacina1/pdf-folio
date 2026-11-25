@@ -1,5 +1,15 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Преместване на лентата (двойно щракване я връща на мястото ѝ)",
+  "Hide the controls": "Скриване на лентата",
+  "Show the controls": "Показване на лентата",
+  "Full screen": "Цял екран",
+  "Full screen (F)": "Цял екран (F)",
+  "Exit full screen": "Изход от цял екран",
+  "Exit full screen (Esc)": "Изход от цял екран (Esc)",
+  "to exit full screen": "за изход от цял екран",
+  "Hand": "Ръка",
+  "Hand: drag to move the page (hold Space)": "Ръка: плъзнете, за да преместите страницата (или задръжте интервал)",
   "Save as…": "Запиши като…",
   // Tools
   "Select": "Избор",

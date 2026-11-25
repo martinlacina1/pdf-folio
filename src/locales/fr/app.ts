@@ -1,5 +1,15 @@
 // French UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → French. See src/i18n.ts.
 const fr: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Déplacer la barre (double-clic pour la remettre en place)",
+  "Hide the controls": "Masquer la barre",
+  "Show the controls": "Afficher la barre",
+  "Full screen": "Plein écran",
+  "Full screen (F)": "Plein écran (F)",
+  "Exit full screen": "Quitter le plein écran",
+  "Exit full screen (Esc)": "Quitter le plein écran (Échap)",
+  "to exit full screen": "pour quitter le plein écran",
+  "Hand": "Main",
+  "Hand: drag to move the page (hold Space)": "Main : faites glisser pour déplacer la page (ou maintenez Espace)",
   "Save as…": "Enregistrer sous…",
   // Tools
   "Select": "Sélectionner",

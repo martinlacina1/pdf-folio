@@ -1,5 +1,7 @@
 // Slovak UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Move the page by dragging (hand)": "Posun stránky ťahaním (ručička)",
+  "Space@@key": "Medzerník",
   "Language": "Jazyk",
   "Manage language, appearance, updates, and Ask AI accounts.": "Spravujte jazyk, vzhľad, aktualizácie a účty pre Opýtať sa AI.",
   "The new language is used after Folio restarts.": "Nový jazyk sa použije po reštarte aplikácie Folio.",

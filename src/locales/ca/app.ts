@@ -1,5 +1,15 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Mou la barra (doble clic per tornar-la al seu lloc)",
+  "Hide the controls": "Amaga la barra",
+  "Show the controls": "Mostra la barra",
+  "Full screen": "Pantalla completa",
+  "Full screen (F)": "Pantalla completa (F)",
+  "Exit full screen": "Surt de la pantalla completa",
+  "Exit full screen (Esc)": "Surt de la pantalla completa (Esc)",
+  "to exit full screen": "per sortir de la pantalla completa",
+  "Hand": "Mà",
+  "Hand: drag to move the page (hold Space)": "Mà: arrossegueu per moure la pàgina (o manteniu premuda la barra d'espai)",
   "Save as…": "Desa com a…",
   // Tools
   "Select": "Seleccionar",

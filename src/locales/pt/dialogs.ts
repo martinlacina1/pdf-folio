@@ -1,5 +1,7 @@
 // Brazilian Portuguese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Move the page by dragging (hand)": "Mover a página arrastando (mão)",
+  "Space@@key": "Espaço",
   "Language": "Idioma",
   "Manage language, appearance, updates, and Ask AI accounts.": "Gerencie idioma, aparência, atualizações e contas de Perguntar à IA.",
   "The new language is used after Folio restarts.": "O novo idioma será usado depois que o Folio for reiniciado.",

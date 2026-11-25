@@ -1,5 +1,7 @@
 // Spanish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Move the page by dragging (hand)": "Mover la página arrastrando (mano)",
+  "Space@@key": "Espacio",
   "Language": "Idioma",
   "Manage language, appearance, updates, and Ask AI accounts.": "Gestiona el idioma, la apariencia, las actualizaciones y las cuentas de Preguntar a la IA.",
   "The new language is used after Folio restarts.": "El nuevo idioma se usará después de reiniciar Folio.",

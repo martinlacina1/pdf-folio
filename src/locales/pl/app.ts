@@ -1,5 +1,15 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Przesuń pasek (dwukrotne kliknięcie przywraca go na miejsce)",
+  "Hide the controls": "Ukryj pasek",
+  "Show the controls": "Pokaż pasek",
+  "Full screen": "Pełny ekran",
+  "Full screen (F)": "Pełny ekran (F)",
+  "Exit full screen": "Zamknij pełny ekran",
+  "Exit full screen (Esc)": "Zamknij pełny ekran (Esc)",
+  "to exit full screen": "aby wyjść z pełnego ekranu",
+  "Hand": "Rączka",
+  "Hand: drag to move the page (hold Space)": "Rączka: przeciągnij, aby przesunąć stronę (lub przytrzymaj spację)",
   "Save as…": "Zapisz jako…",
   // Tools
   "Select": "Zaznacz",

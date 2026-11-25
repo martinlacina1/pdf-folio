@@ -1,5 +1,7 @@
 // Polish UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Move the page by dragging (hand)": "Przesuwanie strony przeciąganiem (rączka)",
+  "Space@@key": "Spacja",
   "Language": "Język",
   "Manage language, appearance, updates, and Ask AI accounts.": "Zarządzaj językiem, wyglądem, aktualizacjami i kontami funkcji Zapytaj AI.",
   "The new language is used after Folio restarts.": "Nowy język zostanie użyty po ponownym uruchomieniu aplikacji Folio.",

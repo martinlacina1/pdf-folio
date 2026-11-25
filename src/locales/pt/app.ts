@@ -1,5 +1,15 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Mover a barra (clique duas vezes para recolocá-la)",
+  "Hide the controls": "Ocultar a barra",
+  "Show the controls": "Mostrar a barra",
+  "Full screen": "Tela cheia",
+  "Full screen (F)": "Tela cheia (F)",
+  "Exit full screen": "Sair da tela cheia",
+  "Exit full screen (Esc)": "Sair da tela cheia (Esc)",
+  "to exit full screen": "para sair da tela cheia",
+  "Hand": "Mão",
+  "Hand: drag to move the page (hold Space)": "Mão: arraste para mover a página (ou segure a barra de espaço)",
   "Save as…": "Salvar como…",
   // Tools
   "Select": "Selecionar",

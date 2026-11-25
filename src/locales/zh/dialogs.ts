@@ -1,5 +1,7 @@
 // Simplified Chinese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Move the page by dragging (hand)": "拖动移动页面（抓手）",
+  "Space@@key": "空格键",
   "Language": "语言",
   "Manage language, appearance, updates, and Ask AI accounts.": "管理语言、外观、更新和“询问 AI”账户。",
   "The new language is used after Folio restarts.": "重新启动 Folio 后将使用新语言。",

@@ -1,5 +1,7 @@
 // Japanese UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Move the page by dragging (hand)": "ドラッグでページを移動（手のひら）",
+  "Space@@key": "スペース",
   "Language": "言語",
   "Manage language, appearance, updates, and Ask AI accounts.": "言語、外観、更新、「AI に質問」のアカウントを管理します。",
   "The new language is used after Folio restarts.": "新しい言語は Folio の再起動後に使用されます。",

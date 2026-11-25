@@ -1,5 +1,15 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Lëviz shiritin (klikim i dyfishtë e kthen në vend)",
+  "Hide the controls": "Fshih shiritin",
+  "Show the controls": "Shfaq shiritin",
+  "Full screen": "Ekran i plotë",
+  "Full screen (F)": "Ekran i plotë (F)",
+  "Exit full screen": "Dil nga ekrani i plotë",
+  "Exit full screen (Esc)": "Dil nga ekrani i plotë (Esc)",
+  "to exit full screen": "për të dalë nga ekrani i plotë",
+  "Hand": "Dora",
+  "Hand: drag to move the page (hold Space)": "Dora: tërhiqni për të lëvizur faqen (ose mbani shtypur Hapësirën)",
   "Save as…": "Ruaj si…",
   // Tools
   "Select": "Përzgjidh",

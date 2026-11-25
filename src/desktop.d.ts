@@ -32,6 +32,12 @@ interface FolioDesktop {
   setLanguageSetting?(value: string): Promise<string>;
   /** Closes Folio (asking about unsaved changes as usual) and starts it again. */
   relaunch?(): void;
+  /** Shows a native right-click menu with these labels; resolves to the chosen index, or null when dismissed. */
+  contextMenu?(labels: string[]): Promise<number | null>;
+  /** Puts the Folio window into full screen or back. */
+  setFullScreen?(on: boolean): void;
+  /** Called whenever the window enters or leaves full screen. */
+  onFullScreenChange?(callback: (on: boolean) => void): () => void;
   /** Null when the user declines to open an address on their computer or local network. */
   fetchPdf(url: string): Promise<{ name: string; data: Uint8Array } | null>;
   getAppInfo(): Promise<{ version: string; mode: "development" | "portable" | "installed" | "appimage" | "package"; location: string; platform: string;

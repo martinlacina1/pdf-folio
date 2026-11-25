@@ -1,5 +1,15 @@
 // Slovak UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Presunúť lištu (dvojklikom ju vrátite na miesto)",
+  "Hide the controls": "Skryť lištu",
+  "Show the controls": "Zobraziť lištu",
+  "Full screen": "Na celú obrazovku",
+  "Full screen (F)": "Na celú obrazovku (F)",
+  "Exit full screen": "Ukončiť celú obrazovku",
+  "Exit full screen (Esc)": "Ukončiť celú obrazovku (Esc)",
+  "to exit full screen": "ukončí celú obrazovku",
+  "Hand": "Ručička",
+  "Hand: drag to move the page (hold Space)": "Ručička: ťahaním posuniete stránku (alebo podržte medzerník)",
   "Save as…": "Uložiť ako…",
   // Tools
   "Select": "Vybrať",

@@ -1,5 +1,7 @@
 // Norwegian Bokmål UI text for Ask AI, Settings, dialogs, the start screen, menus and search: English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Move the page by dragging (hand)": "Flytt siden ved å dra (hånd)",
+  "Space@@key": "Mellomrom",
   "Language": "Språk",
   "Manage language, appearance, updates, and Ask AI accounts.": "Administrer språk, utseende, oppdateringer og kontoer for Spør AI.",
   "The new language is used after Folio restarts.": "Det nye språket brukes når Folio er startet på nytt.",

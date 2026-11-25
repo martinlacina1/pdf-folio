@@ -1,5 +1,15 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Move the controls (double-click to put them back)": "Sáv áthelyezése (dupla kattintással visszakerül a helyére)",
+  "Hide the controls": "Sáv elrejtése",
+  "Show the controls": "Sáv megjelenítése",
+  "Full screen": "Teljes képernyő",
+  "Full screen (F)": "Teljes képernyő (F)",
+  "Exit full screen": "Kilépés a teljes képernyőből",
+  "Exit full screen (Esc)": "Kilépés a teljes képernyőből (Esc)",
+  "to exit full screen": "– kilépés a teljes képernyőből",
+  "Hand": "Kéz",
+  "Hand: drag to move the page (hold Space)": "Kéz: húzással mozgathatja az oldalt (vagy tartsa lenyomva a szóközt)",
   "Save as…": "Mentés másként…",
   // Tools
   "Select": "Kijelölés",
