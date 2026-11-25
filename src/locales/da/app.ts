@@ -1,5 +1,9 @@
 // Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Fill": "Udfyldning",
+  "No fill": "Ingen udfyldning",
+  "Solid fill": "Fuld udfyldning",
+  "See-through fill": "Gennemsigtig udfyldning",
   "Remove drawing": "Fjern tegning",
   "Remove text": "Fjern tekst",
   "Remove image": "Fjern billede",

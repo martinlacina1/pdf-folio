@@ -1,5 +1,9 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Fill": "Preenchimento",
+  "No fill": "Sem preenchimento",
+  "Solid fill": "Preenchimento sólido",
+  "See-through fill": "Preenchimento translúcido",
   "Remove drawing": "Remover desenho",
   "Remove text": "Remover texto",
   "Remove image": "Remover imagem",

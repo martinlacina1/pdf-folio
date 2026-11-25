@@ -1,5 +1,9 @@
 // Croatian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Fill": "Ispuna",
+  "No fill": "Bez ispune",
+  "Solid fill": "Puna ispuna",
+  "See-through fill": "Prozirna ispuna",
   "Remove drawing": "Ukloni crtež",
   "Remove text": "Ukloni tekst",
   "Remove image": "Ukloni sliku",

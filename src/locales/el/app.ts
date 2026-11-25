@@ -1,5 +1,9 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Fill": "Γέμισμα",
+  "No fill": "Χωρίς γέμισμα",
+  "Solid fill": "Συμπαγές γέμισμα",
+  "See-through fill": "Ημιδιαφανές γέμισμα",
   "Remove drawing": "Αφαίρεση σχεδίου",
   "Remove text": "Αφαίρεση κειμένου",
   "Remove image": "Αφαίρεση εικόνας",

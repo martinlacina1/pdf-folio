@@ -1,5 +1,9 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Fill": "Emplenament",
+  "No fill": "Sense emplenament",
+  "Solid fill": "Emplenament sòlid",
+  "See-through fill": "Emplenament translúcid",
   "Remove drawing": "Elimina el dibuix",
   "Remove text": "Elimina el text",
   "Remove image": "Elimina la imatge",

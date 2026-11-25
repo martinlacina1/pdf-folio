@@ -1,5 +1,9 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Fill": "Kitöltés",
+  "No fill": "Nincs kitöltés",
+  "Solid fill": "Teli kitöltés",
+  "See-through fill": "Áttetsző kitöltés",
   "Remove drawing": "Rajz eltávolítása",
   "Remove text": "Szöveg eltávolítása",
   "Remove image": "Kép eltávolítása",

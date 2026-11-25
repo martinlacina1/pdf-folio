@@ -1,5 +1,9 @@
 // Simplified Chinese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Fill": "填充",
+  "No fill": "无填充",
+  "Solid fill": "实心填充",
+  "See-through fill": "半透明填充",
   "Remove drawing": "删除绘图",
   "Remove text": "删除文本",
   "Remove image": "删除图片",

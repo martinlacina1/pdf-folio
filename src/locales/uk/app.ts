@@ -1,5 +1,9 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Fill": "Заливка",
+  "No fill": "Без заливки",
+  "Solid fill": "Суцільна заливка",
+  "See-through fill": "Напівпрозора заливка",
   "Remove drawing": "Видалити малюнок",
   "Remove text": "Видалити текст",
   "Remove image": "Видалити зображення",

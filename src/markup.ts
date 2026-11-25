@@ -6,6 +6,7 @@ import type { EventBus, PDFViewer } from "./viewer";
 import type { PDFDocumentProxy } from "./pdf";
 import { getNotes, saveNotes, type DocNotes, type StoredMark } from "./recent";
 import { t } from "./i18n";
+import { fills, shapeData, shapeEnds, strokes, type ShapeStyle } from "./shapes";
 
 export type Mark = StoredMark;
 
@@ -34,6 +35,8 @@ interface Editor {
   __folioMark?: string;
   __folioText?: string;
   __folioShape?: Mark["shape"];
+  __folioStyle?: ShapeStyle;
+  parent?: unknown;
 }
 interface EditorLayer {
   div: HTMLElement;
@@ -49,6 +52,10 @@ interface UIManager {
   highlightSelection(methodOfCreation?: string): void;
   endCurrentEditing?(): void;
   hasSelection?: boolean;
+  firstSelectedEditor?: Editor | null;
+  setSelected?(editor: Editor): void;
+  rebuild?(editor: Editor): void;
+  addCommands?(params: { cmd: () => void; undo: () => void; mustExec: boolean }): void;
 }
 
 const toHex = (color: unknown) =>
@@ -118,6 +125,10 @@ export class MarkupController {
 
   get state(): MarkupState {
     return { marks: this.#sorted(), note: this.#note, bookmarkedPages: this.#bookmarkedPages };
+  }
+
+  get hasSelection() {
+    return !!this.#ui?.hasSelection;
   }
 
   clearEditorSelection() {
@@ -191,6 +202,7 @@ export class MarkupController {
         editor.__folioMark = mark.id;
         if (mark.type === "highlight") editor.__folioText = mark.text;
         editor.__folioShape = mark.shape;
+        editor.__folioStyle = mark.shapeStyle;
         if (textBox) editor.isClone = true;
         layer.add(editor);
         // An empty editor would be thrown away by pdf.js (and its mark with it) at the next tool change.
@@ -262,15 +274,86 @@ export class MarkupController {
     this.#ui?.unselectAll();
   }
 
-  async addShape(page: number, shape: NonNullable<Mark["shape"]>, data: Record<string, unknown>) {
-    const layer = this.#ui?.getLayer(page);
-    if (!layer) throw new Error(t("The page is not ready."));
+  async addShape(page: number, shape: NonNullable<Mark["shape"]>, data: Record<string, unknown>, style: ShapeStyle) {
+    const ui = this.#ui;
+    const layer = ui?.getLayer(page);
+    if (!ui || !layer) throw new Error(t("The page is not ready."));
     const editor = await layer.deserialize(data);
-    if (this.#ui?.getLayer(page) !== layer) return;
+    if (this.#ui !== ui || ui.getLayer(page) !== layer) return;
     if (!editor) throw new Error(t("The drawing could not be created."));
     editor.__folioShape = shape;
+    editor.__folioStyle = style;
+    // pdf.js makes adding it undoable, as it does a pen stroke.
     layer.add(editor);
     this.sync();
+  }
+
+  /** The shape the reader selected (a drawing Folio made as a shape, or "Pen" for other ink), with its style. */
+  selectedShape(): { shape: NonNullable<Mark["shape"]> | "Pen"; style?: ShapeStyle } | null {
+    const editor = this.#selectedInk();
+    return editor ? { shape: editor.__folioShape ?? "Pen", style: editor.__folioStyle } : null;
+  }
+
+  #selectedInk() {
+    const editor = this.#ui?.hasSelection ? this.#ui.firstSelectedEditor : null;
+    return editor && editor.constructor._type === "ink" ? editor : null;
+  }
+
+  /**
+   * Redraws the selected shape with a new arrow head, fill or line width, in place and as one undoable step.
+   * Returns false when the selection isn't a shape this can redraw (pdf.js then restyles it as usual).
+   */
+  restyleSelected(change: { style?: Partial<ShapeStyle>; width?: number }): Promise<boolean> {
+    // One redraw at a time: each starts from the shape the previous one left selected.
+    const run = this.#restyling.then(() => this.#restyle(change));
+    this.#restyling = run.catch(() => false);
+    return run;
+  }
+
+  #restyling: Promise<unknown> = Promise.resolve();
+
+  async #restyle(change: { style?: Partial<ShapeStyle>; width?: number }): Promise<boolean> {
+    const ui = this.#ui;
+    const old = this.#selectedInk();
+    const shape = old?.__folioShape;
+    if (!ui || !old || !shape) return false;
+    // Only arrows and filled shapes depend on more than pdf.js can change by itself.
+    const style: ShapeStyle = { arrow: "open", arrowSize: 1, fill: "none", ...old.__folioStyle, ...change.style };
+    if (change.width !== undefined && !(shape === "Arrow" || (fills(shape) && style.fill !== "none"))) return false;
+    if (change.style && !(shape === "Arrow" && (change.style.arrow || change.style.arrowSize))
+      && !(fills(shape) && change.style.fill)) return false;
+    const data = old.serialize(true) as { color?: number[]; thickness?: number; paths?: { points?: ArrayLike<number>[] } } | null;
+    const ends = data?.paths?.points && shapeEnds(shape, data.paths.points);
+    const layer = ui.getLayer(old.pageIndex);
+    if (!data || !ends || !layer) return false;
+    const width = change.width ?? data.thickness ?? 1;
+    const next = await layer.deserialize(shapeData(shape, old.pageIndex, strokes(shape, ends[0], ends[1], 1, width, style),
+      Array.from(data.color ?? [0, 0, 0]), width, style));
+    if (!next || this.#ui !== ui || this.#selectedInk() !== old) return true;
+    next.__folioShape = shape;
+    next.__folioStyle = style;
+    // The same saved mark (and its note), just redrawn.
+    next.__folioMark = old.__folioMark;
+    const swap = (from: Editor, to: Editor) => {
+      // Adding a drawing makes pdf.js record an undo step of its own; this swap is already one.
+      const record = ui.addCommands;
+      ui.addCommands = () => {};
+      try {
+        from.remove();
+        ui.rebuild?.(to);
+      } finally { delete (ui as Partial<UIManager>).addCommands; if (ui.addCommands !== record) ui.addCommands = record; }
+      // Keep the redrawn shape selected while drawing, so the next change applies to it too.
+      if (ui.getMode() === AnnotationEditorType.INK) ui.setSelected?.(to);
+    };
+    swap(old, next);
+    ui.addCommands?.({ cmd: () => swap(old, next), undo: () => swap(next, old), mustExec: false });
+    // The next pen stroke takes the new width too.
+    if (change.width !== undefined) {
+      (old.constructor as { _defaultDrawingOptions?: { updateProperties(p: Record<string, unknown>): void } })
+        ._defaultDrawingOptions?.updateProperties({ "stroke-width": change.width });
+    }
+    this.sync();
+    return true;
   }
 
   scheduleSync() {
@@ -309,6 +392,7 @@ export class MarkupController {
         id: editor.__folioMark,
         type,
         ...(editor.__folioShape && { shape: editor.__folioShape }),
+        ...(editor.__folioStyle && { shapeStyle: editor.__folioStyle }),
         page: editor.pageIndex,
         text,
         note: comment && !comment.deleted ? comment.text ?? "" : previous?.note ?? "",

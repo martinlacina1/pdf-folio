@@ -1,5 +1,9 @@
 // French UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → French. See src/i18n.ts.
 const fr: Record<string, string> = {
+  "Fill": "Remplissage",
+  "No fill": "Sans remplissage",
+  "Solid fill": "Remplissage plein",
+  "See-through fill": "Remplissage transparent",
   "Remove drawing": "Supprimer le dessin",
   "Remove text": "Supprimer le texte",
   "Remove image": "Supprimer l’image",

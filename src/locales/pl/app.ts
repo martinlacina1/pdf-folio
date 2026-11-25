@@ -1,5 +1,9 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Fill": "Wypełnienie",
+  "No fill": "Bez wypełnienia",
+  "Solid fill": "Pełne wypełnienie",
+  "See-through fill": "Półprzezroczyste wypełnienie",
   "Remove drawing": "Usuń rysunek",
   "Remove text": "Usuń tekst",
   "Remove image": "Usuń obraz",

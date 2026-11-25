@@ -1,5 +1,9 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Fill": "Täyttö",
+  "No fill": "Ei täyttöä",
+  "Solid fill": "Täysi täyttö",
+  "See-through fill": "Läpikuultava täyttö",
   "Remove drawing": "Poista piirros",
   "Remove text": "Poista teksti",
   "Remove image": "Poista kuva",

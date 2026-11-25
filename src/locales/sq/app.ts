@@ -1,5 +1,9 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Fill": "Mbushje",
+  "No fill": "Pa mbushje",
+  "Solid fill": "Mbushje e plotë",
+  "See-through fill": "Mbushje e tejdukshme",
   "Remove drawing": "Hiq vizatimin",
   "Remove text": "Hiq tekstin",
   "Remove image": "Hiq figurën",

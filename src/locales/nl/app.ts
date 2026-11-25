@@ -1,5 +1,9 @@
 // Dutch UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Fill": "Vulling",
+  "No fill": "Geen vulling",
+  "Solid fill": "Volle vulling",
+  "See-through fill": "Doorschijnende vulling",
   "Remove drawing": "Tekening verwijderen",
   "Remove text": "Tekst verwijderen",
   "Remove image": "Afbeelding verwijderen",

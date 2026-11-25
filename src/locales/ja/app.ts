@@ -1,5 +1,9 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Fill": "塗りつぶし",
+  "No fill": "塗りつぶしなし",
+  "Solid fill": "塗りつぶし（不透明）",
+  "See-through fill": "塗りつぶし（半透明）",
   "Remove drawing": "描画を削除",
   "Remove text": "テキストを削除",
   "Remove image": "画像を削除",

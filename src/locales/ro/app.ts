@@ -1,5 +1,9 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Fill": "Umplere",
+  "No fill": "Fără umplere",
+  "Solid fill": "Umplere plină",
+  "See-through fill": "Umplere translucidă",
   "Remove drawing": "Eliminați desenul",
   "Remove text": "Eliminați textul",
   "Remove image": "Eliminați imaginea",

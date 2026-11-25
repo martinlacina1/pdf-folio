@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import {
   EventBus,
   LinkTarget,
@@ -44,7 +44,7 @@ import type { Release } from "./releaseNotes";
 import { detectSignatureTargets, placeSignature, type SignatureTarget } from "./signatures";
 import { keepDrawingPointer } from "./drawing";
 import { enableHandTool } from "./handTool";
-import { ARROW_STYLES, INK_WIDTHS, drawShapes, type ArrowStyle, type Shape } from "./shapes";
+import { ARROW_STYLES, DEFAULT_INK_WIDTH, FILLS, INK_WIDTHS, drawShapes, fills, type ArrowStyle, type Fill, type Shape, type ShapeStyle } from "./shapes";
 import { translatePdfjsLabels } from "./pdfjsLabels";
 import { enableWheelPaging } from "./wheelPaging";
 
@@ -244,8 +244,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const [drawTool, setDrawTool] = useState<"Pen" | Shape>("Pen");
   // Line width (PDF points) for the pen and shapes, and how arrows end; both remembered.
   const [inkWidth, setInkWidth] = useState(() => {
-    const saved = Number(localStorage.getItem("folio:ink-width"));
-    return INK_WIDTHS.includes(saved) ? saved : INK_WIDTHS[0];
+    const saved = Number(localStorage.getItem("folio:line-width"));
+    return INK_WIDTHS.includes(saved) ? saved : DEFAULT_INK_WIDTH;
   });
   const inkWidthRef = useRef(inkWidth);
   inkWidthRef.current = inkWidth;
@@ -253,11 +253,19 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     const saved = localStorage.getItem("folio:arrow-style") as ArrowStyle | null;
     return saved && ARROW_STYLES.includes(saved) ? saved : "open";
   });
+  /** Redraws the selected arrow or filled shape with the change; anything else gets `otherwise`. */
+  const restyleOr = (change: { style?: Partial<ShapeStyle>; width?: number }, otherwise = () => {}) => {
+    const markup = markupRef.current;
+    if (!markup) return otherwise();
+    void markup.restyleSelected(change).then((done) => { if (!done) otherwise(); });
+  };
   const chooseInkWidth = (width: number) => {
-    markupRef.current?.endDrawing();
     setInkWidth(width);
-    try { localStorage.setItem("folio:ink-width", String(width)); } catch {}
-    busRef.current?.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.INK_THICKNESS, value: width });
+    try { localStorage.setItem("folio:line-width", String(width)); } catch {}
+    restyleOr({ width }, () => {
+      markupRef.current?.endDrawing();
+      busRef.current?.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.INK_THICKNESS, value: width });
+    });
   };
   // Font size (points) for new text boxes; also resizes the selected one, as pdf.js does. Remembered.
   const [textSize, setTextSize] = useState(() => {
@@ -276,14 +284,32 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     const saved = Number(localStorage.getItem("folio:arrow-size"));
     return saved >= 0.5 && saved <= 3 ? saved : 1;
   });
+  // The slider redraws a selected arrow once it rests, not at every step of the drag.
+  const arrowSizeTimer = useRef(0);
   const chooseArrowSize = (size: number) => {
     setArrowSize(size);
     try { localStorage.setItem("folio:arrow-size", String(size)); } catch {}
+    window.clearTimeout(arrowSizeTimer.current);
+    arrowSizeTimer.current = window.setTimeout(() => restyleOr({ style: { arrowSize: size } }), 200);
   };
   const chooseArrowStyle = (style: ArrowStyle) => {
     setArrowStyle(style);
     try { localStorage.setItem("folio:arrow-style", style); } catch {}
+    restyleOr({ style: { arrow: style } });
   };
+  // Inside rectangles and ovals.
+  const [fill, setFill] = useState<Fill>(() => {
+    const saved = localStorage.getItem("folio:shape-fill") as Fill | null;
+    return saved && FILLS.includes(saved) ? saved : "none";
+  });
+  const chooseFill = (value: Fill) => {
+    setFill(value);
+    try { localStorage.setItem("folio:shape-fill", value); } catch {}
+    restyleOr({ style: { fill: value } });
+  };
+  const shapeStyle = useMemo<ShapeStyle>(() => ({ arrow: arrowStyle, arrowSize, fill }), [arrowStyle, arrowSize, fill]);
+  // Whether pdf.js has a change to take back; shows Undo in the top bar.
+  const [canUndo, setCanUndo] = useState(false);
   const [colors, setColors] = useState<Partial<Record<Tool, string>>>({
     highlight: HIGHLIGHTS[0].hex,
     ink: INKS[0].hex,
@@ -415,12 +441,27 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     eventBus.on("scalechanging", ({ scale }: { scale: number }) => setScale(scale));
     // pdf.js reports a selected drawing's or text box's style: show it in the bar, which then restyles it.
     eventBus.on("annotationeditorparamschanged", ({ details }: { details: [number, unknown][] }) => {
+      // pdf.js also reports its own defaults when a mode starts; the bar keeps Folio's.
+      if (!markupRef.current?.hasSelection) return;
       for (const [type, value] of details) {
         if (type === AnnotationEditorParamsType.INK_THICKNESS && typeof value === "number") setInkWidth(value);
         else if (type === AnnotationEditorParamsType.FREETEXT_SIZE && typeof value === "number") setTextSize(value);
         else if (type === AnnotationEditorParamsType.INK_COLOR && typeof value === "string") setColors((c) => ({ ...c, ink: value.toUpperCase() }));
         else if (type === AnnotationEditorParamsType.FREETEXT_COLOR && typeof value === "string") setColors((c) => ({ ...c, freetext: value.toUpperCase() }));
       }
+      // A selected drawing shows its kind, arrow head and fill in the bar, ready to be changed.
+      const picked = markupRef.current?.selectedShape();
+      if (picked) {
+        setDrawTool(picked.shape);
+        if (picked.style) {
+          setArrowStyle(picked.style.arrow);
+          setArrowSize(picked.style.arrowSize);
+          setFill(picked.style.fill);
+        }
+      }
+    });
+    eventBus.on("editingstateschanged", ({ details }: { details: { hasSomethingToUndo?: boolean } }) => {
+      if (details.hasSomethingToUndo !== undefined) setCanUndo(details.hasSomethingToUndo);
     });
     eventBus.on("rotationchanging", ({ pagesRotation }: { pagesRotation: number }) => setRotation(pagesRotation));
     eventBus.on("updatefindmatchescount", ({ matchesCount }: { matchesCount: { current: number; total: number } }) =>
@@ -438,7 +479,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       // The hand and Select share pdf.js's "no editor" mode.
       const next = mode === AnnotationEditorType.NONE && toolRef.current === "hand" ? "hand" : entry ? (entry[0] as Tool) : "select";
       setTool(next);
-      // Apply the remembered colour once the editor layer for this mode is live.
+      // Apply the remembered colour once the editor layer for this mode is live. Not when an object was picked:
+      // pdf.js would restyle it with the bar's settings.
+      if (pickedRef.current || markupRef.current?.hasSelection) return;
       const param = COLOR_PARAM[next];
       const value = colorsRef.current[next];
       if (param && value) eventBus.dispatch("switchannotationeditorparams", { source: null, type: param, value });
@@ -521,6 +564,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           reading.bookmarkedPages = exportedOrder.flatMap((n, i) => bookmarks.has(n) ? [i + 1] : []);
         }
         persistRef.current = !password && !revision;
+        setCanUndo(false);
         void markupRef.current!.load(id, persistRef.current, reading);
         setNoteBox(null);
         setPinned(null);
@@ -720,10 +764,11 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   const pickObject = (object: { mode: number; uid: number }) => {
     const v = viewerRef.current;
     if (!v?.pdfDocument) return;
+    // Set first: the mode change below must not give the picked object the bar's style.
+    pickedRef.current = true;
     try {
       v.annotationEditorMode = { mode: object.mode, editId: object.uid } as unknown as { mode: number };
-      pickedRef.current = true;
-    } catch { /* annotations unsupported in this document */ }
+    } catch { pickedRef.current = false; /* annotations unsupported in this document */ }
   };
   const pickObjectRef = useRef(pickObject);
   pickObjectRef.current = pickObject;
@@ -766,10 +811,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
   useEffect(() => {
     if (!doc || tool !== "ink" || drawTool === "Pen") return;
-    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, inkWidth, arrowStyle, arrowSize, (page, data) => {
-      void markupRef.current!.addShape(page, drawTool, data).catch(() => flash(t("Couldn't add the shape")));
+    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, inkWidth, shapeStyle, (page, data) => {
+      void markupRef.current!.addShape(page, drawTool, data, shapeStyle).catch(() => flash(t("Couldn't add the shape")));
     });
-  }, [doc, tool, drawTool, colors.ink, inkWidth, arrowStyle, arrowSize, scale, rotation, flash]);
+  }, [doc, tool, drawTool, colors.ink, inkWidth, shapeStyle, scale, rotation, flash]);
 
   const chooseColor = (hex: string) => {
     if (tool === "ink") markupRef.current?.endDrawing();
@@ -1447,6 +1492,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           {doc && (
             <>
               {/* Brings back the hidden page and zoom controls, without covering the page. */}
+              {canUndo && !contentEditing && <IconButton icon="undo" label={keys(t("Undo (Ctrl+Z)"))}
+                onClick={() => busRef.current!.dispatch("editingaction", { source: null, name: "undo" })} />}
               {pillHidden && !focus && <IconButton icon="controls" label={t("Show the controls")} onClick={() => hidePill(false)} />}
               <IconButton icon="sparkle" label={t("Ask AI")} active={aiOpen} onClick={() => { setHistoryOpen(false); setAiOpen(!aiOpen); }} />
               <IconButton icon="search" label={keys(t("Search (Ctrl+F)"))} active={searchOpen} onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))} />
@@ -1543,6 +1590,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
           {doc && !contentEditing && PALETTE[tool] && (
             <div className="color-pill" role="toolbar" aria-label={t("Annotation options")}>
+              <div className="pill-rows">
+              {(tool === "ink" || tool === "freetext") && (
+              <div className="pill-row">
               {tool === "ink" && (
                 <select className="draw-tool" aria-label={t("Drawing tool")} title={t("Hold Ctrl for a square, a circle or lines at 45°")} value={drawTool}
                   onChange={e => { markupRef.current?.endDrawing(); setDrawTool(e.target.value as typeof drawTool); }}>
@@ -1564,12 +1614,23 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     onChange={e => chooseArrowSize(Number(e.target.value))} />
                 </label>
               )}
+              {tool === "ink" && drawTool !== "Pen" && fills(drawTool) && (
+                <select className="draw-tool" aria-label={t("Fill")} title={t("Fill")} value={fill}
+                  onChange={e => chooseFill(e.target.value as Fill)}>
+                  <option value="none">{"○ " + t("No fill")}</option>
+                  <option value="solid">{"● " + t("Solid fill")}</option>
+                  <option value="translucent">{"◍ " + t("See-through fill")}</option>
+                </select>
+              )}
               {tool === "freetext" && (
                 <select className="draw-tool" aria-label={t("Text size")} title={t("Text size")} value={textSize}
                   onChange={e => chooseTextSize(Number(e.target.value))}>
                   {TEXT_SIZES.map(size => <option key={size} value={size}>{size} pt</option>)}
                 </select>
               )}
+              </div>
+              )}
+              <div className="pill-row">
               {tool === "ink" && (
                 <div className="ink-widths" role="radiogroup" aria-label={t("Line thickness")}>
                   {INK_WIDTHS.map((width) => (
@@ -1580,6 +1641,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                   ))}
                 </div>
               )}
+              {tool === "ink" && <span className="divider" />}
               <div className="color-options" role="radiogroup" aria-label={t("Color")}>
                 {PALETTE[tool]!.map((c) => (
                   <button
@@ -1604,10 +1666,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                   );
                 })()}
               </div>
-              <span className="divider" />
-              <button className="pill-btn" onClick={() => busRef.current!.dispatch("editingaction", { source: null, name: "undo" })} title={keys(t("Undo (Ctrl+Z)"))}>
-                <Icon name="undo" size={16} />
-              </button>
+              </div>
+              </div>
               <button className="pill-done" onClick={() => chooseTool("select")}>{t("Done")}</button>
             </div>
           )}

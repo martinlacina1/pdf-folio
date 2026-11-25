@@ -1,5 +1,9 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Fill": "Füllung",
+  "No fill": "Keine Füllung",
+  "Solid fill": "Volle Füllung",
+  "See-through fill": "Durchscheinende Füllung",
   "Remove drawing": "Zeichnung entfernen",
   "Remove text": "Text entfernen",
   "Remove image": "Bild entfernen",

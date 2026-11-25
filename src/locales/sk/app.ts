@@ -1,5 +1,9 @@
 // Slovak UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Fill": "Výplň",
+  "No fill": "Bez výplne",
+  "Solid fill": "Plná výplň",
+  "See-through fill": "Priesvitná výplň",
   "Remove drawing": "Odstrániť kresbu",
   "Remove text": "Odstrániť text",
   "Remove image": "Odstrániť obrázok",

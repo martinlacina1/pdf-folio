@@ -1,5 +1,9 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Fill": "Запълване",
+  "No fill": "Без запълване",
+  "Solid fill": "Плътно запълване",
+  "See-through fill": "Полупрозрачно запълване",
   "Remove drawing": "Премахване на рисунката",
   "Remove text": "Премахване на текста",
   "Remove image": "Премахване на изображението",

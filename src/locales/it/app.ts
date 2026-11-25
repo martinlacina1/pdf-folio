@@ -1,5 +1,9 @@
 // Italian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Fill": "Riempimento",
+  "No fill": "Nessun riempimento",
+  "Solid fill": "Riempimento pieno",
+  "See-through fill": "Riempimento trasparente",
   "Remove drawing": "Rimuovi disegno",
   "Remove text": "Rimuovi testo",
   "Remove image": "Rimuovi immagine",

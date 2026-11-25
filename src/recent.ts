@@ -182,6 +182,8 @@ export interface StoredMark {
   id: string;
   type: "highlight" | "ink" | "freetext";
   shape?: import("./shapes").Shape;
+  /** Arrow head and fill of a shape, so it can be redrawn with others. */
+  shapeStyle?: import("./shapes").ShapeStyle;
   page: number; // 0-based
   text: string;
   note: string;

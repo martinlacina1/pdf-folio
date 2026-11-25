@@ -1,5 +1,9 @@
 // Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Fill": "Fyllning",
+  "No fill": "Ingen fyllning",
+  "Solid fill": "Hel fyllning",
+  "See-through fill": "Genomskinlig fyllning",
   "Remove drawing": "Ta bort teckning",
   "Remove text": "Ta bort text",
   "Remove image": "Ta bort bild",

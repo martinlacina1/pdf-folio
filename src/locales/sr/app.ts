@@ -1,5 +1,9 @@
 // Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Fill": "Ispuna",
+  "No fill": "Bez ispune",
+  "Solid fill": "Puna ispuna",
+  "See-through fill": "Providna ispuna",
   "Remove drawing": "Ukloni crtež",
   "Remove text": "Ukloni tekst",
   "Remove image": "Ukloni sliku",

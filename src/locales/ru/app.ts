@@ -1,5 +1,9 @@
 // Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Fill": "Заливка",
+  "No fill": "Без заливки",
+  "Solid fill": "Сплошная заливка",
+  "See-through fill": "Полупрозрачная заливка",
   "Remove drawing": "Удалить рисунок",
   "Remove text": "Удалить текст",
   "Remove image": "Удалить изображение",

@@ -1,5 +1,9 @@
 // Norwegian Bokmål UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Fill": "Fyll",
+  "No fill": "Ingen fyll",
+  "Solid fill": "Heldekkende fyll",
+  "See-through fill": "Gjennomsiktig fyll",
   "Remove drawing": "Fjern tegning",
   "Remove text": "Fjern tekst",
   "Remove image": "Fjern bilde",

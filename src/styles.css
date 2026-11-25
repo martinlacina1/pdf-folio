@@ -836,6 +836,11 @@ kbd {
     transform: translate(-50%, -6px);
   }
 }
+/* The draw bar: what to draw on top, line and color below, Done beside both. */
+.pill-rows { display: flex; flex-direction: column; gap: 6px; }
+.pill-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
+.pill-row + .pill-row { border-top: 1px solid var(--line); padding-top: 6px; }
+.color-pill .pill-done { align-self: center; }
 .draw-tool {
   border: 0;
   border-radius: 6px;

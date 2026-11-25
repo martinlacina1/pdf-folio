@@ -1,5 +1,9 @@
 // Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Fill": "Relleno",
+  "No fill": "Sin relleno",
+  "Solid fill": "Relleno sólido",
+  "See-through fill": "Relleno translúcido",
   "Remove drawing": "Eliminar dibujo",
   "Remove text": "Eliminar texto",
   "Remove image": "Eliminar imagen",

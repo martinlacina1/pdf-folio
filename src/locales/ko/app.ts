@@ -1,5 +1,9 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Fill": "채우기",
+  "No fill": "채우기 없음",
+  "Solid fill": "단색 채우기",
+  "See-through fill": "반투명 채우기",
   "Remove drawing": "그림 삭제",
   "Remove text": "텍스트 삭제",
   "Remove image": "이미지 삭제",

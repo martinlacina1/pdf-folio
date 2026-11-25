@@ -1,5 +1,9 @@
 // Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Fill": "Výplň",
+  "No fill": "Bez výplně",
+  "Solid fill": "Plná výplň",
+  "See-through fill": "Průsvitná výplň",
   "Remove drawing": "Odstranit kresbu",
   "Remove text": "Odstranit text",
   "Remove image": "Odstranit obrázek",
