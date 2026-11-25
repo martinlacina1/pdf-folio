@@ -1,5 +1,16 @@
 // Slovak UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Remove drawing": "Odstrániť kresbu",
+  "Remove text": "Odstrániť text",
+  "Remove image": "Odstrániť obrázok",
+  "Remove signature": "Odstrániť podpis",
+  "Remove highlight": "Odstrániť zvýraznenie",
+  "Change color": "Zmeniť farbu",
+  "Color choices": "Výber farby",
+  "Add comment": "Pridať komentár",
+  "Resize": "Zmeniť veľkosť",
+  "Arrow size": "Veľkosť šípky",
+  "Hold Ctrl for a square, a circle or lines at 45°": "S klávesom Ctrl nakreslíte štvorec, kruh alebo čiaru po 45°",
   "Line thickness": "Hrúbka čiary",
   "Arrow style": "Tvar šípky",
   "Open arrow": "Otvorená šípka",

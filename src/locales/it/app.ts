@@ -1,5 +1,16 @@
 // Italian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Remove drawing": "Rimuovi disegno",
+  "Remove text": "Rimuovi testo",
+  "Remove image": "Rimuovi immagine",
+  "Remove signature": "Rimuovi firma",
+  "Remove highlight": "Rimuovi evidenziazione",
+  "Change color": "Cambia colore",
+  "Color choices": "Scelta colori",
+  "Add comment": "Aggiungi commento",
+  "Resize": "Ridimensiona",
+  "Arrow size": "Dimensione freccia",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Tieni premuto Ctrl per un quadrato, un cerchio o linee a 45°",
   "Line thickness": "Spessore linea",
   "Arrow style": "Stile freccia",
   "Open arrow": "Freccia aperta",

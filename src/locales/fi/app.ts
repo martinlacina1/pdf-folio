@@ -1,5 +1,16 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Remove drawing": "Poista piirros",
+  "Remove text": "Poista teksti",
+  "Remove image": "Poista kuva",
+  "Remove signature": "Poista allekirjoitus",
+  "Remove highlight": "Poista korostus",
+  "Change color": "Vaihda väri",
+  "Color choices": "Värivaihtoehdot",
+  "Add comment": "Lisää kommentti",
+  "Resize": "Muuta kokoa",
+  "Arrow size": "Nuolen koko",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Pidä Ctrl painettuna: neliö, ympyrä tai 45° viivat",
   "Line thickness": "Viivan paksuus",
   "Arrow style": "Nuolen tyyli",
   "Open arrow": "Avoin nuoli",

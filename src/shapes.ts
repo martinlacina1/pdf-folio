@@ -1,10 +1,10 @@
 import { AnnotationEditorType } from "pdfjs-dist";
 import type { PDFViewer } from "./viewer";
 
-export type Shape = "Rectangle" | "Oval" | "Arrow";
-/** How an arrow ends: an open "V", a filled head, a head at both ends, or a plain line. */
-export type ArrowStyle = "open" | "filled" | "double" | "line";
-export const ARROW_STYLES: ArrowStyle[] = ["open", "filled", "double", "line"];
+export type Shape = "Line" | "Rectangle" | "Oval" | "Arrow";
+/** How an arrow ends: an open "V", a filled head, or a head at both ends. */
+export type ArrowStyle = "open" | "filled" | "double";
+export const ARROW_STYLES: ArrowStyle[] = ["open", "filled", "double"];
 /** Line widths offered for drawing, in PDF points. */
 export const INK_WIDTHS = [1, 2, 4, 8];
 type Point = [number, number];
@@ -12,7 +12,7 @@ type Point = [number, number];
 /** The head at `tip` of a line coming from `from`: its two wings, or (filled) a fan of strokes covering it. */
 function head(from: Point, tip: Point, size: number, filled: boolean, width: number): Point[][] {
   const angle = Math.atan2(tip[1] - from[1], tip[0] - from[0]);
-  const length = Math.min(size, Math.hypot(tip[0] - from[0], tip[1] - from[1]) / 3);
+  const length = Math.min(size, Math.hypot(tip[0] - from[0], tip[1] - from[1]) / 2);
   const wing = (offset: number): Point => [tip[0] - length * Math.cos(angle + offset), tip[1] - length * Math.sin(angle + offset)];
   const left = wing(0.45), right = wing(-0.45);
   if (!filled) return [[left, tip], [tip, right]];
@@ -26,17 +26,32 @@ function head(from: Point, tip: Point, size: number, filled: boolean, width: num
   return [[left, tip, right, left], ...fan];
 }
 
-function strokes(shape: Shape, start: Point, end: Point, scale: number, width: number, arrow: ArrowStyle): Point[][] {
+/**
+ * With Ctrl (or Shift) held: a rectangle becomes a square and an oval a circle; a line or arrow keeps to the nearest
+ * 45° direction.
+ */
+function constrain(shape: Shape, start: Point, end: Point): Point {
+  const dx = end[0] - start[0], dy = end[1] - start[1];
+  if (shape === "Rectangle" || shape === "Oval") {
+    const side = Math.max(Math.abs(dx), Math.abs(dy));
+    return [start[0] + Math.sign(dx || 1) * side, start[1] + Math.sign(dy || 1) * side];
+  }
+  const angle = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4), length = Math.hypot(dx, dy);
+  return [start[0] + length * Math.cos(angle), start[1] + length * Math.sin(angle)];
+}
+
+function strokes(shape: Shape, start: Point, end: Point, scale: number, width: number, arrow: ArrowStyle, arrowSize: number): Point[][] {
   const [x, y] = start, [a, b] = end;
+  if (shape === "Line") return [[start, end]];
   if (shape === "Rectangle") {
     // Individual straight segments keep pdf.js from smoothing the corners as freehand ink.
     return [[start, [a, y]], [[a, y], end], [end, [x, b]], [[x, b], start]];
   }
   if (shape === "Arrow") {
     // The head grows with the line, so thick arrows keep their shape.
-    const size = Math.max(12, 4 * width) * scale, filled = arrow === "filled";
+    const size = Math.max(12, 4 * width) * arrowSize * scale, filled = arrow === "filled";
     const lines: Point[][] = [[start, end]];
-    if (arrow !== "line") lines.push(...head(start, end, size, filled, width * scale));
+    lines.push(...head(start, end, size, filled, width * scale));
     if (arrow === "double") lines.push(...head(end, start, size, false, width * scale));
     return lines;
   }
@@ -49,7 +64,7 @@ function strokes(shape: Shape, start: Point, end: Point, scale: number, width: n
 }
 
 export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Shape, color: string, width: number,
-  arrow: ArrowStyle, add: (pageIndex: number, data: Record<string, unknown>) => void) {
+  arrow: ArrowStyle, arrowSize: number, add: (pageIndex: number, data: Record<string, unknown>) => void) {
   const listeners = new AbortController();
   let cancel: (() => void) | undefined;
 
@@ -95,17 +110,18 @@ export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Sha
     layer.setPointerCapture(down.pointerId);
     layer.addEventListener("pointermove", event => {
       if (event.pointerId !== down.pointerId) return;
-      const paths = strokes(shape, start, localPoint(event), viewport.scale, width, arrow);
+      const point = localPoint(event);
+      const paths = strokes(shape, start, event.ctrlKey || event.shiftKey ? constrain(shape, start, point) : point, viewport.scale, width, arrow, arrowSize);
       path.setAttribute("d", paths.map(points => "M" + points.map(p => p.join(" ")).join(" L")).join(" "));
     }, options);
     layer.addEventListener("pointerup", event => {
       if (event.pointerId !== down.pointerId) return;
       event.stopPropagation();
-      const end = localPoint(event);
+      const end = event.ctrlKey || event.shiftKey ? constrain(shape, start, localPoint(event)) : localPoint(event);
       finish();
       const dx = Math.abs(start[0] - end[0]), dy = Math.abs(start[1] - end[1]);
-      if ((shape === "Arrow" ? Math.hypot(dx, dy) : Math.min(dx, dy)) < 2) return;
-      const paths = strokes(shape, start, end, viewport.scale, width, arrow).map(line =>
+      if ((shape === "Arrow" || shape === "Line" ? Math.hypot(dx, dy) : Math.min(dx, dy)) < 2) return;
+      const paths = strokes(shape, start, end, viewport.scale, width, arrow, arrowSize).map(line =>
         line.map(([x, y]) => viewport.convertToPdfPoint(x, y) as Point));
       const xs = paths.flat().map(p => p[0]), ys = paths.flat().map(p => p[1]);
       add(pageIndex, { annotationType: AnnotationEditorType.INK, pageIndex, rotation: 0, thickness: width, opacity: 1,

@@ -1,5 +1,16 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Remove drawing": "Elimina el dibuix",
+  "Remove text": "Elimina el text",
+  "Remove image": "Elimina la imatge",
+  "Remove signature": "Elimina la signatura",
+  "Remove highlight": "Elimina el ressaltat",
+  "Change color": "Canvia el color",
+  "Color choices": "Opcions de color",
+  "Add comment": "Afegeix un comentari",
+  "Resize": "Canvia la mida",
+  "Arrow size": "Mida de la fletxa",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Manteniu Ctrl per a un quadrat, un cercle o línies a 45°",
   "Line thickness": "Gruix de la línia",
   "Arrow style": "Estil de fletxa",
   "Open arrow": "Fletxa oberta",

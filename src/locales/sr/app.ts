@@ -1,5 +1,16 @@
 // Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Remove drawing": "Ukloni crtež",
+  "Remove text": "Ukloni tekst",
+  "Remove image": "Ukloni sliku",
+  "Remove signature": "Ukloni potpis",
+  "Remove highlight": "Ukloni isticanje",
+  "Change color": "Promeni boju",
+  "Color choices": "Izbor boje",
+  "Add comment": "Dodaj komentar",
+  "Resize": "Promeni veličinu",
+  "Arrow size": "Veličina strelice",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Držite Ctrl za kvadrat, krug ili linije pod 45°",
   "Line thickness": "Debljina linije",
   "Arrow style": "Oblik strelice",
   "Open arrow": "Otvorena strelica",

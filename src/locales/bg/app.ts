@@ -1,5 +1,16 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Remove drawing": "Премахване на рисунката",
+  "Remove text": "Премахване на текста",
+  "Remove image": "Премахване на изображението",
+  "Remove signature": "Премахване на подписа",
+  "Remove highlight": "Премахване на маркирането",
+  "Change color": "Смяна на цвета",
+  "Color choices": "Избор на цвят",
+  "Add comment": "Добавяне на коментар",
+  "Resize": "Преоразмеряване",
+  "Arrow size": "Размер на стрелката",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Задръжте Ctrl за квадрат, кръг или линии под 45°",
   "Line thickness": "Дебелина на линията",
   "Arrow style": "Вид на стрелката",
   "Open arrow": "Отворена стрелка",

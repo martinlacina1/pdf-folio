@@ -1,5 +1,16 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Remove drawing": "그림 삭제",
+  "Remove text": "텍스트 삭제",
+  "Remove image": "이미지 삭제",
+  "Remove signature": "서명 삭제",
+  "Remove highlight": "강조 삭제",
+  "Change color": "색 변경",
+  "Color choices": "색 선택",
+  "Add comment": "댓글 추가",
+  "Resize": "크기 조정",
+  "Arrow size": "화살표 크기",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Ctrl을 누르면 정사각형, 원 또는 45° 선",
   "Line thickness": "선 두께",
   "Arrow style": "화살표 모양",
   "Open arrow": "열린 화살표",

@@ -1,5 +1,16 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Remove drawing": "Hiq vizatimin",
+  "Remove text": "Hiq tekstin",
+  "Remove image": "Hiq figurën",
+  "Remove signature": "Hiq nënshkrimin",
+  "Remove highlight": "Hiq theksimin",
+  "Change color": "Ndrysho ngjyrën",
+  "Color choices": "Zgjedhje ngjyrash",
+  "Add comment": "Shto koment",
+  "Resize": "Ndrysho madhësinë",
+  "Arrow size": "Madhësia e shigjetës",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Mbani Ctrl për katror, rreth ose vija në 45°",
   "Line thickness": "Trashësia e vijës",
   "Arrow style": "Stili i shigjetës",
   "Open arrow": "Shigjetë e hapur",

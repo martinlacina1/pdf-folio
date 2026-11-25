@@ -1,5 +1,16 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Remove drawing": "Rajz eltávolítása",
+  "Remove text": "Szöveg eltávolítása",
+  "Remove image": "Kép eltávolítása",
+  "Remove signature": "Aláírás eltávolítása",
+  "Remove highlight": "Kiemelés eltávolítása",
+  "Change color": "Szín módosítása",
+  "Color choices": "Színválasztás",
+  "Add comment": "Megjegyzés hozzáadása",
+  "Resize": "Átméretezés",
+  "Arrow size": "Nyíl mérete",
+  "Hold Ctrl for a square, a circle or lines at 45°": "A Ctrl lenyomásával négyzet, kör vagy 45°-os vonal",
   "Line thickness": "Vonalvastagság",
   "Arrow style": "Nyíl alakja",
   "Open arrow": "Nyitott nyíl",

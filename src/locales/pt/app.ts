@@ -1,5 +1,16 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Remove drawing": "Remover desenho",
+  "Remove text": "Remover texto",
+  "Remove image": "Remover imagem",
+  "Remove signature": "Remover assinatura",
+  "Remove highlight": "Remover destaque",
+  "Change color": "Alterar cor",
+  "Color choices": "Opções de cor",
+  "Add comment": "Adicionar comentário",
+  "Resize": "Redimensionar",
+  "Arrow size": "Tamanho da seta",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Segure Ctrl para um quadrado, um círculo ou linhas a 45°",
   "Line thickness": "Espessura da linha",
   "Arrow style": "Estilo da seta",
   "Open arrow": "Seta aberta",

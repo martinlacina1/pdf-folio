@@ -1,5 +1,16 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Remove drawing": "Eliminați desenul",
+  "Remove text": "Eliminați textul",
+  "Remove image": "Eliminați imaginea",
+  "Remove signature": "Eliminați semnătura",
+  "Remove highlight": "Eliminați evidențierea",
+  "Change color": "Schimbați culoarea",
+  "Color choices": "Opțiuni de culoare",
+  "Add comment": "Adăugați comentariu",
+  "Resize": "Redimensionați",
+  "Arrow size": "Dimensiunea săgeții",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Țineți Ctrl pentru pătrat, cerc sau linii la 45°",
   "Line thickness": "Grosimea liniei",
   "Arrow style": "Stilul săgeții",
   "Open arrow": "Săgeată deschisă",

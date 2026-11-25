@@ -1,5 +1,16 @@
 // Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Remove drawing": "Fjern tegning",
+  "Remove text": "Fjern tekst",
+  "Remove image": "Fjern billede",
+  "Remove signature": "Fjern signatur",
+  "Remove highlight": "Fjern markering",
+  "Change color": "Skift farve",
+  "Color choices": "Farvevalg",
+  "Add comment": "Tilføj kommentar",
+  "Resize": "Tilpas størrelse",
+  "Arrow size": "Pilstørrelse",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Hold Ctrl nede for et kvadrat, en cirkel eller linjer i 45°",
   "Line thickness": "Stregtykkelse",
   "Arrow style": "Pilform",
   "Open arrow": "Åben pil",

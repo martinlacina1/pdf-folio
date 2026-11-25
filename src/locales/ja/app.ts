@@ -1,5 +1,16 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Remove drawing": "描画を削除",
+  "Remove text": "テキストを削除",
+  "Remove image": "画像を削除",
+  "Remove signature": "署名を削除",
+  "Remove highlight": "ハイライトを削除",
+  "Change color": "色を変更",
+  "Color choices": "色の選択肢",
+  "Add comment": "コメントを追加",
+  "Resize": "サイズを変更",
+  "Arrow size": "矢印のサイズ",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Ctrl を押しながらで正方形・円・45° の線",
   "Line thickness": "線の太さ",
   "Arrow style": "矢印の形",
   "Open arrow": "開いた矢印",

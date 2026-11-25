@@ -1,5 +1,16 @@
 // French UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → French. See src/i18n.ts.
 const fr: Record<string, string> = {
+  "Remove drawing": "Supprimer le dessin",
+  "Remove text": "Supprimer le texte",
+  "Remove image": "Supprimer l’image",
+  "Remove signature": "Supprimer la signature",
+  "Remove highlight": "Supprimer le surlignage",
+  "Change color": "Changer la couleur",
+  "Color choices": "Choix de couleurs",
+  "Add comment": "Ajouter un commentaire",
+  "Resize": "Redimensionner",
+  "Arrow size": "Taille de la flèche",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Maintenez Ctrl pour un carré, un cercle ou des lignes à 45°",
   "Line thickness": "Épaisseur du trait",
   "Arrow style": "Style de flèche",
   "Open arrow": "Flèche ouverte",

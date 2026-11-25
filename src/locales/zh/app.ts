@@ -1,5 +1,16 @@
 // Simplified Chinese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Remove drawing": "删除绘图",
+  "Remove text": "删除文本",
+  "Remove image": "删除图片",
+  "Remove signature": "删除签名",
+  "Remove highlight": "删除高亮",
+  "Change color": "更改颜色",
+  "Color choices": "颜色选项",
+  "Add comment": "添加评论",
+  "Resize": "调整大小",
+  "Arrow size": "箭头大小",
+  "Hold Ctrl for a square, a circle or lines at 45°": "按住 Ctrl 可绘制正方形、圆形或 45° 直线",
   "Line thickness": "线条粗细",
   "Arrow style": "箭头样式",
   "Open arrow": "开放箭头",

@@ -1,5 +1,16 @@
 // Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Remove drawing": "Удалить рисунок",
+  "Remove text": "Удалить текст",
+  "Remove image": "Удалить изображение",
+  "Remove signature": "Удалить подпись",
+  "Remove highlight": "Удалить выделение",
+  "Change color": "Изменить цвет",
+  "Color choices": "Выбор цвета",
+  "Add comment": "Добавить комментарий",
+  "Resize": "Изменить размер",
+  "Arrow size": "Размер стрелки",
+  "Hold Ctrl for a square, a circle or lines at 45°": "С Ctrl — квадрат, круг или линии под углом 45°",
   "Line thickness": "Толщина линии",
   "Arrow style": "Вид стрелки",
   "Open arrow": "Открытая стрелка",

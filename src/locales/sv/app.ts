@@ -1,5 +1,16 @@
 // Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Remove drawing": "Ta bort teckning",
+  "Remove text": "Ta bort text",
+  "Remove image": "Ta bort bild",
+  "Remove signature": "Ta bort signatur",
+  "Remove highlight": "Ta bort markering",
+  "Change color": "Ändra färg",
+  "Color choices": "Färgval",
+  "Add comment": "Lägg till kommentar",
+  "Resize": "Ändra storlek",
+  "Arrow size": "Pilstorlek",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Håll ned Ctrl för en kvadrat, en cirkel eller linjer i 45°",
   "Line thickness": "Linjetjocklek",
   "Arrow style": "Pilform",
   "Open arrow": "Öppen pil",

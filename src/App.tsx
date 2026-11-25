@@ -45,6 +45,7 @@ import { detectSignatureTargets, placeSignature, type SignatureTarget } from "./
 import { keepDrawingPointer } from "./drawing";
 import { enableHandTool } from "./handTool";
 import { ARROW_STYLES, INK_WIDTHS, drawShapes, type ArrowStyle, type Shape } from "./shapes";
+import { translatePdfjsLabels } from "./pdfjsLabels";
 import { enableWheelPaging } from "./wheelPaging";
 
 type Tool = "select" | "hand" | "highlight" | "ink" | "freetext";
@@ -270,6 +271,15 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     try { localStorage.setItem("folio:text-size", String(size)); } catch {}
     busRef.current?.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.FREETEXT_SIZE, value: size });
   };
+  // Arrow head size, relative to the line width.
+  const [arrowSize, setArrowSize] = useState(() => {
+    const saved = Number(localStorage.getItem("folio:arrow-size"));
+    return saved >= 0.5 && saved <= 3 ? saved : 1;
+  });
+  const chooseArrowSize = (size: number) => {
+    setArrowSize(size);
+    try { localStorage.setItem("folio:arrow-size", String(size)); } catch {}
+  };
   const chooseArrowStyle = (style: ArrowStyle) => {
     setArrowStyle(style);
     try { localStorage.setItem("folio:arrow-style", style); } catch {}
@@ -369,6 +379,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
     });
     trackPageImages(eventBus);
     const stopDrawingPointer = keepDrawingPointer(container);
+    const stopLabels = translatePdfjsLabels(container);
     linkService.setViewer(viewer);
     viewerRef.current = viewer;
     markupRef.current = new MarkupController(eventBus, viewer, setMarkup);
@@ -402,6 +413,15 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       setPageInput(String(pageNumber));
     });
     eventBus.on("scalechanging", ({ scale }: { scale: number }) => setScale(scale));
+    // pdf.js reports a selected drawing's or text box's style: show it in the bar, which then restyles it.
+    eventBus.on("annotationeditorparamschanged", ({ details }: { details: [number, unknown][] }) => {
+      for (const [type, value] of details) {
+        if (type === AnnotationEditorParamsType.INK_THICKNESS && typeof value === "number") setInkWidth(value);
+        else if (type === AnnotationEditorParamsType.FREETEXT_SIZE && typeof value === "number") setTextSize(value);
+        else if (type === AnnotationEditorParamsType.INK_COLOR && typeof value === "string") setColors((c) => ({ ...c, ink: value.toUpperCase() }));
+        else if (type === AnnotationEditorParamsType.FREETEXT_COLOR && typeof value === "string") setColors((c) => ({ ...c, freetext: value.toUpperCase() }));
+      }
+    });
     eventBus.on("rotationchanging", ({ pagesRotation }: { pagesRotation: number }) => setRotation(pagesRotation));
     eventBus.on("updatefindmatchescount", ({ matchesCount }: { matchesCount: { current: number; total: number } }) =>
       setFind((f) => ({ ...f, ...matchesCount })),
@@ -438,7 +458,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       });
     };
     container.addEventListener("wheel", onWheel, { passive: false });
-    return () => { stopDrawingPointer(); container.removeEventListener("wheel", onWheel); };
+    return () => { stopDrawingPointer(); stopLabels(); container.removeEventListener("wheel", onWheel); };
   }, []);
 
   useEffect(() => {
@@ -746,10 +766,10 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
   useEffect(() => {
     if (!doc || tool !== "ink" || drawTool === "Pen") return;
-    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, inkWidth, arrowStyle, (page, data) => {
+    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, inkWidth, arrowStyle, arrowSize, (page, data) => {
       void markupRef.current!.addShape(page, drawTool, data).catch(() => flash(t("Couldn't add the shape")));
     });
-  }, [doc, tool, drawTool, colors.ink, inkWidth, arrowStyle, scale, rotation, flash]);
+  }, [doc, tool, drawTool, colors.ink, inkWidth, arrowStyle, arrowSize, scale, rotation, flash]);
 
   const chooseColor = (hex: string) => {
     if (tool === "ink") markupRef.current?.endDrawing();
@@ -1524,9 +1544,9 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
           {doc && !contentEditing && PALETTE[tool] && (
             <div className="color-pill" role="toolbar" aria-label={t("Annotation options")}>
               {tool === "ink" && (
-                <select className="draw-tool" aria-label={t("Drawing tool")} value={drawTool}
+                <select className="draw-tool" aria-label={t("Drawing tool")} title={t("Hold Ctrl for a square, a circle or lines at 45°")} value={drawTool}
                   onChange={e => { markupRef.current?.endDrawing(); setDrawTool(e.target.value as typeof drawTool); }}>
-                  {["Pen", "Rectangle", "Oval", "Arrow"].map(name => <option key={name} value={name}>{t(name)}</option>)}
+                  {["Pen", "Line", "Rectangle", "Oval", "Arrow"].map(name => <option key={name} value={name}>{t(name)}</option>)}
                 </select>
               )}
               {tool === "ink" && drawTool === "Arrow" && (
@@ -1535,8 +1555,14 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                   <option value="open">{"→ " + t("Open arrow")}</option>
                   <option value="filled">{"➞ " + t("Filled arrow")}</option>
                   <option value="double">{"↔ " + t("Double arrow")}</option>
-                  <option value="line">{"— " + t("Line")}</option>
                 </select>
+              )}
+              {tool === "ink" && drawTool === "Arrow" && (
+                <label className="arrow-size" title={t("Arrow size")}>
+                  <Icon name="arrowHead" size={14} />
+                  <input type="range" min="0.5" max="3" step="0.25" value={arrowSize} aria-label={t("Arrow size")}
+                    onChange={e => chooseArrowSize(Number(e.target.value))} />
+                </label>
               )}
               {tool === "freetext" && (
                 <select className="draw-tool" aria-label={t("Text size")} title={t("Text size")} value={textSize}

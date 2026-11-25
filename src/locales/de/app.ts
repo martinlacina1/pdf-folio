@@ -1,5 +1,16 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Remove drawing": "Zeichnung entfernen",
+  "Remove text": "Text entfernen",
+  "Remove image": "Bild entfernen",
+  "Remove signature": "Unterschrift entfernen",
+  "Remove highlight": "Markierung entfernen",
+  "Change color": "Farbe ändern",
+  "Color choices": "Farbauswahl",
+  "Add comment": "Kommentar hinzufügen",
+  "Resize": "Größe ändern",
+  "Arrow size": "Pfeilgröße",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Mit Strg zeichnen Sie ein Quadrat, einen Kreis oder Linien im 45°-Raster",
   "Line thickness": "Linienstärke",
   "Arrow style": "Pfeilform",
   "Open arrow": "Offener Pfeil",

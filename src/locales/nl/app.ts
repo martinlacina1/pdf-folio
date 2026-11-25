@@ -1,5 +1,16 @@
 // Dutch UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Remove drawing": "Tekening verwijderen",
+  "Remove text": "Tekst verwijderen",
+  "Remove image": "Afbeelding verwijderen",
+  "Remove signature": "Handtekening verwijderen",
+  "Remove highlight": "Markering verwijderen",
+  "Change color": "Kleur wijzigen",
+  "Color choices": "Kleurkeuzes",
+  "Add comment": "Opmerking toevoegen",
+  "Resize": "Formaat wijzigen",
+  "Arrow size": "Pijlgrootte",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Houd Ctrl ingedrukt voor een vierkant, een cirkel of lijnen in stappen van 45°",
   "Line thickness": "Lijndikte",
   "Arrow style": "Pijlstijl",
   "Open arrow": "Open pijl",

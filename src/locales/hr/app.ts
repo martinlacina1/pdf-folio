@@ -1,5 +1,16 @@
 // Croatian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Remove drawing": "Ukloni crtež",
+  "Remove text": "Ukloni tekst",
+  "Remove image": "Ukloni sliku",
+  "Remove signature": "Ukloni potpis",
+  "Remove highlight": "Ukloni isticanje",
+  "Change color": "Promijeni boju",
+  "Color choices": "Izbor boje",
+  "Add comment": "Dodaj komentar",
+  "Resize": "Promijeni veličinu",
+  "Arrow size": "Veličina strelice",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Držite Ctrl za kvadrat, krug ili crte pod 45°",
   "Line thickness": "Debljina linije",
   "Arrow style": "Oblik strelice",
   "Open arrow": "Otvorena strelica",

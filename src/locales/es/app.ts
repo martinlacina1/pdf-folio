@@ -1,5 +1,16 @@
 // Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Remove drawing": "Eliminar dibujo",
+  "Remove text": "Eliminar texto",
+  "Remove image": "Eliminar imagen",
+  "Remove signature": "Eliminar firma",
+  "Remove highlight": "Eliminar resaltado",
+  "Change color": "Cambiar color",
+  "Color choices": "Opciones de color",
+  "Add comment": "Añadir comentario",
+  "Resize": "Cambiar tamaño",
+  "Arrow size": "Tamaño de la flecha",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Mantén Ctrl para un cuadrado, un círculo o líneas a 45°",
   "Line thickness": "Grosor de línea",
   "Arrow style": "Estilo de flecha",
   "Open arrow": "Flecha abierta",

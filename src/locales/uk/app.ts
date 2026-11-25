@@ -1,5 +1,16 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Remove drawing": "Видалити малюнок",
+  "Remove text": "Видалити текст",
+  "Remove image": "Видалити зображення",
+  "Remove signature": "Видалити підпис",
+  "Remove highlight": "Видалити виділення",
+  "Change color": "Змінити колір",
+  "Color choices": "Вибір кольору",
+  "Add comment": "Додати коментар",
+  "Resize": "Змінити розмір",
+  "Arrow size": "Розмір стрілки",
+  "Hold Ctrl for a square, a circle or lines at 45°": "З Ctrl — квадрат, коло або лінії під кутом 45°",
   "Line thickness": "Товщина лінії",
   "Arrow style": "Вигляд стрілки",
   "Open arrow": "Відкрита стрілка",

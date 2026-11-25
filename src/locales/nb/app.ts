@@ -1,5 +1,16 @@
 // Norwegian Bokmål UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Remove drawing": "Fjern tegning",
+  "Remove text": "Fjern tekst",
+  "Remove image": "Fjern bilde",
+  "Remove signature": "Fjern signatur",
+  "Remove highlight": "Fjern utheving",
+  "Change color": "Endre farge",
+  "Color choices": "Fargevalg",
+  "Add comment": "Legg til kommentar",
+  "Resize": "Endre størrelse",
+  "Arrow size": "Pilstørrelse",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Hold Ctrl for et kvadrat, en sirkel eller linjer i 45°",
   "Line thickness": "Linjetykkelse",
   "Arrow style": "Pilform",
   "Open arrow": "Åpen pil",

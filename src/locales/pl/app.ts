@@ -1,5 +1,16 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Remove drawing": "Usuń rysunek",
+  "Remove text": "Usuń tekst",
+  "Remove image": "Usuń obraz",
+  "Remove signature": "Usuń podpis",
+  "Remove highlight": "Usuń wyróżnienie",
+  "Change color": "Zmień kolor",
+  "Color choices": "Wybór koloru",
+  "Add comment": "Dodaj komentarz",
+  "Resize": "Zmień rozmiar",
+  "Arrow size": "Rozmiar strzałki",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Przytrzymaj Ctrl, aby narysować kwadrat, koło lub linie co 45°",
   "Line thickness": "Grubość linii",
   "Arrow style": "Kształt strzałki",
   "Open arrow": "Strzałka otwarta",

@@ -1,5 +1,16 @@
 // Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Remove drawing": "Odstranit kresbu",
+  "Remove text": "Odstranit text",
+  "Remove image": "Odstranit obrázek",
+  "Remove signature": "Odstranit podpis",
+  "Remove highlight": "Odstranit zvýraznění",
+  "Change color": "Změnit barvu",
+  "Color choices": "Výběr barvy",
+  "Add comment": "Přidat komentář",
+  "Resize": "Změnit velikost",
+  "Arrow size": "Velikost šipky",
+  "Hold Ctrl for a square, a circle or lines at 45°": "S klávesou Ctrl nakreslíte čtverec, kruh nebo čáru po 45°",
   "Line thickness": "Tloušťka čáry",
   "Arrow style": "Tvar šipky",
   "Open arrow": "Otevřená šipka",

@@ -1,5 +1,16 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Remove drawing": "Αφαίρεση σχεδίου",
+  "Remove text": "Αφαίρεση κειμένου",
+  "Remove image": "Αφαίρεση εικόνας",
+  "Remove signature": "Αφαίρεση υπογραφής",
+  "Remove highlight": "Αφαίρεση επισήμανσης",
+  "Change color": "Αλλαγή χρώματος",
+  "Color choices": "Επιλογές χρώματος",
+  "Add comment": "Προσθήκη σχολίου",
+  "Resize": "Αλλαγή μεγέθους",
+  "Arrow size": "Μέγεθος βέλους",
+  "Hold Ctrl for a square, a circle or lines at 45°": "Κρατήστε Ctrl για τετράγωνο, κύκλο ή γραμμές ανά 45°",
   "Line thickness": "Πάχος γραμμής",
   "Arrow style": "Στυλ βέλους",
   "Open arrow": "Ανοιχτό βέλος",
