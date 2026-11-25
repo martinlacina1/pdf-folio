@@ -1,5 +1,6 @@
 // Czech UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Czech. See src/i18n.ts.
 const cs: Record<string, string> = {
+  "Page and zoom controls": "Lišta se stránkami a zoomem",
   "Move the controls (double-click to put them back)": "Přesunout lištu (dvojklikem ji vrátíte na místo)",
   "Hide the controls": "Skrýt lištu",
   "Show the controls": "Zobrazit lištu",

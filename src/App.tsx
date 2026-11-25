@@ -1353,6 +1353,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     { kind: "divider" },
                     { kind: "toggle", icon: "moon", label: t("PDF dark mode"), checked: night, onSelect: () => setNightTo(!night) },
                     { kind: "action", icon: "expand", label: t("Full screen"), shortcut: "F", onSelect: toggleFocus },
+                    { kind: "toggle", icon: "list", label: t("Page and zoom controls"), checked: !pillHidden, onSelect: () => hidePill(!pillHidden) },
                   ] as MoreItem[])
                 : []),
               { kind: "action", icon: "settings", label: t("Settings"), shortcut: keys("Ctrl ,"), onSelect: () => setDialog("settings") },
@@ -1457,7 +1458,7 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
           {doc && pillHidden && (
             <button className="pill-restore" onClick={() => hidePill(false)} title={t("Show the controls")} aria-label={t("Show the controls")}>
-              <Icon name="chevronUp" size={16} />
+              <Icon name="chevronUp" size={15} /><span>{t("Show the controls")}</span>
             </button>
           )}
           {doc && !pillHidden && (

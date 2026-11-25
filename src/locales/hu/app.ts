@@ -1,5 +1,6 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Page and zoom controls": "Oldal- és nagyítássáv",
   "Move the controls (double-click to put them back)": "Sáv áthelyezése (dupla kattintással visszakerül a helyére)",
   "Hide the controls": "Sáv elrejtése",
   "Show the controls": "Sáv megjelenítése",

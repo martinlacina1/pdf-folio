@@ -1,5 +1,6 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Page and zoom controls": "Bara de pagini și zoom",
   "Move the controls (double-click to put them back)": "Mutați bara (dublu clic o readuce la loc)",
   "Hide the controls": "Ascundeți bara",
   "Show the controls": "Afișați bara",

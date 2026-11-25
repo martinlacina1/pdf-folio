@@ -1,5 +1,6 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Page and zoom controls": "Панель сторінок і масштабу",
   "Move the controls (double-click to put them back)": "Перемістити панель (подвійне клацання поверне її на місце)",
   "Hide the controls": "Сховати панель",
   "Show the controls": "Показати панель",

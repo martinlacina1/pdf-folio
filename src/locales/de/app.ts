@@ -1,5 +1,6 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Page and zoom controls": "Seiten- und Zoomleiste",
   "Move the controls (double-click to put them back)": "Leiste verschieben (Doppelklick setzt sie zurück)",
   "Hide the controls": "Leiste ausblenden",
   "Show the controls": "Leiste einblenden",

@@ -1,5 +1,6 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Page and zoom controls": "ページとズームのバー",
   "Move the controls (double-click to put them back)": "バーを移動（ダブルクリックで元の位置に戻す）",
   "Hide the controls": "バーを隠す",
   "Show the controls": "バーを表示",

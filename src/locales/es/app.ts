@@ -1,5 +1,6 @@
 // Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Page and zoom controls": "Barra de páginas y zoom",
   "Move the controls (double-click to put them back)": "Mover la barra (doble clic para devolverla a su sitio)",
   "Hide the controls": "Ocultar la barra",
   "Show the controls": "Mostrar la barra",

@@ -1,5 +1,6 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Page and zoom controls": "페이지 및 확대/축소 막대",
   "Move the controls (double-click to put them back)": "막대 이동 (두 번 클릭하면 원래 위치로)",
   "Hide the controls": "막대 숨기기",
   "Show the controls": "막대 표시",

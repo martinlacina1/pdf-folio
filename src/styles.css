@@ -693,27 +693,31 @@ kbd {
 .pill-grip:active {
   cursor: grabbing;
 }
-/* Brings back hidden controls: small and quiet in the corner until pointed at. */
+/* Brings back hidden controls, where the bar sits by default: small, but labeled so it's easy to find. */
 .pill-restore {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
   z-index: 10;
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px 5px 8px;
+  border-radius: 999px;
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(16px) saturate(1.6);
   color: var(--text-2);
+  font-size: 12px;
   box-shadow: var(--shadow-md);
-  opacity: 0.6;
-  transition: opacity 0.15s;
+  opacity: 0.85;
+  transition: opacity 0.15s, color 0.15s;
 }
 .pill-restore:hover,
 .pill-restore:focus-visible {
   opacity: 1;
+  color: var(--text);
 }
 .app[data-focus] .pill-restore {
   display: none;

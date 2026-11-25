@@ -1,5 +1,6 @@
 // Norwegian Bokmål UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Norwegian Bokmål. See src/i18n.ts.
 const nb: Record<string, string> = {
+  "Page and zoom controls": "Side- og zoomlinje",
   "Move the controls (double-click to put them back)": "Flytt linjen (dobbeltklikk for å sette den tilbake)",
   "Hide the controls": "Skjul linjen",
   "Show the controls": "Vis linjen",

@@ -1,5 +1,6 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Page and zoom controls": "Sivu- ja zoomauspalkki",
   "Move the controls (double-click to put them back)": "Siirrä palkkia (kaksoisnapsautus palauttaa sen paikalleen)",
   "Hide the controls": "Piilota palkki",
   "Show the controls": "Näytä palkki",

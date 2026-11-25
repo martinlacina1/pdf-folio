@@ -1,5 +1,6 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Page and zoom controls": "Лента за страници и мащаб",
   "Move the controls (double-click to put them back)": "Преместване на лентата (двойно щракване я връща на мястото ѝ)",
   "Hide the controls": "Скриване на лентата",
   "Show the controls": "Показване на лентата",

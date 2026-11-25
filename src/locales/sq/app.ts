@@ -1,5 +1,6 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Page and zoom controls": "Shiriti i faqeve dhe zmadhimit",
   "Move the controls (double-click to put them back)": "Lëviz shiritin (klikim i dyfishtë e kthen në vend)",
   "Hide the controls": "Fshih shiritin",
   "Show the controls": "Shfaq shiritin",

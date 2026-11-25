@@ -1,5 +1,6 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Page and zoom controls": "Pasek stron i powiększenia",
   "Move the controls (double-click to put them back)": "Przesuń pasek (dwukrotne kliknięcie przywraca go na miejsce)",
   "Hide the controls": "Ukryj pasek",
   "Show the controls": "Pokaż pasek",

@@ -1,5 +1,6 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Page and zoom controls": "Barra de páginas e zoom",
   "Move the controls (double-click to put them back)": "Mover a barra (clique duas vezes para recolocá-la)",
   "Hide the controls": "Ocultar a barra",
   "Show the controls": "Mostrar a barra",

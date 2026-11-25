@@ -1,5 +1,6 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Page and zoom controls": "Γραμμή σελίδων και ζουμ",
   "Move the controls (double-click to put them back)": "Μετακίνηση γραμμής (διπλό κλικ για επαναφορά)",
   "Hide the controls": "Απόκρυψη γραμμής",
   "Show the controls": "Εμφάνιση γραμμής",

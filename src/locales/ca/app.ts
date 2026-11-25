@@ -1,5 +1,6 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Page and zoom controls": "Barra de pàgines i zoom",
   "Move the controls (double-click to put them back)": "Mou la barra (doble clic per tornar-la al seu lloc)",
   "Hide the controls": "Amaga la barra",
   "Show the controls": "Mostra la barra",
