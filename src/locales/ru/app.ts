@@ -1,5 +1,13 @@
 // Russian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Russian. See src/i18n.ts.
 const ru: Record<string, string> = {
+  "Line thickness": "Толщина линии",
+  "Arrow style": "Вид стрелки",
+  "Open arrow": "Открытая стрелка",
+  "Filled arrow": "Закрашенная стрелка",
+  "Double arrow": "Двойная стрелка",
+  "Line": "Линия",
+  "Text size": "Размер текста",
+  "Custom color": "Свой цвет",
   "Page and zoom controls": "Панель страниц и масштаба",
   "Move the controls (double-click to put them back)": "Переместить панель (двойной щелчок вернёт её на место)",
   "Hide the controls": "Скрыть панель",

@@ -1,5 +1,13 @@
 // Catalan UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Catalan. See src/i18n.ts.
 const ca: Record<string, string> = {
+  "Line thickness": "Gruix de la línia",
+  "Arrow style": "Estil de fletxa",
+  "Open arrow": "Fletxa oberta",
+  "Filled arrow": "Fletxa plena",
+  "Double arrow": "Fletxa doble",
+  "Line": "Línia",
+  "Text size": "Mida del text",
+  "Custom color": "Color personalitzat",
   "Page and zoom controls": "Barra de pàgines i zoom",
   "Move the controls (double-click to put them back)": "Mou la barra (doble clic per tornar-la al seu lloc)",
   "Hide the controls": "Amaga la barra",

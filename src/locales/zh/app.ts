@@ -1,5 +1,13 @@
 // Simplified Chinese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Simplified Chinese. See src/i18n.ts.
 const zh: Record<string, string> = {
+  "Line thickness": "线条粗细",
+  "Arrow style": "箭头样式",
+  "Open arrow": "开放箭头",
+  "Filled arrow": "实心箭头",
+  "Double arrow": "双向箭头",
+  "Line": "直线",
+  "Text size": "文字大小",
+  "Custom color": "自定义颜色",
   "Page and zoom controls": "页面和缩放工具栏",
   "Move the controls (double-click to put them back)": "移动工具栏（双击可复位）",
   "Hide the controls": "隐藏工具栏",

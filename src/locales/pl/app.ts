@@ -1,5 +1,13 @@
 // Polish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Polish. See src/i18n.ts.
 const pl: Record<string, string> = {
+  "Line thickness": "Grubość linii",
+  "Arrow style": "Kształt strzałki",
+  "Open arrow": "Strzałka otwarta",
+  "Filled arrow": "Strzałka wypełniona",
+  "Double arrow": "Strzałka podwójna",
+  "Line": "Linia",
+  "Text size": "Rozmiar tekstu",
+  "Custom color": "Własny kolor",
   "Page and zoom controls": "Pasek stron i powiększenia",
   "Move the controls (double-click to put them back)": "Przesuń pasek (dwukrotne kliknięcie przywraca go na miejsce)",
   "Hide the controls": "Ukryj pasek",

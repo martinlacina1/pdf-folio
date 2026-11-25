@@ -46,6 +46,7 @@ interface UIManager {
   getEditor(id: string): Editor | undefined;
   getLayer(pageIndex: number): EditorLayer | undefined;
   highlightSelection(methodOfCreation?: string): void;
+  endCurrentEditing?(): void;
 }
 
 const toHex = (color: unknown) =>
@@ -245,6 +246,16 @@ export class MarkupController {
       }
     }
     return editors;
+  }
+
+  /**
+   * Finishes the pen drawing in progress. pdf.js keeps all strokes of a pen session in one drawing and applies a
+   * new width or color to the whole of it, so a change of style finishes it and starts the next drawing fresh.
+   */
+  endDrawing() {
+    this.#ui?.endCurrentEditing?.();
+    // pdf.js selects the finished drawing, and a selection would take the new style instead of the next drawing.
+    this.#ui?.unselectAll();
   }
 
   async addShape(page: number, shape: NonNullable<Mark["shape"]>, data: Record<string, unknown>) {

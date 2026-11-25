@@ -1,5 +1,13 @@
 // Slovak UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Slovak. See src/i18n.ts.
 const sk: Record<string, string> = {
+  "Line thickness": "Hrúbka čiary",
+  "Arrow style": "Tvar šípky",
+  "Open arrow": "Otvorená šípka",
+  "Filled arrow": "Plná šípka",
+  "Double arrow": "Obojstranná šípka",
+  "Line": "Čiara",
+  "Text size": "Veľkosť textu",
+  "Custom color": "Vlastná farba",
   "Page and zoom controls": "Lišta so stranami a lupou",
   "Move the controls (double-click to put them back)": "Presunúť lištu (dvojklikom ju vrátite na miesto)",
   "Hide the controls": "Skryť lištu",

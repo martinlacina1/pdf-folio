@@ -1,5 +1,13 @@
 // Albanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Albanian. See src/i18n.ts.
 const sq: Record<string, string> = {
+  "Line thickness": "Trashësia e vijës",
+  "Arrow style": "Stili i shigjetës",
+  "Open arrow": "Shigjetë e hapur",
+  "Filled arrow": "Shigjetë e mbushur",
+  "Double arrow": "Shigjetë e dyfishtë",
+  "Line": "Vijë",
+  "Text size": "Madhësia e tekstit",
+  "Custom color": "Ngjyrë e personalizuar",
   "Page and zoom controls": "Shiriti i faqeve dhe zmadhimit",
   "Move the controls (double-click to put them back)": "Lëviz shiritin (klikim i dyfishtë e kthen në vend)",
   "Hide the controls": "Fshih shiritin",

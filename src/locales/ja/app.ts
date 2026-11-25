@@ -1,5 +1,13 @@
 // Japanese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Japanese. See src/i18n.ts.
 const ja: Record<string, string> = {
+  "Line thickness": "線の太さ",
+  "Arrow style": "矢印の形",
+  "Open arrow": "開いた矢印",
+  "Filled arrow": "塗りつぶし矢印",
+  "Double arrow": "両方向矢印",
+  "Line": "直線",
+  "Text size": "文字サイズ",
+  "Custom color": "カスタムカラー",
   "Page and zoom controls": "ページとズームのバー",
   "Move the controls (double-click to put them back)": "バーを移動（ダブルクリックで元の位置に戻す）",
   "Hide the controls": "バーを隠す",

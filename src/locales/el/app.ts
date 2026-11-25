@@ -1,5 +1,13 @@
 // Greek UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Greek. See src/i18n.ts.
 const el: Record<string, string> = {
+  "Line thickness": "Πάχος γραμμής",
+  "Arrow style": "Στυλ βέλους",
+  "Open arrow": "Ανοιχτό βέλος",
+  "Filled arrow": "Γεμάτο βέλος",
+  "Double arrow": "Διπλό βέλος",
+  "Line": "Γραμμή",
+  "Text size": "Μέγεθος κειμένου",
+  "Custom color": "Προσαρμοσμένο χρώμα",
   "Page and zoom controls": "Γραμμή σελίδων και ζουμ",
   "Move the controls (double-click to put them back)": "Μετακίνηση γραμμής (διπλό κλικ για επαναφορά)",
   "Hide the controls": "Απόκρυψη γραμμής",

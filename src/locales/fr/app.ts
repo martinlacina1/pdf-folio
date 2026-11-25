@@ -1,5 +1,13 @@
 // French UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → French. See src/i18n.ts.
 const fr: Record<string, string> = {
+  "Line thickness": "Épaisseur du trait",
+  "Arrow style": "Style de flèche",
+  "Open arrow": "Flèche ouverte",
+  "Filled arrow": "Flèche pleine",
+  "Double arrow": "Flèche double",
+  "Line": "Ligne",
+  "Text size": "Taille du texte",
+  "Custom color": "Couleur personnalisée",
   "Page and zoom controls": "Barre des pages et du zoom",
   "Move the controls (double-click to put them back)": "Déplacer la barre (double-clic pour la remettre en place)",
   "Hide the controls": "Masquer la barre",

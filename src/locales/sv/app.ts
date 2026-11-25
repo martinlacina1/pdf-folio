@@ -1,5 +1,13 @@
 // Swedish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Swedish. See src/i18n.ts.
 const sv: Record<string, string> = {
+  "Line thickness": "Linjetjocklek",
+  "Arrow style": "Pilform",
+  "Open arrow": "Öppen pil",
+  "Filled arrow": "Fylld pil",
+  "Double arrow": "Dubbelpil",
+  "Line": "Linje",
+  "Text size": "Textstorlek",
+  "Custom color": "Egen färg",
   "Page and zoom controls": "Sid- och zoomfält",
   "Move the controls (double-click to put them back)": "Flytta fältet (dubbelklicka för att återställa)",
   "Hide the controls": "Dölj fältet",

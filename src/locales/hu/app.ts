@@ -1,5 +1,13 @@
 // Hungarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Hungarian. See src/i18n.ts.
 const hu: Record<string, string> = {
+  "Line thickness": "Vonalvastagság",
+  "Arrow style": "Nyíl alakja",
+  "Open arrow": "Nyitott nyíl",
+  "Filled arrow": "Kitöltött nyíl",
+  "Double arrow": "Kétirányú nyíl",
+  "Line": "Vonal",
+  "Text size": "Szövegméret",
+  "Custom color": "Egyéni szín",
   "Page and zoom controls": "Oldal- és nagyítássáv",
   "Move the controls (double-click to put them back)": "Sáv áthelyezése (dupla kattintással visszakerül a helyére)",
   "Hide the controls": "Sáv elrejtése",

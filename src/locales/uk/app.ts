@@ -1,5 +1,13 @@
 // Ukrainian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Ukrainian. See src/i18n.ts.
 const uk: Record<string, string> = {
+  "Line thickness": "Товщина лінії",
+  "Arrow style": "Вигляд стрілки",
+  "Open arrow": "Відкрита стрілка",
+  "Filled arrow": "Зафарбована стрілка",
+  "Double arrow": "Подвійна стрілка",
+  "Line": "Лінія",
+  "Text size": "Розмір тексту",
+  "Custom color": "Власний колір",
   "Page and zoom controls": "Панель сторінок і масштабу",
   "Move the controls (double-click to put them back)": "Перемістити панель (подвійне клацання поверне її на місце)",
   "Hide the controls": "Сховати панель",

@@ -1,5 +1,13 @@
 // Serbian (Latin) UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Serbian. See src/i18n.ts.
 const sr: Record<string, string> = {
+  "Line thickness": "Debljina linije",
+  "Arrow style": "Oblik strelice",
+  "Open arrow": "Otvorena strelica",
+  "Filled arrow": "Puna strelica",
+  "Double arrow": "Dvostrana strelica",
+  "Line": "Linija",
+  "Text size": "Veličina teksta",
+  "Custom color": "Prilagođena boja",
   "Page and zoom controls": "Traka stranica i zumiranja",
   "Move the controls (double-click to put them back)": "Pomeri traku (dvostruki klik je vraća na mesto)",
   "Hide the controls": "Sakrij traku",

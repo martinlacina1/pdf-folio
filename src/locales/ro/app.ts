@@ -1,5 +1,13 @@
 // Romanian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Romanian. See src/i18n.ts.
 const ro: Record<string, string> = {
+  "Line thickness": "Grosimea liniei",
+  "Arrow style": "Stilul săgeții",
+  "Open arrow": "Săgeată deschisă",
+  "Filled arrow": "Săgeată plină",
+  "Double arrow": "Săgeată dublă",
+  "Line": "Linie",
+  "Text size": "Dimensiunea textului",
+  "Custom color": "Culoare personalizată",
   "Page and zoom controls": "Bara de pagini și zoom",
   "Move the controls (double-click to put them back)": "Mutați bara (dublu clic o readuce la loc)",
   "Hide the controls": "Ascundeți bara",

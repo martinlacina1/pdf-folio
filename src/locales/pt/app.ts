@@ -1,5 +1,13 @@
 // Brazilian Portuguese UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Portuguese. See src/i18n.ts.
 const pt: Record<string, string> = {
+  "Line thickness": "Espessura da linha",
+  "Arrow style": "Estilo da seta",
+  "Open arrow": "Seta aberta",
+  "Filled arrow": "Seta preenchida",
+  "Double arrow": "Seta dupla",
+  "Line": "Linha",
+  "Text size": "Tamanho do texto",
+  "Custom color": "Cor personalizada",
   "Page and zoom controls": "Barra de páginas e zoom",
   "Move the controls (double-click to put them back)": "Mover a barra (clique duas vezes para recolocá-la)",
   "Hide the controls": "Ocultar a barra",

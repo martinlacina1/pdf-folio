@@ -1,5 +1,13 @@
 // Italian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Italian. See src/i18n.ts.
 const it: Record<string, string> = {
+  "Line thickness": "Spessore linea",
+  "Arrow style": "Stile freccia",
+  "Open arrow": "Freccia aperta",
+  "Filled arrow": "Freccia piena",
+  "Double arrow": "Freccia doppia",
+  "Line": "Linea",
+  "Text size": "Dimensione testo",
+  "Custom color": "Colore personalizzato",
   "Page and zoom controls": "Barra di pagine e zoom",
   "Move the controls (double-click to put them back)": "Sposta la barra (doppio clic per riportarla al suo posto)",
   "Hide the controls": "Nascondi la barra",

@@ -1,5 +1,13 @@
 // Finnish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Finnish. See src/i18n.ts.
 const fi: Record<string, string> = {
+  "Line thickness": "Viivan paksuus",
+  "Arrow style": "Nuolen tyyli",
+  "Open arrow": "Avoin nuoli",
+  "Filled arrow": "Täytetty nuoli",
+  "Double arrow": "Kaksisuuntainen nuoli",
+  "Line": "Viiva",
+  "Text size": "Tekstin koko",
+  "Custom color": "Oma väri",
   "Page and zoom controls": "Sivu- ja zoomauspalkki",
   "Move the controls (double-click to put them back)": "Siirrä palkkia (kaksoisnapsautus palauttaa sen paikalleen)",
   "Hide the controls": "Piilota palkki",

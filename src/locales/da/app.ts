@@ -1,5 +1,13 @@
 // Danish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Danish. See src/i18n.ts.
 const da: Record<string, string> = {
+  "Line thickness": "Stregtykkelse",
+  "Arrow style": "Pilform",
+  "Open arrow": "Åben pil",
+  "Filled arrow": "Udfyldt pil",
+  "Double arrow": "Dobbeltpil",
+  "Line": "Linje",
+  "Text size": "Tekststørrelse",
+  "Custom color": "Egen farve",
   "Page and zoom controls": "Side- og zoombjælke",
   "Move the controls (double-click to put them back)": "Flyt bjælken (dobbeltklik for at sætte den tilbage)",
   "Hide the controls": "Skjul bjælken",

@@ -1,5 +1,13 @@
 // Korean UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Korean. See src/i18n.ts.
 const ko: Record<string, string> = {
+  "Line thickness": "선 두께",
+  "Arrow style": "화살표 모양",
+  "Open arrow": "열린 화살표",
+  "Filled arrow": "채워진 화살표",
+  "Double arrow": "양방향 화살표",
+  "Line": "선",
+  "Text size": "텍스트 크기",
+  "Custom color": "사용자 지정 색",
   "Page and zoom controls": "페이지 및 확대/축소 막대",
   "Move the controls (double-click to put them back)": "막대 이동 (두 번 클릭하면 원래 위치로)",
   "Hide the controls": "막대 숨기기",

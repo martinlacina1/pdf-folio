@@ -1,5 +1,13 @@
 // Dutch UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Dutch. See src/i18n.ts.
 const nl: Record<string, string> = {
+  "Line thickness": "Lijndikte",
+  "Arrow style": "Pijlstijl",
+  "Open arrow": "Open pijl",
+  "Filled arrow": "Gevulde pijl",
+  "Double arrow": "Dubbele pijl",
+  "Line": "Lijn",
+  "Text size": "Tekstgrootte",
+  "Custom color": "Eigen kleur",
   "Page and zoom controls": "Pagina- en zoombalk",
   "Move the controls (double-click to put them back)": "Balk verplaatsen (dubbelklik om terug te zetten)",
   "Hide the controls": "Balk verbergen",

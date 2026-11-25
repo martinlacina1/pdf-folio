@@ -1,5 +1,13 @@
 // Croatian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Croatian. See src/i18n.ts.
 const hr: Record<string, string> = {
+  "Line thickness": "Debljina linije",
+  "Arrow style": "Oblik strelice",
+  "Open arrow": "Otvorena strelica",
+  "Filled arrow": "Puna strelica",
+  "Double arrow": "Dvostruka strelica",
+  "Line": "Linija",
+  "Text size": "Veličina teksta",
+  "Custom color": "Prilagođena boja",
   "Page and zoom controls": "Traka stranica i zumiranja",
   "Move the controls (double-click to put them back)": "Pomakni traku (dvostruki klik vraća je na mjesto)",
   "Hide the controls": "Sakrij traku",

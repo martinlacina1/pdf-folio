@@ -1,5 +1,13 @@
 // Spanish UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Spanish. See src/i18n.ts.
 const es: Record<string, string> = {
+  "Line thickness": "Grosor de línea",
+  "Arrow style": "Estilo de flecha",
+  "Open arrow": "Flecha abierta",
+  "Filled arrow": "Flecha rellena",
+  "Double arrow": "Flecha doble",
+  "Line": "Línea",
+  "Text size": "Tamaño del texto",
+  "Custom color": "Color personalizado",
   "Page and zoom controls": "Barra de páginas y zoom",
   "Move the controls (double-click to put them back)": "Mover la barra (doble clic para devolverla a su sitio)",
   "Hide the controls": "Ocultar la barra",

@@ -1,5 +1,13 @@
 // Bulgarian UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → Bulgarian. See src/i18n.ts.
 const bg: Record<string, string> = {
+  "Line thickness": "Дебелина на линията",
+  "Arrow style": "Вид на стрелката",
+  "Open arrow": "Отворена стрелка",
+  "Filled arrow": "Плътна стрелка",
+  "Double arrow": "Двойна стрелка",
+  "Line": "Линия",
+  "Text size": "Размер на текста",
+  "Custom color": "Собствен цвят",
   "Page and zoom controls": "Лента за страници и мащаб",
   "Move the controls (double-click to put them back)": "Преместване на лентата (двойно щракване я връща на мястото ѝ)",
   "Hide the controls": "Скриване на лентата",

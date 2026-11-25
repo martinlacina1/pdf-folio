@@ -2,19 +2,43 @@ import { AnnotationEditorType } from "pdfjs-dist";
 import type { PDFViewer } from "./viewer";
 
 export type Shape = "Rectangle" | "Oval" | "Arrow";
+/** How an arrow ends: an open "V", a filled head, a head at both ends, or a plain line. */
+export type ArrowStyle = "open" | "filled" | "double" | "line";
+export const ARROW_STYLES: ArrowStyle[] = ["open", "filled", "double", "line"];
+/** Line widths offered for drawing, in PDF points. */
+export const INK_WIDTHS = [1, 2, 4, 8];
 type Point = [number, number];
 
-function strokes(shape: Shape, start: Point, end: Point, scale: number): Point[][] {
+/** The head at `tip` of a line coming from `from`: its two wings, or (filled) a fan of strokes covering it. */
+function head(from: Point, tip: Point, size: number, filled: boolean, width: number): Point[][] {
+  const angle = Math.atan2(tip[1] - from[1], tip[0] - from[0]);
+  const length = Math.min(size, Math.hypot(tip[0] - from[0], tip[1] - from[1]) / 3);
+  const wing = (offset: number): Point => [tip[0] - length * Math.cos(angle + offset), tip[1] - length * Math.sin(angle + offset)];
+  const left = wing(0.45), right = wing(-0.45);
+  if (!filled) return [[left, tip], [tip, right]];
+  // Ink can only stroke, so a solid head is strokes from the tip to points across its base, close enough to touch.
+  const base = Math.hypot(left[0] - right[0], left[1] - right[1]);
+  const steps = Math.max(2, Math.ceil(base / Math.max(0.5, width * 0.6)));
+  const fan = Array.from({ length: steps + 1 }, (_, i): Point[] => {
+    const t = i / steps;
+    return [tip, [left[0] + (right[0] - left[0]) * t, left[1] + (right[1] - left[1]) * t]];
+  });
+  return [[left, tip, right, left], ...fan];
+}
+
+function strokes(shape: Shape, start: Point, end: Point, scale: number, width: number, arrow: ArrowStyle): Point[][] {
   const [x, y] = start, [a, b] = end;
   if (shape === "Rectangle") {
     // Individual straight segments keep pdf.js from smoothing the corners as freehand ink.
     return [[start, [a, y]], [[a, y], end], [end, [x, b]], [[x, b], start]];
   }
   if (shape === "Arrow") {
-    const angle = Math.atan2(b - y, a - x);
-    const length = Math.min(12 * scale, Math.hypot(a - x, b - y) / 3);
-    const wing = (offset: number): Point => [a - length * Math.cos(angle + offset), b - length * Math.sin(angle + offset)];
-    return [[start, end], [wing(0.5), end], [end, wing(-0.5)]];
+    // The head grows with the line, so thick arrows keep their shape.
+    const size = Math.max(12, 4 * width) * scale, filled = arrow === "filled";
+    const lines: Point[][] = [[start, end]];
+    if (arrow !== "line") lines.push(...head(start, end, size, filled, width * scale));
+    if (arrow === "double") lines.push(...head(end, start, size, false, width * scale));
+    return lines;
   }
   const oval = Array.from({ length: 64 }, (_, i): Point => {
     const angle = i * Math.PI / 32;
@@ -24,8 +48,8 @@ function strokes(shape: Shape, start: Point, end: Point, scale: number): Point[]
   return [[...oval, oval[0], oval[0]]];
 }
 
-export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Shape, color: string,
-  add: (pageIndex: number, data: Record<string, unknown>) => void) {
+export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Shape, color: string, width: number,
+  arrow: ArrowStyle, add: (pageIndex: number, data: Record<string, unknown>) => void) {
   const listeners = new AbortController();
   let cancel: (() => void) | undefined;
 
@@ -54,7 +78,9 @@ export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Sha
     svg.setAttribute("viewBox", `0 0 ${viewport.width} ${viewport.height}`);
     path.setAttribute("fill", "none");
     path.setAttribute("stroke", color);
-    path.setAttribute("stroke-width", String(viewport.scale));
+    path.setAttribute("stroke-width", String(viewport.scale * width));
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
     svg.append(path);
     page.append(svg);
     const gesture = new AbortController();
@@ -69,7 +95,7 @@ export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Sha
     layer.setPointerCapture(down.pointerId);
     layer.addEventListener("pointermove", event => {
       if (event.pointerId !== down.pointerId) return;
-      const paths = strokes(shape, start, localPoint(event), viewport.scale);
+      const paths = strokes(shape, start, localPoint(event), viewport.scale, width, arrow);
       path.setAttribute("d", paths.map(points => "M" + points.map(p => p.join(" ")).join(" L")).join(" "));
     }, options);
     layer.addEventListener("pointerup", event => {
@@ -79,10 +105,10 @@ export function drawShapes(container: HTMLElement, viewer: PDFViewer, shape: Sha
       finish();
       const dx = Math.abs(start[0] - end[0]), dy = Math.abs(start[1] - end[1]);
       if ((shape === "Arrow" ? Math.hypot(dx, dy) : Math.min(dx, dy)) < 2) return;
-      const paths = strokes(shape, start, end, viewport.scale).map(line =>
+      const paths = strokes(shape, start, end, viewport.scale, width, arrow).map(line =>
         line.map(([x, y]) => viewport.convertToPdfPoint(x, y) as Point));
       const xs = paths.flat().map(p => p[0]), ys = paths.flat().map(p => p[1]);
-      add(pageIndex, { annotationType: AnnotationEditorType.INK, pageIndex, rotation: 0, thickness: 1, opacity: 1,
+      add(pageIndex, { annotationType: AnnotationEditorType.INK, pageIndex, rotation: 0, thickness: width, opacity: 1,
         color: [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16)),
         rect: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)],
         paths: { points: paths.map(line => Float32Array.from(line.flat())) } });

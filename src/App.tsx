@@ -44,7 +44,7 @@ import type { Release } from "./releaseNotes";
 import { detectSignatureTargets, placeSignature, type SignatureTarget } from "./signatures";
 import { keepDrawingPointer } from "./drawing";
 import { enableHandTool } from "./handTool";
-import { drawShapes, type Shape } from "./shapes";
+import { ARROW_STYLES, INK_WIDTHS, drawShapes, type ArrowStyle, type Shape } from "./shapes";
 import { enableWheelPaging } from "./wheelPaging";
 
 type Tool = "select" | "hand" | "highlight" | "ink" | "freetext";
@@ -80,6 +80,9 @@ const INKS = [
   { name: "Green", hex: "#1F9D55" },
   { name: "Purple", hex: "#8B5CF6" },
 ];
+
+/** Font sizes offered for text boxes, in points. */
+const TEXT_SIZES = [8, 10, 12, 14, 18, 24, 36, 48];
 
 const PALETTE: Partial<Record<Tool, typeof INKS>> = { highlight: HIGHLIGHTS, ink: INKS, freetext: INKS };
 
@@ -220,6 +223,39 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
   });
   const [tool, setTool] = useState<Tool>("select");
   const [drawTool, setDrawTool] = useState<"Pen" | Shape>("Pen");
+  // Line width (PDF points) for the pen and shapes, and how arrows end; both remembered.
+  const [inkWidth, setInkWidth] = useState(() => {
+    const saved = Number(localStorage.getItem("folio:ink-width"));
+    return INK_WIDTHS.includes(saved) ? saved : INK_WIDTHS[0];
+  });
+  const inkWidthRef = useRef(inkWidth);
+  inkWidthRef.current = inkWidth;
+  const [arrowStyle, setArrowStyle] = useState<ArrowStyle>(() => {
+    const saved = localStorage.getItem("folio:arrow-style") as ArrowStyle | null;
+    return saved && ARROW_STYLES.includes(saved) ? saved : "open";
+  });
+  const chooseInkWidth = (width: number) => {
+    markupRef.current?.endDrawing();
+    setInkWidth(width);
+    try { localStorage.setItem("folio:ink-width", String(width)); } catch {}
+    busRef.current?.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.INK_THICKNESS, value: width });
+  };
+  // Font size (points) for new text boxes; also resizes the selected one, as pdf.js does. Remembered.
+  const [textSize, setTextSize] = useState(() => {
+    const saved = Number(localStorage.getItem("folio:text-size"));
+    return TEXT_SIZES.includes(saved) ? saved : 12;
+  });
+  const textSizeRef = useRef(textSize);
+  textSizeRef.current = textSize;
+  const chooseTextSize = (size: number) => {
+    setTextSize(size);
+    try { localStorage.setItem("folio:text-size", String(size)); } catch {}
+    busRef.current?.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.FREETEXT_SIZE, value: size });
+  };
+  const chooseArrowStyle = (style: ArrowStyle) => {
+    setArrowStyle(style);
+    try { localStorage.setItem("folio:arrow-style", style); } catch {}
+  };
   const [colors, setColors] = useState<Partial<Record<Tool, string>>>({
     highlight: HIGHLIGHTS[0].hex,
     ink: INKS[0].hex,
@@ -368,6 +404,8 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
       const param = COLOR_PARAM[next];
       const value = colorsRef.current[next];
       if (param && value) eventBus.dispatch("switchannotationeditorparams", { source: null, type: param, value });
+      if (next === "ink") eventBus.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.INK_THICKNESS, value: inkWidthRef.current });
+      if (next === "freetext") eventBus.dispatch("switchannotationeditorparams", { source: null, type: AnnotationEditorParamsType.FREETEXT_SIZE, value: textSizeRef.current });
     });
 
     // Ctrl/⌘ + wheel or trackpad pinch zooms around the cursor.
@@ -660,12 +698,13 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
 
   useEffect(() => {
     if (!doc || tool !== "ink" || drawTool === "Pen") return;
-    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, (page, data) => {
+    return drawShapes(containerRef.current!, viewerRef.current!, drawTool, colors.ink!, inkWidth, arrowStyle, (page, data) => {
       void markupRef.current!.addShape(page, drawTool, data).catch(() => flash(t("Couldn't add the shape")));
     });
-  }, [doc, tool, drawTool, colors.ink, scale, rotation, flash]);
+  }, [doc, tool, drawTool, colors.ink, inkWidth, arrowStyle, scale, rotation, flash]);
 
   const chooseColor = (hex: string) => {
+    if (tool === "ink") markupRef.current?.endDrawing();
     // The palette sets the color for the next passage. pdf.js leaves the last highlight selected.
     if (tool === "highlight") markupRef.current?.clearEditorSelection();
     setColors((c) => ({ ...c, [tool]: hex }));
@@ -1431,9 +1470,34 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
             <div className="color-pill" role="toolbar" aria-label={t("Annotation options")}>
               {tool === "ink" && (
                 <select className="draw-tool" aria-label={t("Drawing tool")} value={drawTool}
-                  onChange={e => setDrawTool(e.target.value as typeof drawTool)}>
+                  onChange={e => { markupRef.current?.endDrawing(); setDrawTool(e.target.value as typeof drawTool); }}>
                   {["Pen", "Rectangle", "Oval", "Arrow"].map(name => <option key={name} value={name}>{t(name)}</option>)}
                 </select>
+              )}
+              {tool === "ink" && drawTool === "Arrow" && (
+                <select className="draw-tool" aria-label={t("Arrow style")} title={t("Arrow style")} value={arrowStyle}
+                  onChange={e => chooseArrowStyle(e.target.value as ArrowStyle)}>
+                  <option value="open">{"→ " + t("Open arrow")}</option>
+                  <option value="filled">{"➞ " + t("Filled arrow")}</option>
+                  <option value="double">{"↔ " + t("Double arrow")}</option>
+                  <option value="line">{"— " + t("Line")}</option>
+                </select>
+              )}
+              {tool === "freetext" && (
+                <select className="draw-tool" aria-label={t("Text size")} title={t("Text size")} value={textSize}
+                  onChange={e => chooseTextSize(Number(e.target.value))}>
+                  {TEXT_SIZES.map(size => <option key={size} value={size}>{size} pt</option>)}
+                </select>
+              )}
+              {tool === "ink" && (
+                <div className="ink-widths" role="radiogroup" aria-label={t("Line thickness")}>
+                  {INK_WIDTHS.map((width) => (
+                    <button key={width} role="radio" aria-checked={inkWidth === width} className={inkWidth === width ? "on" : ""}
+                      title={`${t("Line thickness")}: ${width} pt`} aria-label={`${width} pt`} onClick={() => chooseInkWidth(width)}>
+                      <span style={{ height: `${Math.min(10, 1 + width)}px` }} />
+                    </button>
+                  ))}
+                </div>
               )}
               <div className="color-options" role="radiogroup" aria-label={t("Color")}>
                 {PALETTE[tool]!.map((c) => (
@@ -1447,6 +1511,17 @@ export default function App({ tabs, tabKey, upgradeNotes }: { tabs: DocumentTabs
                     aria-checked={colors[tool] === c.hex}
                   />
                 ))}
+                {(tool === "ink" || tool === "freetext") && (() => {
+                  // Any other color, from the system color picker; shown filled once it's in use.
+                  const custom = !!colors[tool] && !PALETTE[tool]!.some((c) => c.hex.toLowerCase() === colors[tool]!.toLowerCase());
+                  return (
+                    <label className={custom ? "custom-color on" : "custom-color"} title={t("Custom color")}
+                      style={custom ? { "--swatch": colors[tool] } as React.CSSProperties : undefined}>
+                      <input type="color" aria-label={t("Custom color")} value={(colors[tool] ?? "#000000").toLowerCase()}
+                        onChange={(e) => chooseColor(e.target.value.toUpperCase())} />
+                    </label>
+                  );
+                })()}
               </div>
               <span className="divider" />
               <button className="pill-btn" onClick={() => busRef.current!.dispatch("editingaction", { source: null, name: "undo" })} title={keys(t("Undo (Ctrl+Z)"))}>

@@ -1,5 +1,13 @@
 // German UI text for the reader window (App.tsx): toolbar, More menu, navigation, messages. English → German. See src/i18n.ts.
 const de: Record<string, string> = {
+  "Line thickness": "Linienstärke",
+  "Arrow style": "Pfeilform",
+  "Open arrow": "Offener Pfeil",
+  "Filled arrow": "Gefüllter Pfeil",
+  "Double arrow": "Doppelpfeil",
+  "Line": "Linie",
+  "Text size": "Textgröße",
+  "Custom color": "Eigene Farbe",
   "Page and zoom controls": "Seiten- und Zoomleiste",
   "Move the controls (double-click to put them back)": "Leiste verschieben (Doppelklick setzt sie zurück)",
   "Hide the controls": "Leiste ausblenden",
